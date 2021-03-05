@@ -90,7 +90,7 @@ public class AtonNode extends BaseEntity<Integer> {
     /** Constructor */
     public AtonNode(AtonNodeVo node) {
         Objects.requireNonNull(node);
-        this.id = node.getId();
+        this.id = node.getId() > 0 ? node.getId() : null;
         this.lat = node.getLat();
         this.lon = node.getLon();
         this.user = node.getUser();
@@ -98,7 +98,7 @@ public class AtonNode extends BaseEntity<Integer> {
         this.visible = node.isVisible();
         this.version = node.getVersion();
         this.changeset = node.getChangeset();
-        this.changeset = node.getChangeset();
+        this.timestamp = node.getTimestamp();
         if (node.getTags() != null) {
             setTags(Arrays.stream(node.getTags())
                     .map(t -> new AtonTag(t, AtonNode.this))
@@ -253,6 +253,10 @@ public class AtonNode extends BaseEntity<Integer> {
         this.version = template.getVersion();
         this.changeset = template.getChangeset();
         this.timestamp = template.getTimestamp();
+        this.tags.removeAll(this.getTags()
+                .stream()
+                .filter(t -> template.getTag(t.getK()) == null)
+                .collect(Collectors.toList()));
         template.getTags().forEach(t -> updateTag(t.getK(), t.getV()));
     }
 
