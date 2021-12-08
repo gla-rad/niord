@@ -16,7 +16,6 @@
 
 package org.niord.core.script;
 
-import jdk.nashorn.api.scripting.JSObject;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.NiordApp;
 import org.niord.core.message.MessageService;
@@ -27,6 +26,7 @@ import org.niord.model.message.MainType;
 import org.niord.model.message.MessagePartType;
 import org.niord.model.message.Status;
 import org.niord.model.message.Type;
+import org.openjdk.nashorn.api.scripting.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
