@@ -57,7 +57,6 @@ import java.util.stream.Collectors;
  */
 @Path("/script-resources")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.SYSADMIN)
 @SuppressWarnings("unused")
 public class ScriptResourceRestService extends AbstractBatchableRestService {

@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
  */
 @Path("/niord-integrations")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.ADMIN)
 @SuppressWarnings("unused")
 public class NiordIntegrationRestService {

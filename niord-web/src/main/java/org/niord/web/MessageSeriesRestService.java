@@ -49,7 +49,6 @@ import java.util.stream.Collectors;
  */
 @Path("/message-series")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class MessageSeriesRestService {
 

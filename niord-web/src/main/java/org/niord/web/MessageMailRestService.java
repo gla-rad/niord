@@ -49,7 +49,6 @@ import java.util.Collections;
  */
 @Path("/message-mail")
 @Stateless
-@SecurityDomain("keycloak")
 @SuppressWarnings("unused")
 public class MessageMailRestService {
 

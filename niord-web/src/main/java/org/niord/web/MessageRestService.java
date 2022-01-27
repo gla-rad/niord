@@ -93,7 +93,6 @@ import static org.niord.model.message.Status.*;
  */
 @Path("/messages")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageRestService  {

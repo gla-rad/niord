@@ -57,7 +57,6 @@ import java.util.stream.Collectors;
  */
 @Path("/charts")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class ChartRestService extends AbstractBatchableRestService {
 

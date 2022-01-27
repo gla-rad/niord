@@ -60,7 +60,6 @@ import java.util.stream.Collectors;
  */
 @Path("/dictionaries")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class DictionaryRestService extends AbstractBatchableRestService {
 

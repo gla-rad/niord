@@ -44,7 +44,6 @@ import javax.ws.rs.WebApplicationException;
  */
 @Path("/scheduled-mails")
 @Stateless
-@SecurityDomain("keycloak")
 @SuppressWarnings("unused")
 public class ScheduledMailRestService {
 

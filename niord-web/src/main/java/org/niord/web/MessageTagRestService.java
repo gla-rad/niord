@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
  */
 @Path("/tags")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class MessageTagRestService {
 

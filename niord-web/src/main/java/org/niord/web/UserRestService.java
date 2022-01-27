@@ -54,7 +54,6 @@ import java.util.stream.Collectors;
  */
 @Path("/users")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class UserRestService extends AbstractBatchableRestService {
 
