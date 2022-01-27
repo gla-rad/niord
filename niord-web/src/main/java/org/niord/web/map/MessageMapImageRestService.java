@@ -63,7 +63,6 @@ import java.util.List;
  */
 @javax.ws.rs.Path("/message-map-image")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class MessageMapImageRestService {
 

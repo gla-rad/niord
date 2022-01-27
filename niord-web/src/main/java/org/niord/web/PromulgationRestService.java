@@ -64,7 +64,6 @@ import java.util.stream.Collectors;
  */
 @Path("/promulgations")
 @Stateless
-@SecurityDomain("keycloak")
 @SuppressWarnings("unused")
 public class PromulgationRestService extends AbstractBatchableRestService {
 

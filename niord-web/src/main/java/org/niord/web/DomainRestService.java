@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
  */
 @Path("/domains")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class DomainRestService extends AbstractBatchableRestService {
 

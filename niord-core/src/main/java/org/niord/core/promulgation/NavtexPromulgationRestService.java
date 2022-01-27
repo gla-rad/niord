@@ -52,7 +52,6 @@ import static org.niord.core.promulgation.NavtexPromulgationService.NAVTEX_LINE_
  */
 @Path("/promulgation/navtex")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.SYSADMIN)
 @SuppressWarnings("unused")
 public class NavtexPromulgationRestService {

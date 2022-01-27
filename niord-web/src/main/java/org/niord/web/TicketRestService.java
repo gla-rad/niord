@@ -50,7 +50,6 @@ import java.util.Set;
  */
 @Path("/tickets")
 @Stateless
-@SecurityDomain("keycloak")
 public class TicketRestService {
 
     @Resource

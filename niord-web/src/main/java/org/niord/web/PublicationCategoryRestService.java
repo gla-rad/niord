@@ -55,7 +55,6 @@ import java.util.stream.Collectors;
  */
 @Path("/publication-categories")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class PublicationCategoryRestService extends AbstractBatchableRestService {
 

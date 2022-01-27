@@ -62,7 +62,6 @@ import java.util.stream.Collectors;
  */
 @Path("/areas")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class AreaRestService extends AbstractBatchableRestService {
 

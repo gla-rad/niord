@@ -69,7 +69,6 @@ import java.util.stream.Collectors;
  */
 @Path("/message-reports")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageReportRestService extends AbstractBatchableRestService {

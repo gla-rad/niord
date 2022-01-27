@@ -91,7 +91,6 @@ import static org.niord.core.util.WebUtils.encodeURIComponent;
  */
 @Path("/publications")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class PublicationRestService extends AbstractBatchableRestService {
 

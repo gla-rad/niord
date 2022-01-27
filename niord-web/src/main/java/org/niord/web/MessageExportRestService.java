@@ -61,7 +61,6 @@ import java.util.zip.ZipInputStream;
  */
 @Path("/message-io")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageExportRestService extends AbstractBatchableRestService {

@@ -96,7 +96,6 @@ import static org.niord.core.settings.Setting.Type;
 @javax.ws.rs.Path("/repo")
 @Singleton
 @Lock(LockType.READ)
-@SecurityDomain("keycloak")
 @PermitAll
 @SuppressWarnings("unused")
 public class RepositoryService {

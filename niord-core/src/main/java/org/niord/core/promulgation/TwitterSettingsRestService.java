@@ -38,7 +38,6 @@ import javax.ws.rs.Produces;
  */
 @Path("/promulgation/twitter-settings")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.SYSADMIN)
 @SuppressWarnings("unused")
 public class TwitterSettingsRestService {

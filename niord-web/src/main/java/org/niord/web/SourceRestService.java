@@ -59,7 +59,6 @@ import java.util.stream.Collectors;
  */
 @Path("/sources")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class SourceRestService extends AbstractBatchableRestService {
 

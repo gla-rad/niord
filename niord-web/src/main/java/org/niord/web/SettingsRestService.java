@@ -51,7 +51,6 @@ import java.util.stream.Collectors;
  */
 @Path("/settings")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.SYSADMIN)
 public class SettingsRestService extends AbstractBatchableRestService {
 

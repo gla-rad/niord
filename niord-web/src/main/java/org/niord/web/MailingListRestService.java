@@ -73,7 +73,6 @@ import java.util.stream.Collectors;
  */
 @Path("/mailing-lists")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.ADMIN)
 public class MailingListRestService extends AbstractBatchableRestService  {
 

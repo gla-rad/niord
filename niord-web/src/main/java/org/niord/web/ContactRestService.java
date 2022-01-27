@@ -57,7 +57,6 @@ import static org.niord.core.util.TextUtils.encodeCVSLine;
  */
 @Path("/contacts")
 @Stateless
-@SecurityDomain("keycloak")
 @RolesAllowed(Roles.ADMIN)
 public class ContactRestService {
 

@@ -63,7 +63,6 @@ import java.util.stream.Collectors;
  */
 @Path("/templates")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class TemplateExecutionRestService extends AbstractBatchableRestService {
 

@@ -65,7 +65,6 @@ import java.util.List;
  */
 @Path("/batch")
 @Stateless
-@SecurityDomain("keycloak")
 public class BatchRestService {
 
     @Inject

@@ -40,7 +40,6 @@ import java.util.*;
  */
 @Path("/atons")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class AtonRestService {
 

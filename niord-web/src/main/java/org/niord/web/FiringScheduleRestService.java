@@ -62,7 +62,6 @@ import java.util.stream.Collectors;
  */
 @Path("/firing-schedules")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 public class FiringScheduleRestService {
 

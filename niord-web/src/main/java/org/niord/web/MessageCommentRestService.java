@@ -60,7 +60,6 @@ import java.util.stream.Collectors;
  */
 @Path("/messages")
 @Stateless
-@SecurityDomain("keycloak")
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageCommentRestService {
