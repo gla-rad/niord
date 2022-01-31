@@ -26,23 +26,14 @@ import org.niord.core.message.Message;
 import org.niord.core.settings.annotation.Setting;
 import org.niord.core.util.GlobalMercator;
 import org.niord.core.util.GraphicsUtils;
+import org.niord.model.geojson.*;
 import org.niord.model.message.MainType;
-import org.niord.model.geojson.FeatureCollectionVo;
-import org.niord.model.geojson.FeatureVo;
-import org.niord.model.geojson.GeometryCollectionVo;
-import org.niord.model.geojson.GeometryVo;
-import org.niord.model.geojson.LineStringVo;
-import org.niord.model.geojson.MultiLineStringVo;
-import org.niord.model.geojson.MultiPointVo;
-import org.niord.model.geojson.MultiPolygonVo;
-import org.niord.model.geojson.PointVo;
-import org.niord.model.geojson.PolygonVo;
 import org.slf4j.Logger;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
@@ -63,7 +54,7 @@ import static org.niord.core.settings.Setting.Type.Integer;
 /**
  * Generates message map thumbnail images.
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @Lock(LockType.READ)
 public class MessageMapImageGenerator {

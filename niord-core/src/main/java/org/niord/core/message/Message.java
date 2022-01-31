@@ -169,7 +169,7 @@ public class Message extends VersionedEntity<Integer> implements ILocalizable<Me
     Area area;
 
     // The areaSortOrder is used to sort the message within its associated area
-    @Column(columnDefinition = "DOUBLE default 0.0")
+    @Column(columnDefinition = "FLOAT default 0.0")
     double areaSortOrder;
 
     @ManyToMany

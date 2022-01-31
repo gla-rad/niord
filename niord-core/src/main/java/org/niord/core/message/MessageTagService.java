@@ -26,24 +26,10 @@ import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.criteria.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.niord.core.message.vo.MessageTagVo.MessageTagType.*;
@@ -56,7 +42,7 @@ import static org.niord.model.search.PagedSearchParamsVo.SortOrder.DESC;
  * Message tags can either be tied to a user or be shared, so the set of tags
  * that a specific user can work on, is her own tags + the shared tags.
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class MessageTagService extends BaseService {
 

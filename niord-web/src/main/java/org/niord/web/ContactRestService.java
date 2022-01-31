@@ -19,12 +19,7 @@ package org.niord.web;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.niord.core.user.Contact;
-import org.niord.core.user.ContactSearchParams;
-import org.niord.core.user.ContactService;
-import org.niord.core.user.Roles;
-import org.niord.core.user.UserService;
+import org.niord.core.user.*;
 import org.niord.core.user.vo.ContactVo;
 import org.niord.model.IJsonSerializable;
 import org.niord.model.search.PagedSearchResultVo;
@@ -32,19 +27,9 @@ import org.slf4j.Logger;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -56,7 +41,7 @@ import static org.niord.core.util.TextUtils.encodeCVSLine;
  * REST interface for accessing contacts.
  */
 @Path("/contacts")
-@Stateless
+@RequestScoped
 @RolesAllowed(Roles.ADMIN)
 public class ContactRestService {
 

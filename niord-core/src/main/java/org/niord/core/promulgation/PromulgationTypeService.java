@@ -27,12 +27,9 @@ import org.niord.core.service.BaseService;
 import org.niord.model.message.Type;
 import org.slf4j.Logger;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +48,7 @@ import java.util.stream.Collectors;
  * In turn, messages are associated with a list of {@linkplain BaseMessagePromulgation}-derived entities that
  * are each tied to a promulgation type.
  */
+@RequestScoped
 public class PromulgationTypeService extends BaseService {
 
     @Inject

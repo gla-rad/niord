@@ -26,16 +26,20 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,7 +51,7 @@ import static org.keycloak.util.JsonSerialization.mapper;
  * This bean can either be injected directly,
  * or the {@code @Setting} annotation can be used.
  */
-@Singleton
+@ApplicationScoped
 @Lock(LockType.READ)
 @Startup
 @SuppressWarnings("unused")
@@ -72,6 +76,7 @@ public class SettingsService extends BaseService {
      * Lastly, persists all the loaded settings that do not already exists in the database.
      */
     @PostConstruct
+    @Transactional
     public void loadSettingsFromPropertiesFile() {
         try {
 

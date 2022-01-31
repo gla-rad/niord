@@ -21,8 +21,8 @@ import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
@@ -30,7 +30,7 @@ import javax.inject.Inject;
  * this service will ensure that there is a "niord-client-master" domain
  * present, that may be used for bootstrapping and setting up the system.
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @SuppressWarnings("unused")
 public class BootstrapService extends BaseService {

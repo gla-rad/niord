@@ -30,13 +30,9 @@ import org.openjdk.nashorn.api.scripting.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.SimpleBindings;
+import javax.script.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +51,7 @@ import java.util.stream.Collectors;
  * </pre>
  * Inspiration from https://bugs.openjdk.java.net/secure/attachment/54881/LoaderTest.java
  */
-@Stateless
+@RequestScoped
 public class JsResourceService extends BaseService {
 
     private static final Class<?>[] SCRIPT_CLASSES  = {

@@ -30,16 +30,10 @@ import org.slf4j.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -47,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * Defines the API for accessing users either from the database or from Keycloak
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class UserService extends BaseService {
 

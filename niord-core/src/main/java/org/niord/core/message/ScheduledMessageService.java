@@ -23,8 +23,8 @@ import org.niord.model.message.Status;
 import org.slf4j.Logger;
 
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +43,7 @@ import static org.niord.model.message.Status.VERIFIED;
  *     <li>Checks for verified messages with a publishDateFrom in the past and publishes these.</li>
  * </ul>
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @SuppressWarnings("unused")
 public class ScheduledMessageService extends BaseService {

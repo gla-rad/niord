@@ -24,21 +24,15 @@ import org.niord.core.util.TimeUtils;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Main interface for accessing and processing Freemarker reports
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class FmReportService extends BaseService {
 

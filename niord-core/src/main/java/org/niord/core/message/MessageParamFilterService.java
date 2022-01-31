@@ -20,7 +20,7 @@ import org.niord.core.user.User;
 import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * Business interface for managing persisted message parameter filters
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class MessageParamFilterService extends BaseService {
 

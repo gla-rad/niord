@@ -23,6 +23,7 @@ import org.niord.core.util.GlobalMercator;
 import org.niord.core.util.GraphicsUtils;
 import org.slf4j.Logger;
 
+import javax.enterprise.context.RequestScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -56,6 +57,7 @@ import java.util.Date;
  * </ul>
  */
 @javax.ws.rs.Path("/aton-tiles")
+@RequestScoped
 public class AtonTileRestService {
 
     static final int        TILE_SIZE           = 256;

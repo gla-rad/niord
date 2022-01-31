@@ -19,14 +19,14 @@ package org.niord.core.publication;
 import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
 
 /**
  * Business interface for accessing publication categories
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class PublicationCategoryService extends BaseService {
 

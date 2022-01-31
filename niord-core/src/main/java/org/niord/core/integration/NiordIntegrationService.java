@@ -20,7 +20,7 @@ import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.Calendar;
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
  * The service will periodically import public messages from other Niord serves as defined
  * by the {@code NiordIntegration} entity
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class NiordIntegrationService extends BaseService {
 

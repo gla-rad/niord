@@ -20,7 +20,7 @@ import org.niord.core.service.BaseService;
 import org.niord.core.user.User;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Business interface for managing message comments
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class CommentService extends BaseService {
 

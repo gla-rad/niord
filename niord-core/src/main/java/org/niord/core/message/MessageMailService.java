@@ -17,18 +17,18 @@
 package org.niord.core.message;
 
 import org.apache.commons.lang.StringUtils;
-import org.niord.core.script.FmTemplateService;
 import org.niord.core.mail.Mail.MailRecipient;
 import org.niord.core.mail.ScheduledMail;
 import org.niord.core.mail.ScheduledMailRecipient;
 import org.niord.core.mail.ScheduledMailRecipient.RecipientType;
+import org.niord.core.script.FmTemplateService;
 import org.niord.core.service.BaseService;
 import org.niord.core.user.User;
 import org.niord.core.user.UserService;
 import org.niord.model.message.MessageVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 import java.util.LinkedList;
@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * Can be used for sending message-related emails
  */
-@Stateless
+@RequestScoped
 public class MessageMailService extends BaseService {
 
     @Inject

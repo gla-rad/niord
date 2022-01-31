@@ -16,20 +16,15 @@
 package org.niord.web;
 
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.niord.core.user.TicketService;
 import org.slf4j.Logger;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import java.util.Set;
 
 /**
@@ -49,7 +44,7 @@ import java.util.Set;
  * even in an un-authorized request.
  */
 @Path("/tickets")
-@Stateless
+@RequestScoped
 public class TicketRestService {
 
     @Resource

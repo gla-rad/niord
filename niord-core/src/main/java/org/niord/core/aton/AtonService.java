@@ -21,9 +21,9 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.search.MatchNoDocsQuery;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.FullTextQuery;
-import org.hibernate.search.jpa.Search;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.scope.SearchScope;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.niord.core.area.Area;
 import org.niord.core.chart.Chart;
 import org.niord.core.db.CriteriaHelper;
@@ -34,8 +34,9 @@ import org.niord.core.user.UserService;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -48,12 +49,15 @@ import static org.niord.core.util.LuceneUtils.normalize;
 /**
  * Interface for handling AtoNs
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class AtonService extends BaseService {
 
     @Inject
     private Logger log;
+
+    @Inject
+    EntityManager entityManager;
 
     @Inject
     private UserService userService;
@@ -365,7 +369,7 @@ public class AtonService extends BaseService {
 
         value = normalize(value);
 
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+        SearchSession searchSession = Search.session(entityManager);
 
         // Create a query parser with "or" operator as the default
         QueryParser parser = new ComplexPhraseQueryParser(
@@ -382,11 +386,16 @@ public class AtonService extends BaseService {
         }
 
         // wrap Lucene query in a javax.persistence.Query
-        FullTextQuery persistenceQuery = fullTextEntityManager.createFullTextQuery(query, AtonNode.class);
+        SearchScope<AtonNode> scope = searchSession.scope( AtonNode.class );
 
         // execute search
         @SuppressWarnings("unchecked")
-        List<AtonNode> an = (List<AtonNode>)persistenceQuery.getResultList();
+//        List<AtonNode> an = searchSession.search( scope )
+//                .where(f -> f.wildcard()
+//                        .fields("tags.v")
+//                        .matching("query"))
+//                .fetchAllHits();
+        List<AtonNode> an = new ArrayList<>();
 
         // Returns the ID's of the AtoN nodes
         return an.stream()

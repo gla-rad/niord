@@ -20,7 +20,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.niord.core.domain.DomainService;
 import org.niord.core.mail.Mail.MailRecipient;
 import org.niord.core.message.MessageMailService;
@@ -32,7 +31,7 @@ import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
@@ -48,7 +47,7 @@ import java.util.Collections;
  * REST interface for generating message e-mails.
  */
 @Path("/message-mail")
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class MessageMailRestService {
 

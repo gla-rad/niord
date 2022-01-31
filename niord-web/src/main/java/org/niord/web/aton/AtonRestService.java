@@ -15,7 +15,6 @@
  */
 package org.niord.web.aton;
 
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.niord.core.aton.AtonDefaultsService;
@@ -30,16 +29,18 @@ import org.slf4j.Logger;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * REST interface for accessing AtoNs.
  */
 @Path("/atons")
-@Stateless
+@RequestScoped
 @PermitAll
 public class AtonRestService {
 

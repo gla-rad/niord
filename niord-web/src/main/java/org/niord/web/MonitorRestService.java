@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.ws.rs.GET;
@@ -27,6 +28,7 @@ import javax.ws.rs.WebApplicationException;
  * An extremely simple REST endpoint that can be used to monitor the basic dead-or-alive state of the Niord service
  */
 @Path("/monitor")
+@RequestScoped
 public class MonitorRestService {
 
     @Inject

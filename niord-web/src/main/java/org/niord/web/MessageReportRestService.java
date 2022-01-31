@@ -18,18 +18,17 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.niord.core.NiordApp;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.domain.DomainService;
-import org.niord.core.report.FmReport;
-import org.niord.core.report.FmReportService;
-import org.niord.core.script.FmTemplateService;
-import org.niord.core.script.FmTemplateService.ProcessFormat;
-import org.niord.core.report.vo.FmReportVo;
 import org.niord.core.message.MessagePrintParams;
 import org.niord.core.message.MessageSearchParams;
 import org.niord.core.message.MessageService;
+import org.niord.core.report.FmReport;
+import org.niord.core.report.FmReportService;
+import org.niord.core.report.vo.FmReportVo;
+import org.niord.core.script.FmTemplateService;
+import org.niord.core.script.FmTemplateService.ProcessFormat;
 import org.niord.core.user.Roles;
 import org.niord.core.user.UserService;
 import org.niord.model.DataFilter;
@@ -39,36 +38,22 @@ import org.slf4j.Logger;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * REST interface for generating PDF message reports.
  */
 @Path("/message-reports")
-@Stateless
+@RequestScoped
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageReportRestService extends AbstractBatchableRestService {

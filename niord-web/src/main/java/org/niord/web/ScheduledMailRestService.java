@@ -18,7 +18,6 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.niord.core.mail.ScheduledMail;
 import org.niord.core.mail.ScheduledMailSearchParams;
 import org.niord.core.mail.ScheduledMailService;
@@ -29,21 +28,15 @@ import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 
 /**
  * REST interface for searching scheduled e-mails.
  */
 @Path("/scheduled-mails")
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class ScheduledMailRestService {
 

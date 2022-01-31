@@ -15,7 +15,7 @@
  */
 package org.niord.core.aton;
 
-import org.hibernate.search.annotations.Field;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.niord.core.aton.vo.AtonTagVo;
 import org.niord.core.model.BaseEntity;
 
@@ -53,7 +53,7 @@ public class AtonTag extends BaseEntity<Integer> {
     @NotNull
     String k;
 
-    @Field
+    @FullTextField
     String v;
 
     @ManyToOne

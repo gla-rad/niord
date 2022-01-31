@@ -23,8 +23,8 @@ import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.repo.RepositoryService;
 import org.slf4j.Logger;
 
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -42,7 +42,7 @@ import java.nio.file.Path;
  */
 @javax.ws.rs.Path("/aton-icon")
 @Startup
-@Singleton
+@ApplicationScoped
 public class AtonIconRestService {
 
     static final String OVERVIEW_ICON_REPO = "aton_icons";

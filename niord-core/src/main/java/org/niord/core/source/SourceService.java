@@ -21,6 +21,8 @@ import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * Business interface for accessing sources
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class SourceService extends BaseService {
 

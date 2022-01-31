@@ -35,7 +35,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Cacheable
-@Table(indexes = {
+@Table(name = "user_account", indexes = {
         @Index(name = "user_username", columnList="username", unique = true)
 })
 @NamedQueries({

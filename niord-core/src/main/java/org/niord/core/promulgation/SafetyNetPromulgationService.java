@@ -31,8 +31,8 @@ import org.niord.model.message.Type;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 /**
  * Manages SafetyNET-via-mailing-lists promulgations
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @Lock(LockType.READ)
 @SuppressWarnings("unused")

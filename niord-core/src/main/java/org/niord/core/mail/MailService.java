@@ -21,9 +21,9 @@ import org.niord.core.settings.annotation.Setting;
 import org.slf4j.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 /**
  * Interface for sending emails
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class MailService extends BaseService {
 

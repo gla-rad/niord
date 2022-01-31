@@ -38,19 +38,13 @@ import org.niord.core.service.BaseService;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.niord.core.mail.ScheduledMailRecipient.RecipientType.TO;
@@ -59,7 +53,7 @@ import static org.niord.core.script.ScriptResource.Type.FM;
 /**
  * Handles execution of mailing list triggers
  */
-@Stateless
+@RequestScoped
 public class MailingListExecutionService extends BaseService {
 
     @Inject

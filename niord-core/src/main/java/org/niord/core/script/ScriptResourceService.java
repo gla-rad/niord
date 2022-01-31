@@ -26,22 +26,17 @@ import org.niord.core.service.BaseService;
 import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 /**
  * Main interface for accessing and processing script resource, i.e. Freemarker templates and JavaScript resources
  */
-@Stateless
+@RequestScoped
 public class ScriptResourceService extends BaseService {
 
     @Inject

@@ -17,25 +17,17 @@ package org.niord.core.message;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.ClassicAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexOptions;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.*;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.niord.core.NiordApp;
@@ -53,25 +45,13 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Timeout;
-import javax.ejb.TimerConfig;
-import javax.ejb.TimerService;
+import javax.ejb.*;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -86,7 +66,7 @@ import static org.niord.core.settings.Setting.Type.Boolean;
  * Note to self: Using "Hibernate Search" for message (as for AtoNs), was ruled out because it would
  * be too complex to index all related entities by language.
  */
-@Singleton
+@ApplicationScoped
 @Lock(LockType.READ)
 @Startup
 @SuppressWarnings("unused")
@@ -198,7 +178,7 @@ public class MessageLuceneIndex extends BaseService {
      * @return the analyzer to use.
      */
     private Analyzer getAnalyzer() {
-        return new ClassicAnalyzer();
+        return new StandardAnalyzer();
     }
 
 
@@ -409,7 +389,7 @@ public class MessageLuceneIndex extends BaseService {
      */
     private void refreshReader(IndexWriter writer) throws IOException {
         closeReader();
-        reader = DirectoryReader.open(writer, true);
+        reader = DirectoryReader.open(writer, true, true);
     }
 
 
@@ -450,7 +430,7 @@ public class MessageLuceneIndex extends BaseService {
         try {
             writer = getNewWriter();
             writer.deleteAll();
-            writer.setCommitData(new HashMap<>());
+            writer.setLiveCommitData(new HashMap<String, String>().entrySet());
             writer.commit();
         } finally {
             closeWriter(writer);
@@ -482,7 +462,7 @@ public class MessageLuceneIndex extends BaseService {
     private void setLastUpdated(Date date, IndexWriter writer) {
         Map<String,String> userData = new HashMap<>();
         userData.put(LUCENE_LAST_UPDATE, String.valueOf(date.getTime()));
-        writer.setCommitData(userData);
+        writer.setLiveCommitData(userData.entrySet());
     }
 
 

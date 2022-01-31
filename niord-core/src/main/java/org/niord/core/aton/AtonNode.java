@@ -16,8 +16,8 @@
 package org.niord.core.aton;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.aton.vo.AtonTagVo;
@@ -67,6 +67,7 @@ public class AtonNode extends BaseEntity<Integer> {
 
     double lat;
     double lon;
+    @Column(name="user_name")
     String user;
     int uid;
     boolean visible;

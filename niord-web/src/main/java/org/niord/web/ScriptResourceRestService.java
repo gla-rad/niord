@@ -19,7 +19,6 @@ package org.niord.web;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.script.ScriptResource;
 import org.niord.core.script.ScriptResourceHistory;
@@ -32,19 +31,10 @@ import org.slf4j.Logger;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
@@ -56,7 +46,7 @@ import java.util.stream.Collectors;
  * REST interface for accessing script resources, such as Freemarker templates and JavaScript Resources.
  */
 @Path("/script-resources")
-@Stateless
+@RequestScoped
 @RolesAllowed(Roles.SYSADMIN)
 @SuppressWarnings("unused")
 public class ScriptResourceRestService extends AbstractBatchableRestService {

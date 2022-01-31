@@ -15,21 +15,25 @@
  */
 package org.niord.core.db;
 
-import org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
+import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.hibernate.search.util.common.SearchException;
+import org.niord.core.aton.AtonNode;
 import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.*;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 /**
  * Launches the Hibernate Search index
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @SuppressWarnings("unused")
 public class HibernateSearchIndexService extends BaseService {
@@ -39,6 +43,9 @@ public class HibernateSearchIndexService extends BaseService {
 
     @Resource
     TimerService timerService;
+
+    @Inject
+    EntityManager entityManager;
 
     /** Called upon application startup */
     @PostConstruct
@@ -52,17 +59,18 @@ public class HibernateSearchIndexService extends BaseService {
      */
     @Timeout
     private void generateFullTextIndexes() {
+        log.info("Start Hibernate Search indexer");
+
+        long t0 = System.currentTimeMillis();
+        SearchSession searchSession = Search.session(entityManager);
+        // Create a mass indexer
+        MassIndexer indexer = searchSession.massIndexer( AtonNode.class )
+                .threadsToLoadObjects( 7 );
+
+        // And perform the indexing
         try {
-            log.info("Start Hibernate Search indexer");
-
-            long t0 = System.currentTimeMillis();
-            FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-            fullTextEntityManager.createIndexer()
-                    .progressMonitor(new SimpleIndexingProgressMonitor(5000))
-                    .startAndWait();
-            log.info("Created Hibernate Search indexes in " + (System.currentTimeMillis() - t0) + " ms");
-
-        } catch (Exception e) {
+            indexer.startAndWait();
+        } catch (InterruptedException | SearchException e) {
             log.error("Error indexing AtoNs", e);
         }
     }

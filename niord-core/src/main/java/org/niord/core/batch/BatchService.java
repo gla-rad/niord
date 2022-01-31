@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import javax.batch.operations.JobOperator;
 import javax.batch.operations.NoSuchJobException;
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.*;
 import java.nio.file.*;
@@ -79,7 +79,7 @@ import java.util.zip.GZIPOutputStream;
  * @see <a href="https://issues.jboss.org/browse/WFLY-4988">Error report</a>
  * @see <a href="https://github.com/NiordOrg/niord-dk/tree/master/niord-dk-web">Example solution</a>
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class BatchService extends BaseService {
 

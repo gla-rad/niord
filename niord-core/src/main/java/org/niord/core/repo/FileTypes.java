@@ -21,7 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ import java.util.Set;
 /**
  * Enlists the supported file types and maps them to icons
  */
-@Singleton
+@ApplicationScoped
 @Lock(LockType.READ)
 @SuppressWarnings("unused")
 public class FileTypes {

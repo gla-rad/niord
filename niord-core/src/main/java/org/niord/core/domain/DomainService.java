@@ -25,7 +25,7 @@ import org.niord.core.user.TicketService;
 import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * Provides an interface for managing application domains
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class DomainService extends BaseService {
 

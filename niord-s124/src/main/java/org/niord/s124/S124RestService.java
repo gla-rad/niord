@@ -21,13 +21,9 @@ import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.OutputKeys;
@@ -52,6 +48,7 @@ import java.io.StringWriter;
         description = "Public API for accessing messages as S-124 GML. " +
                 "NB: Only use this service for test purposes, not for production.",
         tags = {"S-124" })
+@RequestScoped
 @Path("/S-124")
 public class S124RestService {
 
@@ -60,7 +57,6 @@ public class S124RestService {
 
     @Inject
     S124Service s124Service;
-
 
     /**
      * Returns the S-124 GML representation for the given message

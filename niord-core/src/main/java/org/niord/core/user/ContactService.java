@@ -22,9 +22,9 @@ import org.niord.core.service.BaseService;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Defines the API for accessing contacts
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class ContactService extends BaseService {
 

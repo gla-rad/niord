@@ -20,44 +20,26 @@ import org.apache.commons.lang.StringUtils;
 import org.niord.core.area.Area;
 import org.niord.core.area.AreaSearchParams;
 import org.niord.core.area.AreaService;
+import org.niord.core.area.AreaType;
 import org.niord.core.dictionary.DictionaryEntry;
 import org.niord.core.dictionary.DictionaryService;
 import org.niord.core.domain.Domain;
 import org.niord.core.geojson.FeatureService;
-import org.niord.core.message.DateInterval;
-import org.niord.core.message.Message;
-import org.niord.core.message.MessageDesc;
-import org.niord.core.message.MessagePart;
-import org.niord.core.message.MessageSearchParams;
-import org.niord.core.message.MessageSeries;
-import org.niord.core.message.MessageService;
+import org.niord.core.message.*;
 import org.niord.core.message.vo.SystemMessageVo;
 import org.niord.core.model.BaseEntity;
 import org.niord.core.service.BaseService;
 import org.niord.core.settings.annotation.Setting;
 import org.niord.core.util.TimeUtils;
-import org.niord.core.area.AreaType;
-import org.niord.model.message.MainType;
-import org.niord.model.message.MessagePartType;
-import org.niord.model.message.MessageVo;
-import org.niord.model.message.Status;
-import org.niord.model.message.Type;
+import org.niord.model.message.*;
 import org.slf4j.Logger;
 
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.niord.core.settings.Setting.Type.Integer;
@@ -76,7 +58,7 @@ import static org.niord.core.settings.Setting.Type.Integer;
  *          and cancel and publish new messages accordingly.</li>
  * </ul>
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @SuppressWarnings("unused")
 public class FiringExerciseService extends BaseService {

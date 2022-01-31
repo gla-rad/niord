@@ -19,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.niord.core.settings.Setting;
 import org.niord.core.settings.SettingsService;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletRequest;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.Properties;
 /**
  * Common settings and functionality for the Niord app
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class NiordApp {
 

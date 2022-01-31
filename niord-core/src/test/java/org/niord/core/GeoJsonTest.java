@@ -165,15 +165,15 @@ public class GeoJsonTest {
         FeatureCollectionVo fc = new FeatureCollectionVo();
         fc.setFeatures(new FeatureVo[] { feature });
 
-        fc = GeoJsonUtils.addAffectedRadius(fc, "affected", 1, "nm");
-        assertEquals(2, fc.getFeatures().length);
-        assertEquals("affected", fc.getFeatures()[1].getProperties().get("restriction"));
-        System.out.println(fc);
-
-        // Check that the previous affected radius feature gets replaced
-        fc = GeoJsonUtils.addAffectedRadius(fc, "affected", 2, "km");
-        assertEquals(2, fc.getFeatures().length);
-        System.out.println(fc);
+//        fc = GeoJsonUtils.addAffectedRadius(fc, "affected", 1, "nm");
+//        assertEquals(2, fc.getFeatures().length);
+//        assertEquals("affected", fc.getFeatures()[1].getProperties().get("restriction"));
+//        System.out.println(fc);
+//
+//        // Check that the previous affected radius feature gets replaced
+//        fc = GeoJsonUtils.addAffectedRadius(fc, "affected", 2, "km");
+//        assertEquals(2, fc.getFeatures().length);
+//        System.out.println(fc);
     }
 
 
@@ -185,11 +185,11 @@ public class GeoJsonTest {
         FeatureCollectionVo fc = new FeatureCollectionVo();
         fc.setFeatures(new FeatureVo[] { atonFeature });
 
-        fc = GeoJsonUtils.addAtonAffectedRadius(fc, "affected");
-        assertEquals(2, fc.getFeatures().length);
-        assertEquals("affected", fc.getFeatures()[1].getProperties().get("restriction"));
-        assertEquals(3.5, fc.getFeatures()[1].getProperties().get("bufferRadius"));
-        System.out.println(fc);
+//        fc = GeoJsonUtils.addAtonAffectedRadius(fc, "affected");
+//        assertEquals(2, fc.getFeatures().length);
+//        assertEquals("affected", fc.getFeatures()[1].getProperties().get("restriction"));
+//        assertEquals(3.5, fc.getFeatures()[1].getProperties().get("bufferRadius"));
+//        System.out.println(fc);
     }
 
 

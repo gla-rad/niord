@@ -37,12 +37,12 @@ public abstract class TreeBaseEntity<E extends TreeBaseEntity<E>> extends Versio
     protected boolean active = true;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
-    protected E parent;
+    public E parent;
 
     @SuppressWarnings("all")
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     @OrderBy("siblingSortOrder ASC")
-    protected  List<E> children = new ArrayList<>();
+    public  List<E> children = new ArrayList<>();
 
     @Column(length = 256)
     protected String lineage;

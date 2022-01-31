@@ -34,14 +34,9 @@ import org.niord.model.message.MessageVo;
 import org.niord.model.publication.PublicationVo;
 import org.niord.model.search.PagedSearchResultVo;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -51,11 +46,7 @@ import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -72,7 +63,7 @@ import java.util.stream.Collectors;
      description = "Public API for accessing message and publication data from the Niord NW-NM system",
      tags = {"messages", "publications" })
 @Path("/public/v1")
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class ApiRestService extends AbstractApiService {
 

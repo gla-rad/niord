@@ -46,45 +46,23 @@ import org.niord.core.user.User;
 import org.niord.core.user.UserService;
 import org.niord.model.DataFilter;
 import org.niord.model.geojson.FeatureCollectionVo;
-import org.niord.model.message.AreaVo;
-import org.niord.model.message.CategoryVo;
-import org.niord.model.message.ChartVo;
-import org.niord.model.message.MainType;
-import org.niord.model.message.MessageVo;
-import org.niord.model.message.ReferenceType;
-import org.niord.model.message.Status;
+import org.niord.model.message.*;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
+import javax.jms.Session;
 import javax.jms.Topic;
 import javax.persistence.Tuple;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -97,7 +75,7 @@ import static org.niord.model.search.PagedSearchParamsVo.SortOrder;
 /**
  * Business interface for managing messages
  */
-@Stateless
+@RequestScoped
 @SuppressWarnings("unused")
 public class MessageService extends BaseService {
 
@@ -119,7 +97,7 @@ public class MessageService extends BaseService {
     private Logger log;
 
     @Inject
-    JMSContext jmsContext;
+    ConnectionFactory connectionFactory;
 
     @Resource(mappedName = "java:/jms/topic/MessageStatusTopic")
     Topic messageStatusTopic;
@@ -709,7 +687,7 @@ public class MessageService extends BaseService {
         body.put("UID", message.getUid());
         body.put("STATUS", message.getStatus().name());
         body.put("PREV_STATUS", prevStatus.name());
-        try {
+        try (JMSContext jmsContext = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)){
             jmsContext.createProducer().send(messageStatusTopic, body);
         } catch (Exception e) {
             log.error("Failed sending JMS: " + e, e);

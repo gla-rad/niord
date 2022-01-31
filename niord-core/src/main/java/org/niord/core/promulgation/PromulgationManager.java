@@ -29,16 +29,11 @@ import org.slf4j.Logger;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -54,7 +49,7 @@ import java.util.stream.Collectors;
  * In turn, messages are associated with a list of {@linkplain BaseMessagePromulgation}-derived entities that
  * are each tied to a promulgation type.
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @Lock(LockType.READ)
 @SuppressWarnings("unused")

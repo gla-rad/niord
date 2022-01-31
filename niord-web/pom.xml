@@ -5,73 +5,48 @@
     <parent>
         <groupId>org.niord</groupId>
         <artifactId>niord-parent</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>niord-web</artifactId>
     <name>Niord web application</name>
-    <packaging>war</packaging>
 
     <properties>
         <batik.version>1.8</batik.version>
         <swagger-ui.version>3.0.10</swagger-ui.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>dd-MM-yyyy HH:mm 'UTC'</maven.build.timestamp.format>
-        <niord-core.jar>niord-core-${project.version}.jar</niord-core.jar>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-josm-seachart</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>3.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-model</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>3.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-core</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>3.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-s124</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>3.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
-            <version>11.0.4.Final</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.ejb3</groupId>
-            <artifactId>jboss-ejb3-ext-api</artifactId>
-            <version>2.2.0.Final</version>
-            <scope>compile</scope>
-        </dependency>
-        
-        <!-- For some unknown reason Maven keeps picking up an old version of infinispan. -->
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
-            <version>11.0.4.Final</version>
-            <scope>compile</scope>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy</artifactId>
         </dependency>
 
         <!-- CORS support -->
@@ -120,12 +95,6 @@
 
 
         <plugins>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>2.1.0.Beta1</version>
-            </plugin>
-
             <!-- Swagger integration -->
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
