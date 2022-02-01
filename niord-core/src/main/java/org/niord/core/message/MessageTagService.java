@@ -467,7 +467,7 @@ public class MessageTagService extends BaseService {
      * Every hour, expired message tags will be removed
      */
     @Scheduled(cron="22 22 */1 * * ?")
-    private void removeExpiredMessageTags() {
+    void removeExpiredMessageTags() {
         List<MessageTag> expiredTags = em.createNamedQuery("MessageTag.findExpiredMessageTags", MessageTag.class)
                 .getResultList();
         if (!expiredTags.isEmpty()) {

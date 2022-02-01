@@ -523,8 +523,8 @@ public class CategoryService extends TreeBaseService<Category> {
      * @return if the sort order was updated
      */
     @Scheduled(cron="13 23 * * * ?")
-    public boolean recomputeTreeSortOrder() {
-        return recomputeTreeSortOrder(SETTING_CATEGORY_LAST_UPDATED);
+    public void recomputeTreeSortOrder() {
+        recomputeTreeSortOrder(SETTING_CATEGORY_LAST_UPDATED);
     }
 
 

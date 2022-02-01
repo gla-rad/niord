@@ -156,7 +156,7 @@ public class NiordIntegrationService extends BaseService {
      * Called every minute and processes the next pending Niord Integration
      */
     @Scheduled(cron="51 */1 * * * ?")
-    private void processNextPendingNiordIntegration() {
+    void processNextPendingNiordIntegration() {
         List<NiordIntegration> integrations = getPendingNiordIntegrations();
         if (!integrations.isEmpty()) {
             processNiordIntegration(integrations.get(0).getId());

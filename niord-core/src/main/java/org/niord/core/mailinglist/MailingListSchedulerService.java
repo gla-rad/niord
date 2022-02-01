@@ -50,7 +50,7 @@ public class MailingListSchedulerService extends BaseService {
      * Checks every minute if there are pending scheduled mailing list triggers.
      */
     @Scheduled(cron="37 */1 */1 * * ?")
-    public void checkExecuteScheduledTriggers() {
+    void checkExecuteScheduledTriggers() {
 
         long t0 = System.currentTimeMillis();
 

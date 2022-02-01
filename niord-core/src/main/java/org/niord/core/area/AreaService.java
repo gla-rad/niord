@@ -489,8 +489,8 @@ public class AreaService extends TreeBaseService<Area> {
      * @return if the sort order was updated
      */
     @Scheduled(cron="13 3 * * * ?")
-    public boolean recomputeTreeSortOrder() {
-        return recomputeTreeSortOrder(SETTING_AREA_LAST_UPDATED);
+    public void recomputeTreeSortOrder() {
+        recomputeTreeSortOrder(SETTING_AREA_LAST_UPDATED);
     }
 
 

@@ -49,6 +49,7 @@ import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -158,10 +159,10 @@ public class MessageLuceneIndex extends BaseService {
      */
     @Timeout
     @Scheduled(cron="38 */1 * * * ?")
-    private int updateLuceneIndex() {
+    void updateLuceneIndex() {
         lock.lock();
         try {
-            return updateLuceneIndex(LUCENE_MAX_INDEX_COUNT);
+            updateLuceneIndex(LUCENE_MAX_INDEX_COUNT);
         } finally {
             lock.unlock();
         }
@@ -473,6 +474,7 @@ public class MessageLuceneIndex extends BaseService {
      * @param maxIndexCount max number of messages to index at a time
      * @return the number of updates
      */
+    @Transactional
     private int updateLuceneIndex(int maxIndexCount) {
 
         Date lastUpdated = getLastUpdated();

@@ -541,7 +541,7 @@ public class RepositoryService {
      * Every hour, check the repo "temp" root, and delete old files and folders
      */
     @Scheduled(cron="50 22 * * * ?")
-    public void cleanUpTempRoot() {
+    void cleanUpTempRoot() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         File[] files = getTempRepoRoot().toFile().listFiles();

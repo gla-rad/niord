@@ -30,6 +30,7 @@ import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -235,7 +236,8 @@ public class BatchSetService {
      * placed in this folder, the batch-set gets executed.
      */
     @Scheduled(cron="24 */1 */1 * * ?")
-    protected void monitorBatchJobInFolderInitiation() {
+    @Transactional
+    void monitorBatchJobInFolderInitiation() {
 
         Path batchSetsFolder = batchService.getBatchJobRoot().resolve(BATCH_SETS_FOLDER);
 

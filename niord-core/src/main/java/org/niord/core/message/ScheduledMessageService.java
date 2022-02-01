@@ -62,7 +62,7 @@ public class ScheduledMessageService extends BaseService {
      * Called every minute to update expire published messages where publishDateTo is in the past
      */
     @Scheduled(cron="28 * * * * ?")
-    public void checkForExpirablePublishedMessages() {
+    void checkForExpirablePublishedMessages() {
 
         // We want to treat messages with timestamps within the same minute equally, so, reset the seconds
         Date now = TimeUtils.resetSeconds(new Date());
@@ -87,7 +87,7 @@ public class ScheduledMessageService extends BaseService {
      * Called every minute to publish messages with a VERIFIED status and a defined publishDateFrom in the past
      */
     @Scheduled(cron="37 * * * * ?")
-    public void checkForPublishableMessages() {
+    void checkForPublishableMessages() {
 
         // We want to treat messages with timestamps within the same minute equally, so, reset the seconds
         Date now = TimeUtils.resetSeconds(new Date());

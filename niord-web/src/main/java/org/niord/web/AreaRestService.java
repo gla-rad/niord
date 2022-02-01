@@ -262,7 +262,8 @@ public class AreaRestService extends AbstractBatchableRestService {
     @Path("/recompute-tree-sort-order")
     @RolesAllowed(Roles.ADMIN)
     public boolean recomputeTreeSortOrder() {
-        return areaService.recomputeTreeSortOrder();
+        areaService.recomputeTreeSortOrder();
+        return true;
     }
 
 

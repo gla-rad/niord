@@ -308,7 +308,8 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @Path("/recompute-tree-sort-order")
     @RolesAllowed(Roles.SYSADMIN)
     public boolean recomputeTreeSortOrder() {
-        return categoryService.recomputeTreeSortOrder();
+        categoryService.recomputeTreeSortOrder();
+        return true;
     }
 
 

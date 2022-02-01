@@ -175,7 +175,8 @@ public class ScheduledMailService extends BaseService {
      */
     @Scheduled(cron="24 * * * * ?")
     @Lock(LockType.WRITE)
-    public void sendPendingMails() {
+    @Transactional
+    void sendPendingMails() {
 
         // Send at most "maxMailsPerMinute" mails at a time
         List<Integer> scheduledMailIds = getPendingMails().stream()
@@ -211,7 +212,7 @@ public class ScheduledMailService extends BaseService {
     @Lock(LockType.WRITE)
     @Transactional
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void deleteExpiredMails() {
+    void deleteExpiredMails() {
 
         // If expiryDate is 0 (actually, non-positive), never delete mails
         if (mailDeleteAfterDays <= 0) {
@@ -262,6 +263,7 @@ public class ScheduledMailService extends BaseService {
         }
 
         /** {@inheritDoc} **/
+        @Transactional
         @Override
         public ScheduledMail call() {
             try {

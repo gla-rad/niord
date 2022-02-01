@@ -24,6 +24,7 @@ import org.niord.core.util.CdiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.RequestScoped;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * The deployment will be specific to - and cached by - the current domain.
  */
+@RequestScoped
 public class NiordKeycloakConfigResolver implements KeycloakConfigResolver {
 
     final Map<String, KeycloakDeployment> cache = new ConcurrentHashMap<>();
