@@ -17,6 +17,7 @@
 package org.niord.core.batch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.batch.vo.BatchSetVo;
@@ -233,7 +234,7 @@ public class BatchSetService {
      * Called every minute to monitor the "batch-sets" folder. If a batch-set zip file has been
      * placed in this folder, the batch-set gets executed.
      */
-    @Schedule(persistent=false, second="24", minute="*/1", hour="*/1")
+    @Scheduled(cron="24 */1 */1 * * ?")
     protected void monitorBatchJobInFolderInitiation() {
 
         Path batchSetsFolder = batchService.getBatchJobRoot().resolve(BATCH_SETS_FOLDER);

@@ -37,6 +37,7 @@ import javax.ejb.LockType;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
@@ -156,6 +157,7 @@ public class TwitterPromulgationService extends BasePromulgationService {
 
 
     /** Creates a Twitter settings entity from the given template **/
+    @Transactional
     public TwitterSettings createSettings(TwitterSettings settings) throws Exception {
 
         String typeId = settings.getPromulgationType().getTypeId();

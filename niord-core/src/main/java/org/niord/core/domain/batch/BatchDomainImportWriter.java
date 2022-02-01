@@ -21,6 +21,7 @@ import org.niord.core.domain.DomainService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class BatchDomainImportWriter extends AbstractItemHandler {
 
 
     /** {@inheritDoc} **/
+    @Transactional
     @Override
     public void writeItems(List<Object> items) throws Exception {
         long t0 = System.currentTimeMillis();

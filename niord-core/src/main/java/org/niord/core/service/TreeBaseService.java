@@ -21,6 +21,7 @@ import org.niord.core.settings.SettingsService;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -102,6 +103,7 @@ public abstract class TreeBaseService<E extends TreeBaseEntity<E>> extends BaseS
     /**
      * Update lineages for all entities
      */
+    @Transactional
     public void updateLineages(Class<E> clz) {
 
         // Get root entities
@@ -146,6 +148,7 @@ public abstract class TreeBaseService<E extends TreeBaseEntity<E>> extends BaseS
      * @param moveUp whether to move the entity up or down
      * @return if the entity was moved
      */
+    @Transactional
     public boolean changeSortOrder(Class<E> clz, Integer entityId, boolean moveUp) {
         E entity = getByPrimaryKey(clz, entityId);
         boolean updated = false;
@@ -221,6 +224,7 @@ public abstract class TreeBaseService<E extends TreeBaseEntity<E>> extends BaseS
      *
      * @return if the sort order was updated
      */
+    @Transactional
     public boolean recomputeTreeSortOrder(String lastProcessedSettingsKey) {
         long t0 = System.currentTimeMillis();
 

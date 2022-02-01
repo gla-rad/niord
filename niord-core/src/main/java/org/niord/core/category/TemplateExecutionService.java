@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.script.*;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -128,6 +129,7 @@ public class TemplateExecutionService extends BaseService {
      * @param type the parameter type value object
      * @return the new entity
      */
+    @Transactional
     public ParamType createParamType(ParamType type) {
 
         // Ensure validity of the type name
@@ -149,6 +151,7 @@ public class TemplateExecutionService extends BaseService {
      * @param type the parameter type value object
      * @return the updated entity
      */
+    @Transactional
     public ParamType updateParamType(ParamType type) {
 
         ParamType original = getParamType(type.getId());
@@ -177,6 +180,7 @@ public class TemplateExecutionService extends BaseService {
      * @param id the id of the parameter type to delete
      * @noinspection all
      */
+    @Transactional
     public boolean deleteParamType(Integer id) {
 
         ParamType type = getByPrimaryKey(ParamType.class, id);

@@ -34,6 +34,7 @@ import javax.ejb.LockType;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -286,6 +287,7 @@ public class SafetyNetPromulgationService
 
 
     /** Creates a new SafetyNET area */
+    @Transactional
     public SafetyNetArea createArea(SafetyNetArea area) {
 
         String typeId = area.getPromulgationType().getTypeId();
@@ -297,6 +299,7 @@ public class SafetyNetPromulgationService
 
 
     /** Updates an existing SafetyNET area */
+    @Transactional
     public SafetyNetArea updateArea(SafetyNetArea area) {
 
         String typeId = area.getPromulgationType().getTypeId();
@@ -311,6 +314,7 @@ public class SafetyNetPromulgationService
 
     /** Deletes an existing SafetyNET area */
     @SuppressWarnings("all")
+    @Transactional
     public boolean deleteArea(String typeId, String name) {
 
         log.info("Deleting SafetyNET area " + name + " for promulgation type " + typeId);

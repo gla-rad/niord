@@ -32,6 +32,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.script.ScriptException;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -113,6 +114,7 @@ public class DictionaryService extends BaseService {
      * @param entry the template dictionary entry to add
      * @return the added dictionary entry
      */
+    @Transactional
     @Lock(LockType.WRITE)
     public DictionaryEntry createEntry(String name, DictionaryEntry entry) {
         Dictionary dict = findByName(name);
@@ -150,6 +152,7 @@ public class DictionaryService extends BaseService {
      * @param entry the template dictionary entry to update
      * @return the updated dictionary entry
      */
+    @Transactional
     @Lock(LockType.WRITE)
     public DictionaryEntry updateEntry(String name, DictionaryEntry entry) {
         Dictionary dict = findByName(name);
@@ -183,6 +186,7 @@ public class DictionaryService extends BaseService {
      * @return if the entry was deleted
      */
     @Lock(LockType.WRITE)
+    @Transactional
     public boolean deleteEntry(String name, String key) {
         Dictionary dict = findByName(name);
         if (dict == null) {
@@ -431,6 +435,7 @@ public class DictionaryService extends BaseService {
      * Imports a dictionary from the given template
      * @param dictionary the dictionary to import
      */
+    @Transactional
     public Dictionary importDictionary(Dictionary dictionary) {
         long t0 = System.currentTimeMillis();
 

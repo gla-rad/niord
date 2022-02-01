@@ -28,6 +28,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -156,6 +157,7 @@ public class ChartService extends BaseService {
      * @param chart    the template chart to update the original from
      * @return the updated chart
      */
+    @Transactional
     public Chart updateChart(Chart original, Chart chart) {
         // Copy the chart data
         original.setInternationalNumber(chart.getInternationalNumber());
@@ -188,6 +190,7 @@ public class ChartService extends BaseService {
      * @param chart the chart to create
      * @return the created chart
      */
+    @Transactional
     public Chart createChart(Chart chart) {
         Chart original = findByChartNumber(chart.getChartNumber());
         if (original != null) {
@@ -221,6 +224,7 @@ public class ChartService extends BaseService {
      * Deletes the chart
      * @param chartNumber the id of the chart to delete
      */
+    @Transactional
     public boolean deleteChart(String chartNumber) {
 
         Chart chart = findByChartNumber(chartNumber);

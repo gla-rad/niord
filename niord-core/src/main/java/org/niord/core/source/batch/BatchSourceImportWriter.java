@@ -22,6 +22,7 @@ import org.niord.core.source.SourceService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class BatchSourceImportWriter extends AbstractItemHandler {
     SourceService sourceService;
 
     /** {@inheritDoc} **/
+    @Transactional
     @Override
     public void writeItems(List<Object> items) throws Exception {
         long t0 = System.currentTimeMillis();

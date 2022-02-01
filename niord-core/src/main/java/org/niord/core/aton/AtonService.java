@@ -41,6 +41,7 @@ import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,6 +178,7 @@ public class AtonService extends BaseService {
      * Deletes the AtoN that matches the provided AtoN UID identifier.
      * @param atonUid The UID of the AtoN to be deleted
      */
+    @Transactional
     public boolean deleteAton(String atonUid) throws Exception {
         // Find the original AtoN entry
         AtonNode orig = findByAtonUid(atonUid);

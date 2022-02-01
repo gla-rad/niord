@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -167,6 +168,7 @@ public class MessageSeriesService extends BaseService {
      * @param series the new message series
      * @return the persisted message series
      */
+    @Transactional
     public MessageSeries createMessageSeries(MessageSeries series) {
         MessageSeries original = findBySeriesId(series.getSeriesId());
         if (original != null) {
@@ -184,6 +186,7 @@ public class MessageSeriesService extends BaseService {
      * @param series the message series to update
      * @return the persisted message series
      */
+    @Transactional
     public MessageSeries updateMessageSeries(MessageSeries series) {
         MessageSeries original = findBySeriesId(series.getSeriesId());
         if (original == null) {
@@ -212,6 +215,7 @@ public class MessageSeriesService extends BaseService {
      * @return if the message was deleted
      * @noinspection all
      */
+    @Transactional
     public boolean deleteMessageSeries(String seriesId) {
 
         // TODO: Check if there are message with the given message series

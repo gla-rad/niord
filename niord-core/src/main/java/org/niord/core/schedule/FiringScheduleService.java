@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.WebApplicationException;
 import java.util.*;
 import java.util.function.Function;
@@ -111,6 +112,7 @@ public class FiringScheduleService extends BaseService {
      * @param schedule the firing schedule to create
      * @return the created firing schedule
      */
+    @Transactional
     public FiringSchedule createFiringSchedule(FiringSchedule schedule) {
         if (schedule.isPersisted()) {
             throw new IllegalArgumentException("Cannot create schedule with existing ID " + schedule.getId());
@@ -139,6 +141,7 @@ public class FiringScheduleService extends BaseService {
      * @param schedule the firing schedule to update
      * @return the updated firing schedule
      */
+    @Transactional
     public FiringSchedule updateFiringSchedule(FiringSchedule schedule) {
         FiringSchedule original = findById(schedule.getId());
         if (original == null) {
@@ -172,6 +175,7 @@ public class FiringScheduleService extends BaseService {
      * @param id the ID of the firing schedule to delete
      * @noinspection all
      */
+    @Transactional
     public boolean deleteFiringSchedule(Integer id) {
 
         FiringSchedule schedule = findById(id);
@@ -334,6 +338,7 @@ public class FiringScheduleService extends BaseService {
      * @param templatePeriod the template firing period
      * @return the persisted firing period
      */
+    @Transactional
     public FiringPeriod addFiringPeriod(FiringPeriod templatePeriod) {
         // Validation
         if (templatePeriod.isPersisted()) {
@@ -352,6 +357,7 @@ public class FiringScheduleService extends BaseService {
      * @param templatePeriod the template firing period
      * @return the persisted firing period
      */
+    @Transactional
     public FiringPeriod updateFiringPeriod(FiringPeriod templatePeriod) {
         // Validation
         if (templatePeriod.isNew()) {
@@ -372,6 +378,7 @@ public class FiringScheduleService extends BaseService {
      * Deletes the firing period with the given ID
      * @param id the firing period ID
      */
+    @Transactional
     public boolean deleteFiringPeriod(Integer id) {
 
         FiringPeriod firingPeriod = getByPrimaryKey(FiringPeriod.class, id);
@@ -394,6 +401,7 @@ public class FiringScheduleService extends BaseService {
      * @param messageTag the message tag to assign the messages to
      * @return the list of newly created firing area message templates
      */
+    @Transactional
     public List<Message> generateFiringAreaMessages(MessageSeries messageSeries, MessageTag messageTag) {
 
         // Search for active firing areas for the current domain

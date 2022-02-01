@@ -15,6 +15,7 @@
  */
 package org.niord.core.message;
 
+import io.quarkus.scheduler.Scheduled;
 import org.niord.core.domain.Domain;
 import org.niord.core.domain.DomainService;
 import org.niord.core.service.BaseService;
@@ -22,7 +23,6 @@ import org.niord.core.util.TimeUtils;
 import org.niord.model.message.Status;
 import org.slf4j.Logger;
 
-import javax.ejb.Schedule;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -61,7 +61,7 @@ public class ScheduledMessageService extends BaseService {
     /**
      * Called every minute to update expire published messages where publishDateTo is in the past
      */
-    @Schedule(persistent = false, second = "27", minute = "*", hour = "*")
+    @Scheduled(cron="28 * * * * ?")
     public void checkForExpirablePublishedMessages() {
 
         // We want to treat messages with timestamps within the same minute equally, so, reset the seconds
@@ -86,7 +86,7 @@ public class ScheduledMessageService extends BaseService {
     /**
      * Called every minute to publish messages with a VERIFIED status and a defined publishDateFrom in the past
      */
-    @Schedule(persistent = false, second = "37", minute = "*", hour = "*")
+    @Scheduled(cron="37 * * * * ?")
     public void checkForPublishableMessages() {
 
         // We want to treat messages with timestamps within the same minute equally, so, reset the seconds

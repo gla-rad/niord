@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -215,6 +216,7 @@ public class DomainService extends BaseService {
      * @param domain the domain to update
      * @return the updated domain
      */
+    @Transactional
     public Domain updateDomain(Domain domain) {
         Domain original = findByDomainId(domain.getDomainId());
         if (original == null) {
@@ -254,6 +256,7 @@ public class DomainService extends BaseService {
      * @param domain the domain to create
      * @return the created domain
      */
+    @Transactional
     public Domain createDomain(Domain domain, @SuppressWarnings("all") boolean createInKeycloak) {
         Domain original = findByDomainId(domain.getDomainId());
         if (original != null) {
@@ -290,6 +293,7 @@ public class DomainService extends BaseService {
      * @param domainId the ID of the domain to delete
      * @noinspection all
      */
+    @Transactional
     public boolean deleteDomain(String domainId) {
 
         Domain domain = findByDomainId(domainId);

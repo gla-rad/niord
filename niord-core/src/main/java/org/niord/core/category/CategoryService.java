@@ -15,6 +15,7 @@
  */
 package org.niord.core.category;
 
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.NiordApp;
 import org.niord.core.aton.AtonFilter;
@@ -27,11 +28,11 @@ import org.niord.core.service.TreeBaseService;
 import org.niord.model.search.PagedSearchParamsVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Schedule;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
 import javax.script.ScriptException;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -255,6 +256,7 @@ public class CategoryService extends TreeBaseService<Category> {
      * @param category the template category to update the original with
      * @return the updated category
      */
+    @Transactional
     public Category updateCategoryData(Category original, Category category) {
 
         original.setType(category.getType());
@@ -310,6 +312,7 @@ public class CategoryService extends TreeBaseService<Category> {
      * @param parentId the id of the parent category
      * @return the created category
      */
+    @Transactional
     public Category createCategory(Category category, Integer parentId) {
 
         if (parentId != null) {
@@ -362,6 +365,7 @@ public class CategoryService extends TreeBaseService<Category> {
      * Deletes the category and sub-categories
      * @param categoryId the id of the category to delete
      */
+    @Transactional
     public boolean deleteCategory(Integer categoryId) {
 
         Category category = getByPrimaryKey(Category.class, categoryId);
@@ -518,7 +522,7 @@ public class CategoryService extends TreeBaseService<Category> {
      *
      * @return if the sort order was updated
      */
-    @Schedule(persistent = false, second = "13", minute = "23", hour = "*")
+    @Scheduled(cron="13 23 * * * ?")
     public boolean recomputeTreeSortOrder() {
         return recomputeTreeSortOrder(SETTING_CATEGORY_LAST_UPDATED);
     }

@@ -34,6 +34,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -356,6 +357,7 @@ public class PublicationService extends BaseService {
      * @param publication the publication to save
      * @return the persisted publication
      */
+    @Transactional
     private Publication savePublication(Publication publication) {
 
         // Update the publication ID and repoPath
@@ -455,6 +457,7 @@ public class PublicationService extends BaseService {
      * Deletes the publication with the given ID
      * @param publicationId the id of the publication to delete
      */
+    @Transactional
     public boolean deletePublication(String publicationId) {
 
         Publication publication = findByPublicationId(publicationId);

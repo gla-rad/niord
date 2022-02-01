@@ -109,7 +109,8 @@ public class SettingsService extends BaseService {
 
 
     /** Called upon startup. Read the settings from the "/niord.json" classpath file */
-    private Map<String, Setting> loadSettingsFromClasspath() throws IOException {
+    @Transactional
+    Map<String, Setting> loadSettingsFromClasspath() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<Setting> settings = mapper.readValue(
                 getClass().getResource(SETTINGS_FILE),
@@ -120,7 +121,8 @@ public class SettingsService extends BaseService {
 
 
     /** Called upon startup. Read the settings from the "${niord.home}/niord.json" file and update the settingMap */
-    private Map<String, Setting> loadSettingsFromNiordHome(Map<String, Setting> settingMap) throws IOException {
+    @Transactional
+    Map<String, Setting> loadSettingsFromNiordHome(Map<String, Setting> settingMap) throws IOException {
         Object niordHome = peek("niord.home");
         if (niordHome == null && settingMap.containsKey("niord.home")) {
             niordHome = settingMap.get("niord.home").getValue();

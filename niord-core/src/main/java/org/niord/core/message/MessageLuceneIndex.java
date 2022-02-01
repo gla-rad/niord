@@ -15,6 +15,7 @@
  */
 package org.niord.core.message;
 
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -156,7 +157,7 @@ public class MessageLuceneIndex extends BaseService {
      * to the index while it is being updated, and we really do not want that.
      */
     @Timeout
-    @Schedule(persistent=false, second="38", minute="*/1", hour="*")
+    @Scheduled(cron="38 */1 * * * ?")
     private int updateLuceneIndex() {
         lock.lock();
         try {

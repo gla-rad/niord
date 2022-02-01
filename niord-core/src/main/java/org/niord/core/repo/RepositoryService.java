@@ -15,6 +15,7 @@
  */
 package org.niord.core.repo;
 
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -36,7 +37,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Schedule;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -540,7 +540,7 @@ public class RepositoryService {
     /**
      * Every hour, check the repo "temp" root, and delete old files and folders
      */
-    @Schedule(persistent = false, second = "50", minute = "22", hour = "*")
+    @Scheduled(cron="50 22 * * * ?")
     public void cleanUpTempRoot() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);

@@ -21,6 +21,7 @@ import org.niord.core.batch.AbstractItemHandler;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class BatchAtonImportWriter extends AbstractItemHandler {
 
     /** {@inheritDoc} **/
     @Override
+    @Transactional
     public void writeItems(List<Object> items) throws Exception {
         long t0 = System.currentTimeMillis();
         for (Object i : items) {

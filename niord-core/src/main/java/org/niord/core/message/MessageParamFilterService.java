@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -113,6 +114,7 @@ public class MessageParamFilterService extends BaseService {
      * @param filter the new message filter
      * @return the persisted message filter
      */
+    @Transactional
     public MessageParamFilter createOrUpdateMessageFilter(MessageParamFilter filter) {
         MessageParamFilter original;
 
@@ -144,6 +146,7 @@ public class MessageParamFilterService extends BaseService {
      * @param id the message filter to delete
      * @return if the message filter was deleted
      */
+    @Transactional
     public boolean deleteMessageFilter(Integer id) {
         User user = userService.currentUser();
 

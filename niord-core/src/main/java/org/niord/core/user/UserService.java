@@ -25,13 +25,13 @@ import org.niord.core.keycloak.KeycloakIntegrationService;
 import org.niord.core.service.BaseService;
 import org.niord.core.user.vo.GroupVo;
 import org.niord.core.user.vo.UserVo;
+import org.niord.core.web.SecurityContextProvider;
 import org.niord.model.DataFilter.UserResolver;
 import org.slf4j.Logger;
 
-import javax.annotation.Resource;
-import javax.ejb.SessionContext;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
 import java.util.function.Function;
@@ -52,8 +52,8 @@ public class UserService extends BaseService {
     @Inject
     private Logger log;
 
-    @Resource
-    SessionContext ctx;
+    @Inject
+    SecurityContextProvider securityContextProvider;
 
     @Inject
     TicketService ticketService;
@@ -71,7 +71,7 @@ public class UserService extends BaseService {
      * Returns the current Keycloak principal
      */
     public KeycloakPrincipal getCallerPrincipal() {
-        Principal principal = ctx.getCallerPrincipal();
+        Principal principal = this.securityContextProvider.getSecurityContext().getUserPrincipal();
 
         // Handle un-authenticated case
         if (principal == null || !(principal instanceof KeycloakPrincipal)) {
@@ -132,6 +132,7 @@ public class UserService extends BaseService {
      *
      * @return the currently authenticated user
      */
+    @Transactional
     public User currentUser() {
 
         // Get the current Keycloak principal
@@ -184,7 +185,7 @@ public class UserService extends BaseService {
      * @return True if the caller has the specified role.
      */
     public boolean isCallerInRole(String role) {
-        return ctx.isCallerInRole(role) ||
+        return this.securityContextProvider.getSecurityContext().isUserInRole(role) ||
                 ticketService.validateRolesForCurrentThread(role);
     }
 
@@ -296,6 +297,7 @@ public class UserService extends BaseService {
      * Adds the user to Keycloak and the local Niord DB
      * @param user the template user to add
      */
+    @Transactional
     public UserVo addKeycloakUser(UserVo user) throws Exception {
         keycloakIntegrationService.addKeycloakUser(user);
         return syncKeycloakUserWithNiord(user).toVo();
@@ -306,6 +308,7 @@ public class UserService extends BaseService {
      * Updates the user in Keycloak and the local Niord DB
      * @param user the template user to update
      */
+    @Transactional
     public UserVo updateKeycloakUser(UserVo user) throws Exception {
         keycloakIntegrationService.updateKeycloakUser(user);
         return syncKeycloakUserWithNiord(user).toVo();

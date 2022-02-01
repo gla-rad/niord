@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 
 import static org.niord.core.category.StandardParamType.STANDARD_PARAM_TYPES;
@@ -44,6 +45,7 @@ public class TemplateInitService extends BaseService {
 
     /** Called when the web application boots up **/
     @PostConstruct
+    @Transactional
     void init() {
         Arrays.stream(STANDARD_PARAM_TYPES)
                 .forEach(this::checkCreateStandardParamType);

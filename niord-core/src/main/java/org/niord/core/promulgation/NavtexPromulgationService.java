@@ -40,6 +40,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -419,6 +420,7 @@ public class NavtexPromulgationService extends BasePromulgationService {
 
 
     /** Creates a new transmitter */
+    @Transactional
     public NavtexTransmitter createTransmitter(NavtexTransmitter transmitter) {
 
         String typeId = transmitter.getPromulgationType().getTypeId();
@@ -431,6 +433,7 @@ public class NavtexPromulgationService extends BasePromulgationService {
 
 
     /** Updates an existing transmitter */
+    @Transactional
     public NavtexTransmitter updateTransmitter(NavtexTransmitter transmitter) {
 
         String typeId = transmitter.getPromulgationType().getTypeId();
@@ -445,6 +448,7 @@ public class NavtexPromulgationService extends BasePromulgationService {
 
     /** Deletes an existing transmitter */
     @SuppressWarnings("all")
+    @Transactional
     public boolean deleteTransmitter(String typeId, String name) {
 
         log.info("Deleting transmitter " + name + " for promulgation type " + typeId);

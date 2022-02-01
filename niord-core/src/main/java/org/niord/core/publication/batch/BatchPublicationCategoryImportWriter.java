@@ -22,6 +22,7 @@ import org.niord.core.publication.PublicationCategoryService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class BatchPublicationCategoryImportWriter extends AbstractItemHandler {
     PublicationCategoryService publicationCategoryService;
 
     /** {@inheritDoc} **/
+    @Transactional
     @Override
     public void writeItems(List<Object> items) throws Exception {
         long t0 = System.currentTimeMillis();

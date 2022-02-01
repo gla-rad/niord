@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,6 +56,7 @@ public class ScriptResourceService extends BaseService {
      * @param resource the script resource to save
      * @return the saved resource
      */
+    @Transactional
     public ScriptResource saveScriptResource(ScriptResource resource) {
 
         // Update the type from the path extension
@@ -196,6 +198,7 @@ public class ScriptResourceService extends BaseService {
      * @param id the ID of the script resource to delete
      * @noinspection all
      */
+    @Transactional
     public boolean deleteScriptResource(Integer id) {
 
         ScriptResource resource = findById(id);
@@ -272,6 +275,7 @@ public class ScriptResourceService extends BaseService {
      *
      * @param resource the resource to save a snapshot for
      */
+    @Transactional
     public void saveScriptResourceHistory(ScriptResource resource) {
 
         try {

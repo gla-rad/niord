@@ -16,6 +16,7 @@
 
 package org.niord.core.mail;
 
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.db.CriteriaHelper;
 import org.niord.core.model.BaseEntity;
@@ -31,6 +32,7 @@ import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -171,7 +173,7 @@ public class ScheduledMailService extends BaseService {
     /**
      * Called every minute to process scheduled mails
      */
-    @Schedule(persistent=false, second="24", minute="*", hour = "*")
+    @Scheduled(cron="24 * * * * ?")
     @Lock(LockType.WRITE)
     public void sendPendingMails() {
 
@@ -205,8 +207,9 @@ public class ScheduledMailService extends BaseService {
      * However, this will fail because of a missing mail - recipient "delete on cascade" FK constraint.
      * Using JPAs CascadeType.ALL for the relation does NOT work in this case.
      */
-    @Schedule(persistent=false, second="48", minute="28", hour = "05")
+    @Scheduled(cron="48 28 5 * * ?")
     @Lock(LockType.WRITE)
+    @Transactional
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void deleteExpiredMails() {
 

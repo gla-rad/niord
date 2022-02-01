@@ -16,6 +16,7 @@
 package org.niord.core.batch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.batch.vo.BatchExecutionVo;
@@ -36,9 +37,9 @@ import org.slf4j.Logger;
 
 import javax.batch.operations.JobOperator;
 import javax.batch.operations.NoSuchJobException;
-import javax.ejb.Schedule;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -454,6 +455,7 @@ public class BatchService extends BaseService {
      *
      * @param job the batch job entity
      */
+    @Transactional
     public BatchData saveBatchJob(BatchData job) {
         Objects.requireNonNull(job, "Invalid job parameter");
         Objects.requireNonNull(job.getInstanceId(), "Invalid job instance ID");
@@ -470,6 +472,7 @@ public class BatchService extends BaseService {
      * @param instanceIds the batch job id
      * @param progress the progress
      */
+    @Transactional
     public void updateBatchJobProgress(Long instanceIds, Integer progress) {
 
         BatchData job = findByInstanceId(instanceIds);
@@ -627,7 +630,7 @@ public class BatchService extends BaseService {
      * Called every minute to monitor the batch job "[jobName]/in" folders. If a file has been
      * placed in one of these folders, the cause the "jobName" batch job to be started.
      */
-    @Schedule(persistent=false, second="48", minute="*/1", hour="*/1")
+    @Scheduled(cron="48 */1 */1 * * ?")
     protected void monitorBatchJobInFolderInitiation() {
 
         // Resolve the list of batch job "in" folders
@@ -660,7 +663,7 @@ public class BatchService extends BaseService {
     /**
      * Called every hour to clean up the batch job "[jobName]/execution" folders for expired files
      */
-    @Schedule(persistent=false, second="30", minute="42", hour="*/1")
+    @Scheduled(cron="30 42 */1 * * ?")
     protected void cleanUpExpiredBatchJobFiles() {
 
         long t0 = System.currentTimeMillis();

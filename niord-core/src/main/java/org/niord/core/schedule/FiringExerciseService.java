@@ -16,6 +16,7 @@
 
 package org.niord.core.schedule;
 
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.area.Area;
 import org.niord.core.area.AreaSearchParams;
@@ -34,7 +35,6 @@ import org.niord.core.util.TimeUtils;
 import org.niord.model.message.*;
 import org.slf4j.Logger;
 
-import javax.ejb.Schedule;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -94,8 +94,7 @@ public class FiringExerciseService extends BaseService {
      * TODO: Hourly update are used when the schedule is imported from a legacy system.
      * TODO: Once Niord is used for scheduling, chang to run every night at 3 AM
      */
-    //@Schedule(persistent = false, hour = "3")
-    @Schedule(persistent=false, second="50", minute="21", hour="*/1")
+    @Scheduled(cron="50 21 */1 * * ?")
     public void updateFiringExercises() {
 
         Date today = TimeUtils.resetTime(new Date());

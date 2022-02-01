@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
+import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class MessageMailService extends BaseService {
      * Generates an email from the given mail template
      * @param mailTemplate the message mail template
      */
+    @Transactional
     public void sendMessageMail(MessageMailTemplate mailTemplate) throws Exception {
 
         if (mailTemplate.getRecipients().isEmpty()) {

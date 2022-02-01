@@ -42,6 +42,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -200,6 +201,7 @@ public class MailingListExecutionService extends BaseService {
      * Computes the next scheduled execution of the given trigger
      * @param triggerId the ID of the scheduled mailing list trigger to execute
      */
+    @Transactional
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void computeNextScheduledExecution(Integer triggerId) {
 
@@ -224,6 +226,7 @@ public class MailingListExecutionService extends BaseService {
      * @param trigger the scheduled mailing list trigger to execute
      * @param persist whether to persist the mails or not
      */
+    @Transactional
     public List<ScheduledMail> executeScheduledTrigger(MailingListTrigger trigger, boolean persist) throws Exception {
 
         if (trigger.getType() != TriggerType.SCHEDULED) {

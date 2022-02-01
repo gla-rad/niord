@@ -30,6 +30,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 /**
@@ -151,6 +152,7 @@ public class MailService extends BaseService {
      * @param scheduledMailId the ID of the scheduled mail to send
      * @return the updated mail entity
      */
+    @Transactional
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public ScheduledMail sendScheduledMail(Integer scheduledMailId) {
         try {

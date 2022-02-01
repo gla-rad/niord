@@ -15,6 +15,7 @@
  */
 package org.niord.core.area;
 
+import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.area.vo.SystemAreaVo.AreaMessageSorting;
@@ -30,7 +31,6 @@ import org.niord.core.settings.SettingsService;
 import org.niord.model.search.PagedSearchParamsVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Schedule;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
@@ -247,6 +247,7 @@ public class AreaService extends TreeBaseService<Area> {
      * @param area the template area to update the original with
      * @return the updated area
      */
+    @Transactional
     public Area updateAreaData(Area original, Area area) {
 
         original.setMrn(area.getMrn());
@@ -293,6 +294,7 @@ public class AreaService extends TreeBaseService<Area> {
      * @param parentId the id of the parent area
      * @return the created area
      */
+    @Transactional
     public Area createArea(Area area, Integer parentId) {
 
         if (parentId != null) {
@@ -318,6 +320,7 @@ public class AreaService extends TreeBaseService<Area> {
      * @param parentId the id of the parent area
      * @return if the area was moved
      */
+    @Transactional
     public boolean moveArea(Integer areaId, Integer parentId) {
         return moveEntity(Area.class, areaId, parentId);
     }
@@ -332,6 +335,7 @@ public class AreaService extends TreeBaseService<Area> {
      * @param moveUp whether to move the area up or down
      * @return if the area was moved
      */
+    @Transactional
     public boolean changeSortOrder(Integer areaId, boolean moveUp) {
         return changeSortOrder(Area.class, areaId, moveUp);
     }
@@ -341,6 +345,7 @@ public class AreaService extends TreeBaseService<Area> {
      * Deletes the area and sub-areas
      * @param areaId the id of the area to delete
      */
+    @Transactional
     public boolean deleteArea(Integer areaId) {
 
         Area area = getByPrimaryKey(Area.class, areaId);
@@ -483,7 +488,7 @@ public class AreaService extends TreeBaseService<Area> {
      *
      * @return if the sort order was updated
      */
-    @Schedule(persistent = false, second = "3", minute = "13", hour = "*")
+    @Scheduled(cron="13 3 * * * ?")
     public boolean recomputeTreeSortOrder() {
         return recomputeTreeSortOrder(SETTING_AREA_LAST_UPDATED);
     }

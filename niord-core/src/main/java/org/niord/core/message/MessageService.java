@@ -61,6 +61,7 @@ import javax.jms.Session;
 import javax.jms.Topic;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -322,6 +323,7 @@ public class MessageService extends BaseService {
      * @param message the message to save
      * @return the saved message
      */
+    @Transactional
     public Message saveMessage(Message message) {
         boolean wasPersisted = message.isPersisted();
 
@@ -1358,6 +1360,7 @@ public class MessageService extends BaseService {
      *
      * @param message the message to save a snapshot for
      */
+    @Transactional
     public void saveHistory(Message message) {
 
         try {
