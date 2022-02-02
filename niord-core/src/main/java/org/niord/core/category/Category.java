@@ -23,18 +23,7 @@ import org.niord.model.DataFilter;
 import org.niord.model.ILocalizable;
 import org.niord.model.message.CategoryVo;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +64,7 @@ public class Category extends TreeBaseEntity<Category> implements ILocalizable<C
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "entity", orphanRemoval = true)
     List<CategoryDesc> descs = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     List<String> editorFields = new ArrayList<>();
 
     String atonFilter;

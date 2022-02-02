@@ -59,5 +59,7 @@ public class BootstrapService extends BaseService {
      */
     @SuppressWarnings("all")
     private void handleUpgrade() {
+        // Nothing for now
     }
+
 }

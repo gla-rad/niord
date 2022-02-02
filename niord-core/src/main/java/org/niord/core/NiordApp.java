@@ -15,12 +15,15 @@
  */
 package org.niord.core;
 
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.QuarkusApplication;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.settings.Setting;
 import org.niord.core.settings.SettingsService;
+import org.slf4j.Logger;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.servlet.ServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,9 +34,8 @@ import java.util.Properties;
 /**
  * Common settings and functionality for the Niord app
  */
-@RequestScoped
 @SuppressWarnings("unused")
-public class NiordApp {
+public class NiordApp implements QuarkusApplication {
 
     private final static ThreadLocal<String> THREAD_LOCAL_SERVER_NAME = new ThreadLocal<>();
 
@@ -65,7 +67,26 @@ public class NiordApp {
                     .web(true);
 
     @Inject
+    Logger log;
+
+    @Inject
     SettingsService settingsService;
+
+    /**
+     * The main running function of the Quarkus application.
+     *
+     * @param args The input arguments provided
+     * @return The exit code
+     * @throws Exception
+     */
+    @Override
+    public int run(String... args) throws Exception {
+        this.log.info("The QUARKUS Niord App is starting up...");
+        // And wait to finish
+        Quarkus.waitForExit();
+        // Finish!!!
+        return 0;
+    }
 
 
     /** Returns the build version **/

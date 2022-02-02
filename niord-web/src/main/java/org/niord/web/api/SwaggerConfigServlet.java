@@ -31,14 +31,11 @@ import javax.servlet.http.HttpServlet;
  * <p>
  * This will make the swagger definition available at "/rest/swagger.json"
  */
-@WebServlet(name = "SwaggerConfigServlet", loadOnStartup = 1)
+@WebServlet(name = "SwaggerConfigServlet")
 public class SwaggerConfigServlet extends HttpServlet {
 
     @Inject
     Logger log;
-
-    @Inject
-    NiordApp app;
 
     /** Initialize Swagger */
     @Override
@@ -51,7 +48,7 @@ public class SwaggerConfigServlet extends HttpServlet {
             beanConfig.setBasePath("/rest");
             beanConfig.setResourcePackage("org.niord.web.api,org.niord.model,org.niord.model.message,org.niord.model.publication,org.niord.model.search,org.niord.model.geojson,org.niord.s124");
             beanConfig.setScan(true);
-            log.info("Initialized Swagger: " + app.getBaseUri() +  "/rest/swagger.json");
+            log.info("Initialized Swagger: /rest/swagger.json");
         } catch (ServletException e) {
             log.error("Error initializing Swagger", e);
         }

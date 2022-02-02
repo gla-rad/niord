@@ -25,15 +25,7 @@ import org.niord.model.DataFilter;
 import org.niord.model.ILocalizable;
 import org.niord.model.message.AreaVo;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -82,7 +74,7 @@ public class Area extends TreeBaseEntity<Area> implements ILocalizable<AreaDesc>
     Integer originAngle;    // For CW and CCW message sorting
 
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     List<String> editorFields = new ArrayList<>();
 
     /** Constructor */
