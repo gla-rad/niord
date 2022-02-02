@@ -19,8 +19,8 @@ import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -28,7 +28,7 @@ import java.util.List;
  * Creates the spatial indexes needed.
  * Cannot be accommodated with usual JPA annotations, methinks.
  */
-@Singleton
+@ApplicationScoped
 @Startup
 @SuppressWarnings("unused")
 public class SpatialIndexCreator extends BaseService {

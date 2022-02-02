@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -99,9 +98,6 @@ public class AtonDefaultsService {
     @Inject
     private Logger log;
 
-    @Resource
-    TimerService timerService;
-
     // TODO: Inject from setting
     private IalaBuoyageSystem ialaSystem = IalaBuoyageSystem.IALA_A;
 
@@ -116,13 +112,20 @@ public class AtonDefaultsService {
     @PostConstruct
     public void init() {
         // In order not to stall webapp deployment, wait 3 seconds before initializing the defaults
-        timerService.createSingleActionTimer(3000, new TimerConfig());
+        new java.util.Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        generateDefaults();
+                    }
+                },
+                3000
+        );
     }
 
     /**
      * Generates the AtoN defaults from the INT-1-preset.xml file
      */
-    @Timeout
     private void generateDefaults() {
         try {
             long t0 = System.currentTimeMillis();

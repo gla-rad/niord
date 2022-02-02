@@ -16,12 +16,14 @@
 
 package org.niord.core.repo;
 
+import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -48,8 +50,7 @@ public class FileTypes {
     /**
      * Defines the supported content types
      */
-    @PostConstruct
-    void init() {
+    void init(@Observes StartupEvent ev) {
         addConentType("application/msword", 			    "docx", 	"doc", "dot");
         addConentType("application/pdf", 			    	"pdf", 		"pdf");
         addConentType("application/vnd.ms-excel",   		"xlsx", 	"xls", "xlt");

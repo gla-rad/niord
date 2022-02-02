@@ -19,6 +19,7 @@ import org.niord.core.aton.AtonNode;
 import org.niord.core.aton.AtonService;
 import org.niord.core.batch.AbstractItemHandler;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -27,7 +28,8 @@ import java.util.List;
 /**
  * Persists the AtoNs to the database
  */
-@Named
+@Dependent
+@Named("batchAtonImportWriter")
 public class BatchAtonImportWriter extends AbstractItemHandler {
 
     @Inject

@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.security.Principal;
+import javax.ws.rs.core.SecurityContext;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -71,14 +71,12 @@ public class UserService extends BaseService {
      * Returns the current Keycloak principal
      */
     public KeycloakPrincipal getCallerPrincipal() {
-        Principal principal = this.securityContextProvider.getSecurityContext().getUserPrincipal();
-
-        // Handle un-authenticated case
-        if (principal == null || !(principal instanceof KeycloakPrincipal)) {
-            return null;
-        }
-
-        return (KeycloakPrincipal) principal;
+        return Optional.ofNullable(this.securityContextProvider)
+                .map(SecurityContextProvider::getSecurityContext)
+                .map(SecurityContext::getUserPrincipal)
+                .filter(KeycloakPrincipal.class::isInstance)
+                .map(KeycloakPrincipal.class::cast)
+                .orElse(null);
     }
 
 
@@ -86,12 +84,10 @@ public class UserService extends BaseService {
      * Returns the current Keycloak Access Token
      */
     public AccessToken getKeycloakAccessToken() {
-        KeycloakPrincipal keycloakPrincipal = getCallerPrincipal();
-        if (keycloakPrincipal != null) {
-            KeycloakSecurityContext ctx = keycloakPrincipal.getKeycloakSecurityContext();
-            return ctx.getToken();
-        }
-        return null;
+        return Optional.ofNullable(this.getCallerPrincipal())
+                .map(KeycloakPrincipal::getKeycloakSecurityContext)
+                .map(KeycloakSecurityContext::getToken)
+                .orElse(null);
     }
 
 
@@ -99,11 +95,9 @@ public class UserService extends BaseService {
      * Returns the user attributes, i.e. the "other claims" map of the current Keycloak principal
      */
     public Map<String, Object> getUserAttributes() {
-        AccessToken accessToken = getKeycloakAccessToken();
-        if (accessToken != null) {
-            return accessToken.getOtherClaims();
-        }
-        return new HashMap<>();
+        return Optional.ofNullable(this.getKeycloakAccessToken())
+                .map(AccessToken::getOtherClaims)
+                .orElseGet(() -> new HashMap<>());
     }
 
 
@@ -114,15 +108,14 @@ public class UserService extends BaseService {
      * @return all the Keycloak domain IDs where the current user has the given role
      */
     public Set<String> getKeycloakDomainIdsForRole(String role) {
-        AccessToken accessToken = getKeycloakAccessToken();
-        if (accessToken != null) {
-            Map<String, AccessToken.Access> accessMap = accessToken.getResourceAccess();
-            return accessMap.entrySet().stream()
-                    .filter(kv -> kv.getValue().isUserInRole(role))
-                    .map(Map.Entry::getKey)
-                    .collect(Collectors.toSet());
-        }
-        return new HashSet<>();
+        return Optional.ofNullable(this.getKeycloakAccessToken())
+                .map(AccessToken::getResourceAccess)
+                .orElseGet(HashMap::new)
+                .entrySet()
+                .stream()
+                .filter(kv -> kv.getValue().isUserInRole(role))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 
 
@@ -185,8 +178,10 @@ public class UserService extends BaseService {
      * @return True if the caller has the specified role.
      */
     public boolean isCallerInRole(String role) {
-        return this.securityContextProvider.getSecurityContext().isUserInRole(role) ||
-                ticketService.validateRolesForCurrentThread(role);
+        return Optional.ofNullable(this.securityContextProvider)
+                .map(SecurityContextProvider::getSecurityContext)
+                .map(sc -> sc.isUserInRole(role))
+                .orElse(this.ticketService.validateRolesForCurrentThread(role));
     }
 
 

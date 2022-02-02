@@ -26,20 +26,15 @@ import org.niord.core.util.JsonUtils;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.*;
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -63,9 +58,6 @@ public class BatchSetService {
 
     @Inject
     Logger log;
-
-    @Resource
-    TimerService timerService;
 
     @Inject
     BatchService batchService;
@@ -191,7 +183,15 @@ public class BatchSetService {
                     .append(delay)
                     .append(" ms\n");
 
-            timerService.createSingleActionTimer(delay, new TimerConfig(execution, false));
+            new java.util.Timer().schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+                            executeBatchSetItem(execution);
+                        }
+                    },
+                    delay
+            );
         }
     }
 
@@ -199,10 +199,7 @@ public class BatchSetService {
     /**
      * Called in order to execute a batch set item
      */
-    @Timeout
-    private void executeBatchSetItem(Timer timer) {
-        BatchSetExecution batchSetExecution = (BatchSetExecution)timer.getInfo();
-
+    private void executeBatchSetItem(BatchSetExecution batchSetExecution) {
         String batchJobName = batchSetExecution.getBatchSetItem().getJobName();
         String batchFileName = batchSetExecution.getBatchSetItem().getFileName();
         Path file = batchSetExecution.getBatchSetSpec().getFolder().resolve(batchFileName);
@@ -236,7 +233,6 @@ public class BatchSetService {
      * placed in this folder, the batch-set gets executed.
      */
     @Scheduled(cron="24 */1 */1 * * ?")
-    @Transactional
     void monitorBatchJobInFolderInitiation() {
 
         Path batchSetsFolder = batchService.getBatchJobRoot().resolve(BATCH_SETS_FOLDER);

@@ -49,6 +49,11 @@
             <artifactId>quarkus-resteasy</artifactId>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>io.quarkus</groupId>-->
+<!--            <artifactId>quarkus-undertow</artifactId>-->
+<!--        </dependency>-->
+
         <!-- CORS support -->
         <dependency>
             <groupId>org.ebaysf.web</groupId>

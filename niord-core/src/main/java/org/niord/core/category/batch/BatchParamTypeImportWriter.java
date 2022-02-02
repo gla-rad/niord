@@ -17,13 +17,15 @@ package org.niord.core.category.batch;
 
 import org.niord.core.batch.AbstractItemHandler;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.util.List;
 
 /**
  * The parameter types have already been persisted by the processor
  */
-@Named
+@Dependent
+@Named("batchParamTypeImportWriter")
 public class BatchParamTypeImportWriter extends AbstractItemHandler {
 
     /** {@inheritDoc} **/

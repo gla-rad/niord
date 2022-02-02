@@ -172,7 +172,7 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-main</artifactId>
-            <version>22.4</version>
+            <version>26.2</version>
         </dependency>
 
 

@@ -15,6 +15,7 @@
  */
 package org.niord.core.message;
 
+import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -45,14 +46,16 @@ import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Timer;
 import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
@@ -70,7 +73,6 @@ import static org.niord.core.settings.Setting.Type.Boolean;
  */
 @ApplicationScoped
 @Lock(LockType.READ)
-@Startup
 @SuppressWarnings("unused")
 public class MessageLuceneIndex extends BaseService {
 
@@ -99,9 +101,6 @@ public class MessageLuceneIndex extends BaseService {
     @Inject
     Logger log;
 
-    @Resource
-    TimerService timerService;
-
     @Inject
     MessageService messageService;
 
@@ -118,8 +117,7 @@ public class MessageLuceneIndex extends BaseService {
     /**
      * Initialize the index
      */
-    @PostConstruct
-    private void init() {
+    private void init(@Observes StartupEvent ev) {
         // Create the lucene index directory
         if (!Files.exists(indexFolder)) {
             try {
@@ -139,7 +137,15 @@ public class MessageLuceneIndex extends BaseService {
         }
 
         // Wait 5 seconds before initializing the message index
-        timerService.createSingleActionTimer(5000, new TimerConfig());
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        updateLuceneIndex();
+                    }
+                },
+                5000
+        );
     }
 
     /**
@@ -157,8 +163,9 @@ public class MessageLuceneIndex extends BaseService {
      * Note to self: It's tempting to use @Lock(WRITE) here. However, that would lock search access
      * to the index while it is being updated, and we really do not want that.
      */
-    @Timeout
+    @Transactional
     @Scheduled(cron="38 */1 * * * ?")
+    @ActivateRequestContext
     void updateLuceneIndex() {
         lock.lock();
         try {
@@ -474,7 +481,6 @@ public class MessageLuceneIndex extends BaseService {
      * @param maxIndexCount max number of messages to index at a time
      * @return the number of updates
      */
-    @Transactional
     private int updateLuceneIndex(int maxIndexCount) {
 
         Date lastUpdated = getLastUpdated();

@@ -19,6 +19,7 @@ import org.niord.core.batch.AbstractItemHandler;
 import org.niord.core.domain.Domain;
 import org.niord.core.domain.DomainService;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -27,7 +28,8 @@ import java.util.List;
 /**
  * Persists the domains to the database
  */
-@Named
+@Dependent
+@Named("batchDomainImportWriter")
 public class BatchDomainImportWriter extends AbstractItemHandler {
 
     @Inject

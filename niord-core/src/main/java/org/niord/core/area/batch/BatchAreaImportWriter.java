@@ -19,6 +19,7 @@ import org.niord.core.area.Area;
 import org.niord.core.area.AreaService;
 import org.niord.core.batch.AbstractItemHandler;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -27,7 +28,8 @@ import java.util.List;
 /**
  * Persists the areas to the database
  */
-@Named
+@Dependent
+@Named("batchAreaImportWriter")
 public class BatchAreaImportWriter extends AbstractItemHandler {
 
     @Inject

@@ -48,7 +48,7 @@ public abstract class TreeBaseEntity<E extends TreeBaseEntity<E>> extends Versio
     protected String lineage;
 
     // The sortOrder is used to sort this category among siblings, and exposed via the Admin UI
-    @Column(columnDefinition="DOUBLE default 0.0")
+    @Column(columnDefinition="FLOAT default 0.0")
     protected double siblingSortOrder;
 
     // The treeSortOrder is re-computed at regular intervals by the system and designates

@@ -20,6 +20,7 @@ import org.niord.core.batch.AbstractItemHandler;
 import org.niord.core.publication.PublicationCategory;
 import org.niord.core.publication.PublicationCategoryService;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -28,7 +29,8 @@ import java.util.List;
 /**
  * Persists the publication categories to the database
  */
-@Named
+@Dependent
+@Named("batchPublicationCategoryImportWriter")
 public class BatchPublicationCategoryImportWriter extends AbstractItemHandler {
 
     @Inject

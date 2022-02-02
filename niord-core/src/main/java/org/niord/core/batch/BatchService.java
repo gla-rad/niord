@@ -16,9 +16,11 @@
 package org.niord.core.batch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.quarkiverse.jberet.runtime.QuarkusJobOperator;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jberet.cdi.JobScoped;
 import org.niord.core.batch.vo.BatchExecutionVo;
 import org.niord.core.batch.vo.BatchInstanceVo;
 import org.niord.core.batch.vo.BatchStatusVo;
@@ -37,8 +39,11 @@ import org.slf4j.Logger;
 
 import javax.batch.operations.JobOperator;
 import javax.batch.operations.NoSuchJobException;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.*;
@@ -80,7 +85,7 @@ import java.util.zip.GZIPOutputStream;
  * @see <a href="https://issues.jboss.org/browse/WFLY-4988">Error report</a>
  * @see <a href="https://github.com/NiordOrg/niord-dk/tree/master/niord-dk-web">Example solution</a>
  */
-@RequestScoped
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class BatchService extends BaseService {
 
@@ -97,7 +102,7 @@ public class BatchService extends BaseService {
     DomainService domainService;
 
     @Inject
-    JobOperator jobOperator;
+    QuarkusJobOperator jobOperator;
 
     @Inject
     SequenceService sequenceService;
@@ -160,6 +165,8 @@ public class BatchService extends BaseService {
      *
      * @param jobName the batch job name
      */
+    @Transactional
+    @ActivateRequestContext
     public long startBatchJobWithDeflatedData(String jobName, Object data, String dataFileName, Map<String, Object> properties) throws Exception {
 
         BatchData job = initBatchData(jobName, properties);
@@ -185,6 +192,8 @@ public class BatchService extends BaseService {
      *
      * @param jobName the batch job name
      */
+    @Transactional
+    @ActivateRequestContext
     public long startBatchJobWithJsonData(String jobName, Object data, String dataFileName, Map<String, Object> properties) throws Exception {
 
         BatchData job = initBatchData(jobName, properties);
@@ -206,6 +215,8 @@ public class BatchService extends BaseService {
      *
      * @param jobName the batch job name
      */
+    @Transactional
+    @ActivateRequestContext
     public long startBatchJobWithDataFile(String jobName, InputStream in, String dataFileName, Map<String, Object> properties) throws IOException {
 
         BatchData job = initBatchData(jobName, properties);
@@ -226,6 +237,8 @@ public class BatchService extends BaseService {
      *
      * @param jobName the batch job name
      */
+    @Transactional
+    @ActivateRequestContext
     public long startBatchJobWithDataFile(String jobName, Path file, Map<String, Object> properties) throws IOException {
         if (!Files.isRegularFile(file)) {
             throw new IllegalArgumentException("Invalid file " + file);
@@ -631,7 +644,6 @@ public class BatchService extends BaseService {
      * placed in one of these folders, the cause the "jobName" batch job to be started.
      */
     @Scheduled(cron="48 */1 */1 * * ?")
-    @Transactional
     void monitorBatchJobInFolderInitiation() {
 
         // Resolve the list of batch job "in" folders

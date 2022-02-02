@@ -17,6 +17,7 @@ package org.niord.core.settings;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.cache.CacheElement;
 import org.niord.core.service.BaseService;
@@ -178,6 +179,7 @@ public class SettingsService extends BaseService {
      * @param setting the source
      * @return the associated value
      */
+    @Transactional
     public Object get(Setting setting) {
         Objects.requireNonNull(setting, "Must specify valid setting");
 
@@ -190,19 +192,23 @@ public class SettingsService extends BaseService {
         CacheElement<Object> value = settingsCache.getCache().get(setting.getKey());
 
         // No cached value
-        if (value == null) {
-            Setting result = em.find(Setting.class, setting.getKey());
-            if (result == null) {
-                result = new Setting(setting);
-                em.persist(result);
-            }
-            value = new CacheElement<>(result.getValue());
+        try {
+            if (value == null) {
+                Setting result = em.find(Setting.class, setting.getKey());
+                if (result == null) {
+                    result = new Setting(setting);
+                    em.persist(result);
+                }
+                value = new CacheElement<>(result.getValue());
 
 
-            // Cache it.
-            if (setting.isCached()) {
-                settingsCache.getCache().put(setting.getKey(), value);
+                // Cache it.
+                if (setting.isCached()) {
+                    settingsCache.getCache().put(setting.getKey(), value);
+                }
             }
+        } catch (IllegalStateException ex) {
+            return "/";
         }
 
         // Check if we need to substitute with system properties. Only applies to String-based settings.

@@ -357,7 +357,6 @@ public class PublicationService extends BaseService {
      * @param publication the publication to save
      * @return the persisted publication
      */
-    @Transactional
     private Publication savePublication(Publication publication) {
 
         // Update the publication ID and repoPath
@@ -372,6 +371,7 @@ public class PublicationService extends BaseService {
      * @param publication the publication to update
      * @return the updated publication
      */
+    @Transactional
     public Publication updatePublication(Publication publication) {
         Publication original = findByPublicationId(publication.getPublicationId());
         if (original == null) {
@@ -402,6 +402,7 @@ public class PublicationService extends BaseService {
      * @param publication the publication to create
      * @return the created publication
      */
+    @Transactional
     public Publication createPublication(Publication publication) {
         if (!publication.isNew()) {
             throw new IllegalArgumentException("Cannot create publication with existing ID "
@@ -475,6 +476,7 @@ public class PublicationService extends BaseService {
      * @param status the new status
      * @return the update publication
      */
+    @Transactional
     public Publication updateStatus(String publicationId, PublicationStatus status) throws Exception {
 
         Publication pub = findByPublicationId(publicationId);

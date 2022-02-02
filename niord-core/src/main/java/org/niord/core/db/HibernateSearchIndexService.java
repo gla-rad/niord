@@ -15,6 +15,7 @@
  */
 package org.niord.core.db;
 
+import io.quarkus.runtime.StartupEvent;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -24,11 +25,12 @@ import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.*;
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.TimerTask;
 
 /**
  * Launches the Hibernate Search index
@@ -41,9 +43,6 @@ public class HibernateSearchIndexService extends BaseService {
     @Inject
     private Logger log;
 
-    @Resource
-    TimerService timerService;
-
     @Inject
     EntityManager entityManager;
 
@@ -51,13 +50,20 @@ public class HibernateSearchIndexService extends BaseService {
     @PostConstruct
     public void init() {
         // In order not to stall webapp deployment, wait 2 seconds starting the search index
-        timerService.createSingleActionTimer(2000, new TimerConfig());
+        new java.util.Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        generateFullTextIndexes();
+                    }
+                },
+                3000
+        );
     }
 
     /**
      * Creates the full text indexes
      */
-    @Timeout
     private void generateFullTextIndexes() {
         log.info("Start Hibernate Search indexer");
 
