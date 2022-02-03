@@ -97,7 +97,7 @@ public class AtonNodeVo implements IJsonSerializable {
     int version;
     int changeset;
     Date timestamp;
-    private AtonTagVo[] tags;
+    AtonTagVo[] tags;
 
     /**
      * Returns if this AtoN node is a valid seamark

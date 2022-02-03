@@ -17,6 +17,7 @@
 package org.niord.core.batch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,9 +26,8 @@ import org.niord.core.repo.RepositoryService;
 import org.niord.core.util.JsonUtils;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.*;
 import java.nio.file.DirectoryStream;
@@ -50,7 +50,6 @@ import java.util.zip.ZipInputStream;
  * via a "niord.batch-set" System setting.
  */
 @ApplicationScoped
-@Startup
 @SuppressWarnings("unused")
 public class BatchSetService {
 
@@ -69,8 +68,7 @@ public class BatchSetService {
     /**
      * Check if a batch set has been specified via the "niord.batch-set" system setting
      **/
-    @PostConstruct
-    public void init() {
+    void init(@Observes StartupEvent ev) {
         if (StringUtils.isNotBlank(System.getProperty("niord.batch-set"))) {
 
             Path path = Paths.get(System.getProperty("niord.batch-set"));

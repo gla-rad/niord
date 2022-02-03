@@ -15,6 +15,7 @@
  */
 package org.niord.core.dictionary;
 
+import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.NiordApp;
 import org.niord.core.aton.AtonFilter;
@@ -25,11 +26,10 @@ import org.niord.core.service.BaseService;
 import org.niord.model.DataFilter;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.script.ScriptException;
 import javax.transaction.Transactional;
@@ -45,7 +45,6 @@ import java.util.stream.Collectors;
  */
 @ApplicationScoped
 @Lock(LockType.READ)
-@Startup
 @SuppressWarnings("unused")
 public class DictionaryService extends BaseService {
 
@@ -59,11 +58,9 @@ public class DictionaryService extends BaseService {
 
     private Map<String, DictionaryVo> cachedDictionaries = new ConcurrentHashMap<>();
 
-    /**
-     * Called when the system starts up.
-     */
-    @PostConstruct
-    private void init() {
+    /** Called upon application startup */
+    @Transactional
+    void init(@Observes StartupEvent ev) {
 
         // Cache all dictionaries
         long t0 = System.currentTimeMillis();

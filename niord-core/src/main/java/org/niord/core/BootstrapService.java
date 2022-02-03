@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 /**
  * In case Niord has been started up on a fresh database
@@ -38,6 +39,7 @@ public class BootstrapService extends BaseService {
     Logger log;
 
     /** Called upon application startup */
+    @Transactional
     void init(@Observes StartupEvent ev) {
 
         // If no domains have been defined (fresh database), create

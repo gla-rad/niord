@@ -24,11 +24,10 @@ import org.niord.core.service.BaseService;
 import org.niord.core.util.JsonUtils;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
@@ -54,7 +53,6 @@ import static org.keycloak.util.JsonSerialization.mapper;
  */
 @ApplicationScoped
 @Lock(LockType.READ)
-@Startup
 @SuppressWarnings("unused")
 public class SettingsService extends BaseService {
 
@@ -76,9 +74,8 @@ public class SettingsService extends BaseService {
      *
      * Lastly, persists all the loaded settings that do not already exists in the database.
      */
-    @PostConstruct
     @Transactional
-    public void loadSettingsFromPropertiesFile() {
+    void init(@Observes StartupEvent ev) {
         try {
 
             // Read the settings from the "/niord.json" classpath file
