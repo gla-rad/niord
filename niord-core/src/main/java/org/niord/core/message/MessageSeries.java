@@ -65,7 +65,7 @@ public class MessageSeries extends VersionedEntity<Integer> {
     @Enumerated(EnumType.STRING)
     Set<Type> types = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     List<String> editorFields = new ArrayList<>();
 
     /**

@@ -48,21 +48,24 @@
             <version>1.1.0</version>
         </dependency>
 
-        <!-- Contains KeycloakPrincipal -->
         <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-core</artifactId>
-            <version>${keycloak.version}</version>
-            <scope>provided</scope>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc-client</artifactId>
         </dependency>
 
-        <!-- Contains KeycloakDeployment and KeycloakConfigResolver -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-keycloak-admin-client</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
             <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-spi</artifactId>
