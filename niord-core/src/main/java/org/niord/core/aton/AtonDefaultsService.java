@@ -15,12 +15,12 @@
  */
 package org.niord.core.aton;
 
+import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -91,7 +91,6 @@ import java.util.stream.Collectors;
  *
  */
 @ApplicationScoped
-@Startup
 @SuppressWarnings("unused")
 public class AtonDefaultsService {
 
@@ -109,8 +108,7 @@ public class AtonDefaultsService {
 
 
     /** Called upon application startup */
-    @PostConstruct
-    public void init() {
+    public void init(@Observes StartupEvent ev) {
         // In order not to stall webapp deployment, wait 3 seconds before initializing the defaults
         new java.util.Timer().schedule(
                 new TimerTask() {

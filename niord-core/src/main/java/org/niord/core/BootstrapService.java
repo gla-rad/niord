@@ -16,13 +16,13 @@
 
 package org.niord.core;
 
+import io.quarkus.runtime.StartupEvent;
 import org.niord.core.domain.Domain;
 import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 /**
@@ -31,15 +31,14 @@ import javax.inject.Inject;
  * present, that may be used for bootstrapping and setting up the system.
  */
 @ApplicationScoped
-@Startup
 @SuppressWarnings("unused")
 public class BootstrapService extends BaseService {
 
     @Inject
     Logger log;
 
-    @PostConstruct
-    void init() {
+    /** Called upon application startup */
+    void init(@Observes StartupEvent ev) {
 
         // If no domains have been defined (fresh database), create
         // a Master domain that can be used whilst setting up the system

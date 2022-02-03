@@ -50,14 +50,13 @@
 
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-oidc-client</artifactId>
+            <artifactId>quarkus-oidc</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-keycloak-admin-client</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>org.keycloak</groupId>
