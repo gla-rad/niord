@@ -23,7 +23,6 @@ import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.repo.RepositoryService;
 import org.slf4j.Logger;
 
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +40,6 @@ import java.nio.file.Path;
  * Creates and caches AtoN icons
  */
 @javax.ws.rs.Path("/aton-icon")
-@Startup
 @ApplicationScoped
 public class AtonIconRestService {
 
