@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +48,7 @@ import java.util.stream.Collectors;
  */
 @Path("/messages")
 @RequestScoped
+@Transactional
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageCommentRestService {

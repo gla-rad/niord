@@ -17,6 +17,7 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.niord.core.user.TicketService;
+import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.SessionContext;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.Set;
 
@@ -45,13 +47,14 @@ import java.util.Set;
  */
 @Path("/tickets")
 @RequestScoped
+@Transactional
 public class TicketRestService {
-
-    @Resource
-    SessionContext ctx;
 
     @Inject
     Logger log;
+
+    @Inject
+    UserService userService;
 
     @Inject
     TicketService ticketService;
@@ -74,7 +77,7 @@ public class TicketRestService {
         if (roles != null && !roles.isEmpty()) {
             // Ensure that the current user has all the roles that the ticket is requested for
             for (String role : roles) {
-                if (!ctx.isCallerInRole(role)) {
+                if (!userService.isCallerInRole(role)) {
                     throw new WebApplicationException(401);
                 }
             }

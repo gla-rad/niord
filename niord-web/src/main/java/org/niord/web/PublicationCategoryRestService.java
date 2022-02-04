@@ -31,6 +31,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  */
 @Path("/publication-categories")
 @RequestScoped
+@Transactional
 @PermitAll
 public class PublicationCategoryRestService extends AbstractBatchableRestService {
 

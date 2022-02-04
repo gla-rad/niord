@@ -27,6 +27,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.Calendar;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  */
 @Path("/message-series")
 @RequestScoped
+@Transactional
 @PermitAll
 public class MessageSeriesRestService {
 

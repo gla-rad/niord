@@ -31,6 +31,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.Set;
  */
 @Path("/atons")
 @RequestScoped
+@Transactional
 @PermitAll
 public class AtonRestService {
 
@@ -69,7 +71,7 @@ public class AtonRestService {
         param.maxSize(maxAtonNo);
 
         return atonService.search(param)
-                .map(AtonNode::toVo)
+                .map(atonService::toVo)
                 .getData();
     }
 
@@ -103,7 +105,7 @@ public class AtonRestService {
 
         PagedSearchResultVo<AtonNode> atons = atonService.search(param);
 
-        return atons.map(AtonNode::toVo);
+        return atons.map(atonService::toVo);
     }
 
     /**
@@ -129,7 +131,7 @@ public class AtonRestService {
         }
 
         // Return the VO object
-        return atonNode.toVo();
+        return this.atonService.toVo(atonNode);
     }
 
     /**
@@ -157,7 +159,7 @@ public class AtonRestService {
             throw new WebApplicationException(ex.getMessage(), 400);
         }
 
-        return atonNode.toVo();
+        return this.atonService.toVo(atonNode);
     }
 
 
@@ -187,7 +189,7 @@ public class AtonRestService {
             throw new WebApplicationException(ex.getMessage(), 400);
         }
 
-        return atonNode.toVo();
+        return this.atonService.toVo(atonNode);
     }
 
     /**
@@ -240,10 +242,10 @@ public class AtonRestService {
     @GZIP
     @NoCache
     public AtonNodeVo mergeAtonWithNodeTypes(AtonNodeTypeParam atonNodeTypeParam) throws Exception {
-        AtonNode aton = new AtonNode(atonNodeTypeParam.getAton());
+        AtonNode atonNode = new AtonNode(atonNodeTypeParam.getAton());
         atonNodeTypeParam.getNodeTypeNames()
-                .forEach(nt -> atonDefaultsService.mergeAtonWithNodeTypes(aton, nt));
-        return aton.toVo();
+                .forEach(nt -> atonDefaultsService.mergeAtonWithNodeTypes(atonNode, nt));
+        return this.atonService.toVo(atonNode);
     }
 
     /**
@@ -259,10 +261,10 @@ public class AtonRestService {
     @GZIP
     @NoCache
     public Object describeAtonForNodeTypes(AtonNodeTypeParam atonNodeTypeParam) {
-        AtonNode aton = new AtonNode(atonNodeTypeParam.getAton());
+        AtonNode atonNode = new AtonNode(atonNodeTypeParam.getAton());
         atonNodeTypeParam.getNodeTypeNames()    // Here we actually have the type itself
-                .forEach(type -> atonDefaultsService.describeAtonForNodeTypes(aton, type));
-        return aton.toVo();
+                .forEach(type -> atonDefaultsService.describeAtonForNodeTypes(atonNode, type));
+        return this.atonService.toVo(atonNode);
     }
 
     /**

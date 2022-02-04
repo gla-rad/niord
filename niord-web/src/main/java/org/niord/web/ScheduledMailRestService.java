@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 
 /**
@@ -37,6 +38,7 @@ import javax.ws.rs.*;
  */
 @Path("/scheduled-mails")
 @RequestScoped
+@Transactional
 @SuppressWarnings("unused")
 public class ScheduledMailRestService {
 

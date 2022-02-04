@@ -51,8 +51,6 @@ import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
@@ -323,7 +321,6 @@ public class MessageService extends BaseService {
      * @param message the message to save
      * @return the saved message
      */
-    @Transactional
     public Message saveMessage(Message message) {
         boolean wasPersisted = message.isPersisted();
 
@@ -346,6 +343,7 @@ public class MessageService extends BaseService {
      * @param message the template for the message to create
      * @return the new message
      */
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Message createMessage(Message message) throws Exception {
 
         // Validate the message
@@ -415,7 +413,7 @@ public class MessageService extends BaseService {
      * @param message the template for the message to update
      * @return the updated message
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Message updateMessage(Message message) throws Exception {
 
         Message original = findByUid(message.getUid());
@@ -601,7 +599,7 @@ public class MessageService extends BaseService {
      * @param uid the UID of the message
      * @param status    the status
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Message updateStatus(String uid, Status status) throws Exception {
         Date now = new Date();
         Message message = findByUid(uid);

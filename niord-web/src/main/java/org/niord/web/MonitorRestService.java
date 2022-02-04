@@ -19,6 +19,7 @@ package org.niord.web;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -29,6 +30,7 @@ import javax.ws.rs.WebApplicationException;
  */
 @Path("/monitor")
 @RequestScoped
+@Transactional
 public class MonitorRestService {
 
     @Inject

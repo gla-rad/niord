@@ -38,6 +38,11 @@
 
         <dependency>
             <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm-panache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-infinispan-embedded</artifactId>
             <version>1.6.1.Final</version>
         </dependency>

@@ -44,7 +44,6 @@ import org.niord.core.util.TextUtils;
 import org.niord.model.message.Status;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;

@@ -284,7 +284,6 @@ public class UserService extends BaseService {
      * Adds the user to Keycloak and the local Niord DB
      * @param user the template user to add
      */
-    @Transactional
     public UserVo addKeycloakUser(UserVo user) throws Exception {
         keycloakIntegrationService.addKeycloakUser(user);
         return syncKeycloakUserWithNiord(user).toVo();
@@ -295,7 +294,6 @@ public class UserService extends BaseService {
      * Updates the user in Keycloak and the local Niord DB
      * @param user the template user to update
      */
-    @Transactional
     public UserVo updateKeycloakUser(UserVo user) throws Exception {
         keycloakIntegrationService.updateKeycloakUser(user);
         return syncKeycloakUserWithNiord(user).toVo();

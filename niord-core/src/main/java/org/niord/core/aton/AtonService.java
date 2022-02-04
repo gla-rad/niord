@@ -25,6 +25,7 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.niord.core.area.Area;
+import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.chart.Chart;
 import org.niord.core.db.CriteriaHelper;
 import org.niord.core.db.SpatialWithinPredicate;
@@ -41,7 +42,6 @@ import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -127,7 +127,6 @@ public class AtonService extends BaseService {
      * @param aton The AtoN to be created
      * @return The created AtoN node object
      */
-    @Transactional
     public AtonNode createAton(AtonNode aton) throws Exception {
         // Make sure a duplicate AtoN does not exist
         AtonNode orig = findByAtonUid(aton.getAtonUid());
@@ -159,7 +158,6 @@ public class AtonService extends BaseService {
      * @param aton The AtoN to be updated
      * @return The updated AtoN node object
      */
-    @Transactional
     public AtonNode updateAton(AtonNode aton) throws Exception {
         // Find the original AtoN entry
         AtonNode orig = findByAtonUid(aton.getAtonUid());
@@ -180,7 +178,6 @@ public class AtonService extends BaseService {
      * Deletes the AtoN that matches the provided AtoN UID identifier.
      * @param atonUid The UID of the AtoN to be deleted
      */
-    @Transactional
     public boolean deleteAton(String atonUid) throws Exception {
         // Find the original AtoN entry
         AtonNode orig = findByAtonUid(atonUid);
@@ -200,7 +197,6 @@ public class AtonService extends BaseService {
      * Replaces the AtoN DB
      * @param atons the new AtoNs
      */
-    @Transactional
     public void updateAtons(List<AtonNode> atons) {
 
         // Persist new list of AtoNs
@@ -425,6 +421,11 @@ public class AtonService extends BaseService {
         }
         // Return success
         return true;
+    }
+
+    // Vo translations
+    public AtonNodeVo toVo(AtonNode atonNode) {
+        return atonNode.toVo();
     }
 
 }

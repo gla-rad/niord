@@ -32,6 +32,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
  */
 @Path("/users")
 @RequestScoped
+@Transactional
 @PermitAll
 public class UserRestService extends AbstractBatchableRestService {
 

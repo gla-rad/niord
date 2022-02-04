@@ -190,7 +190,6 @@ public class AreaService extends TreeBaseService<Area> {
      * <p>
      * @return the hierarchical list of root areas
      */
-    @Transactional
     public List<Area> getAreaTree() {
         return getTree(Area.class, "Area.findAreasWithDescs");
     }
@@ -294,7 +293,6 @@ public class AreaService extends TreeBaseService<Area> {
      * @param parentId the id of the parent area
      * @return the created area
      */
-    @Transactional
     public Area createArea(Area area, Integer parentId) {
 
         if (parentId != null) {
@@ -320,7 +318,6 @@ public class AreaService extends TreeBaseService<Area> {
      * @param parentId the id of the parent area
      * @return if the area was moved
      */
-    @Transactional
     public boolean moveArea(Integer areaId, Integer parentId) {
         return moveEntity(Area.class, areaId, parentId);
     }
@@ -335,7 +332,6 @@ public class AreaService extends TreeBaseService<Area> {
      * @param moveUp whether to move the area up or down
      * @return if the area was moved
      */
-    @Transactional
     public boolean changeSortOrder(Integer areaId, boolean moveUp) {
         return changeSortOrder(Area.class, areaId, moveUp);
     }
@@ -345,7 +341,6 @@ public class AreaService extends TreeBaseService<Area> {
      * Deletes the area and sub-areas
      * @param areaId the id of the area to delete
      */
-    @Transactional
     public boolean deleteArea(Integer areaId) {
 
         Area area = getByPrimaryKey(Area.class, areaId);

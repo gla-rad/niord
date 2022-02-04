@@ -20,7 +20,6 @@ import io.quarkiverse.jberet.runtime.QuarkusJobOperator;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jberet.cdi.JobScoped;
 import org.niord.core.batch.vo.BatchExecutionVo;
 import org.niord.core.batch.vo.BatchInstanceVo;
 import org.niord.core.batch.vo.BatchStatusVo;
@@ -37,13 +36,10 @@ import org.niord.core.util.JsonUtils;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.batch.operations.JobOperator;
 import javax.batch.operations.NoSuchJobException;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.control.ActivateRequestContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.*;
@@ -468,7 +464,6 @@ public class BatchService extends BaseService {
      *
      * @param job the batch job entity
      */
-    @Transactional
     public BatchData saveBatchJob(BatchData job) {
         Objects.requireNonNull(job, "Invalid job parameter");
         Objects.requireNonNull(job.getInstanceId(), "Invalid job instance ID");
@@ -485,7 +480,6 @@ public class BatchService extends BaseService {
      * @param instanceIds the batch job id
      * @param progress the progress
      */
-    @Transactional
     public void updateBatchJobProgress(Long instanceIds, Integer progress) {
 
         BatchData job = findByInstanceId(instanceIds);
@@ -677,7 +671,6 @@ public class BatchService extends BaseService {
      * Called every hour to clean up the batch job "[jobName]/execution" folders for expired files
      */
     @Scheduled(cron="30 42 */1 * * ?")
-    @Transactional
     void cleanUpExpiredBatchJobFiles() {
 
         long t0 = System.currentTimeMillis();

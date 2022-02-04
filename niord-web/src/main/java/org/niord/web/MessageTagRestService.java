@@ -30,6 +30,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
  */
 @Path("/tags")
 @RequestScoped
+@Transactional
 @PermitAll
 public class MessageTagRestService {
 

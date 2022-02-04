@@ -34,6 +34,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,7 @@ import java.util.stream.Collectors;
  */
 @Path("/firing-schedules")
 @RequestScoped
+@Transactional
 @PermitAll
 public class FiringScheduleRestService {
 

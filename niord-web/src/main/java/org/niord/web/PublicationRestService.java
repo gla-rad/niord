@@ -49,6 +49,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -71,6 +72,7 @@ import static org.niord.core.util.WebUtils.encodeURIComponent;
  */
 @Path("/publications")
 @RequestScoped
+@Transactional
 @PermitAll
 public class PublicationRestService extends AbstractBatchableRestService {
 

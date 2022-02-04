@@ -26,12 +26,7 @@ import org.niord.model.ILocalizable;
 import org.niord.model.message.AreaVo;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -74,7 +69,7 @@ public class Area extends TreeBaseEntity<Area> implements ILocalizable<AreaDesc>
     Integer originAngle;    // For CW and CCW message sorting
 
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     List<String> editorFields = new ArrayList<>();
 
     /** Constructor */
@@ -106,9 +101,9 @@ public class Area extends TreeBaseEntity<Area> implements ILocalizable<AreaDesc>
 
         DataFilter compFilter = filter.forComponent(Area.class);
 
-        this.mrn = area.getMrn();
-        this.active = area.isActive();
-        this.id = area.getId();
+        this.setMrn(area.getMrn());
+        this.setActive(area.isActive());
+        this.setId(area.getId());
 
         if (compFilter.includeParent() && area.getParent() != null) {
             parent = new Area(area.getParent(), filter);
@@ -149,7 +144,7 @@ public class Area extends TreeBaseEntity<Area> implements ILocalizable<AreaDesc>
         DataFilter compFilter = filter.forComponent(Area.class);
 
         A area = newInstance(clz);
-        area.setId(id);
+        area.setId(this.getId());
         area.setMrn(mrn);
         area.setActive(active);
 

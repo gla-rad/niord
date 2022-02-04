@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -48,6 +49,7 @@ import java.util.Collections;
  */
 @Path("/message-mail")
 @RequestScoped
+@Transactional
 @SuppressWarnings("unused")
 public class MessageMailRestService {
 

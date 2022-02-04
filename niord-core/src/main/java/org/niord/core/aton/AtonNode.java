@@ -24,20 +24,8 @@ import org.niord.core.aton.vo.AtonTagVo;
 import org.niord.core.geojson.JtsConverter;
 import org.niord.core.model.BaseEntity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -91,7 +79,7 @@ public class AtonNode extends BaseEntity<Integer> {
     /** Constructor */
     public AtonNode(AtonNodeVo node) {
         Objects.requireNonNull(node);
-        this.id = node.getId() > 0 ? node.getId() : null;
+        this.setId(node.getId() > 0 ? node.getId() : null);
         this.lat = node.getLat();
         this.lon = node.getLon();
         this.user = node.getUser();
@@ -112,7 +100,7 @@ public class AtonNode extends BaseEntity<Integer> {
     /** Converts this entity to a value object */
     public AtonNodeVo toVo() {
         AtonNodeVo vo = new AtonNodeVo();
-        vo.setId(id == null ? 0 : id);
+        vo.setId(this.getId());
         vo.setLat(lat);
         vo.setLon(lon);
         vo.setUser(user);

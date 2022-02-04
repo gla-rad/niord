@@ -51,6 +51,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -66,6 +67,7 @@ import static org.niord.model.message.Status.*;
  */
 @Path("/messages")
 @RequestScoped
+@Transactional
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageRestService  {
@@ -414,9 +416,11 @@ public class MessageRestService  {
         if (editMessage.getMainType() != null && !domain.supportsMainType(editMessage.getMainType())) {
             editMessage.setMainType(null);
             editMessage.setType(null);
-            if (!domain.getMessageSeries().isEmpty()) {
-                editMessage.setMainType(domain.getMessageSeries().get(0).getMainType());
-            }
+            editMessage.setMainType(domain.getMessageSeries()
+                    .stream()
+                    .findFirst()
+                    .map(MessageSeries::getMainType)
+                    .orElse(null));
         }
 
         // Reset message series, if not part of the current domain

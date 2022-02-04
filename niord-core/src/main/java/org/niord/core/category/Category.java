@@ -119,7 +119,7 @@ public class Category extends TreeBaseEntity<Category> implements ILocalizable<C
 
         DataFilter compFilter = filter.forComponent(Category.class);
 
-        this.id = category.getId();
+        this.setId(category.getId());
         this.mrn = category.getMrn();
         this.active = category.isActive();
 
@@ -173,7 +173,7 @@ public class Category extends TreeBaseEntity<Category> implements ILocalizable<C
         DataFilter compFilter = filter.forComponent(Category.class);
 
         C category = newInstance(clz);
-        category.setId(id);
+        category.setId(this.getId());
         category.setMrn(mrn);
         category.setActive(active);
 

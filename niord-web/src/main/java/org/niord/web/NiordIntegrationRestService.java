@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  */
 @Path("/niord-integrations")
 @RequestScoped
+@Transactional
 @RolesAllowed(Roles.ADMIN)
 @SuppressWarnings("unused")
 public class NiordIntegrationRestService {

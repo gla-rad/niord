@@ -35,6 +35,7 @@ import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import java.util.Collections;
@@ -48,6 +49,7 @@ import java.util.stream.Collectors;
  */
 @Path("/messages")
 @RequestScoped
+@Transactional
 @PermitAll
 @SuppressWarnings("unused")
 public class MessageSearchRestService {

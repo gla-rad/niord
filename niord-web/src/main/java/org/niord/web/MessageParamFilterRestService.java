@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  */
 @Path("/filters")
 @RequestScoped
+@Transactional
 @PermitAll
 public class MessageParamFilterRestService {
 

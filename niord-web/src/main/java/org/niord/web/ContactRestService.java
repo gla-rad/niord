@@ -29,6 +29,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,7 @@ import static org.niord.core.util.TextUtils.encodeCVSLine;
  */
 @Path("/contacts")
 @RequestScoped
+@Transactional
 @RolesAllowed(Roles.ADMIN)
 public class ContactRestService {
 
