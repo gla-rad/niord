@@ -34,7 +34,6 @@ import twitter4j.auth.AccessToken;
 import javax.ejb.Asynchronous;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -46,7 +45,6 @@ import java.util.Arrays;
  * Manages Twitter message promulgations
  */
 @ApplicationScoped
-@Startup
 @Lock(LockType.READ)
 @SuppressWarnings("unused")
 public class TwitterPromulgationService extends BasePromulgationService {

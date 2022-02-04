@@ -127,6 +127,7 @@ public class AtonService extends BaseService {
      * @param aton The AtoN to be created
      * @return The created AtoN node object
      */
+    @Transactional
     public AtonNode createAton(AtonNode aton) throws Exception {
         // Make sure a duplicate AtoN does not exist
         AtonNode orig = findByAtonUid(aton.getAtonUid());
@@ -158,6 +159,7 @@ public class AtonService extends BaseService {
      * @param aton The AtoN to be updated
      * @return The updated AtoN node object
      */
+    @Transactional
     public AtonNode updateAton(AtonNode aton) throws Exception {
         // Find the original AtoN entry
         AtonNode orig = findByAtonUid(aton.getAtonUid());
@@ -198,6 +200,7 @@ public class AtonService extends BaseService {
      * Replaces the AtoN DB
      * @param atons the new AtoNs
      */
+    @Transactional
     public void updateAtons(List<AtonNode> atons) {
 
         // Persist new list of AtoNs

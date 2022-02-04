@@ -36,7 +36,6 @@ import org.niord.model.message.Status;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
@@ -48,7 +47,6 @@ import java.util.stream.Collectors;
  * Manages NAVTEX-via-mailing-lists promulgations
  */
 @ApplicationScoped
-@Startup
 @Lock(LockType.READ)
 @SuppressWarnings("unused")
 public class NavtexPromulgationService extends BasePromulgationService {

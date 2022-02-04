@@ -48,6 +48,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.security.PublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -589,11 +590,11 @@ public class KeycloakIntegrationService {
     private <R> R executeAdminRequest(HttpRequestBase request, boolean auth, KeycloakResponseHandler<R> responseHandler) throws Exception {
 
         if (auth) {
-            KeycloakPrincipal keycloakPrincipal = userService.getCallerPrincipal();
+            Principal keycloakPrincipal = userService.getCallerPrincipal();
             if (keycloakPrincipal == null) {
                 throw new Exception("Unable to execute request " + request.getURI() + ". User not authenticated");
             }
-            request.addHeader("Authorization", "Bearer " + keycloakPrincipal.getKeycloakSecurityContext().getTokenString());
+            request.addHeader("Authorization", "Bearer " + userService.getKeycloakAccessToken());
         }
 
         // For e.g. "*.e-navigation.net", with no intermediate certificates specified, you will get an

@@ -45,7 +45,6 @@ import static org.niord.core.settings.Setting.Type.Integer;
  * Interface for handling schedule mails
  */
 @ApplicationScoped
-@Startup
 @Lock(LockType.READ)
 @SuppressWarnings("unused")
 public class ScheduledMailService extends BaseService {

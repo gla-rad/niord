@@ -23,7 +23,6 @@ import org.niord.core.util.TimeUtils;
 import org.niord.model.message.Status;
 import org.slf4j.Logger;
 
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Date;
@@ -44,7 +43,6 @@ import static org.niord.model.message.Status.VERIFIED;
  * </ul>
  */
 @ApplicationScoped
-@Startup
 @SuppressWarnings("unused")
 public class ScheduledMessageService extends BaseService {
 

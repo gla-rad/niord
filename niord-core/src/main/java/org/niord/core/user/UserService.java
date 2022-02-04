@@ -16,23 +16,22 @@
 
 package org.niord.core.user;
 
+import io.quarkus.oidc.runtime.OidcJwtCallerPrincipal;
+import io.quarkus.security.identity.SecurityIdentity;
 import org.apache.commons.lang.StringUtils;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
+import org.jose4j.jwt.JwtClaims;
 import org.niord.core.domain.Domain;
 import org.niord.core.keycloak.KeycloakIntegrationService;
 import org.niord.core.service.BaseService;
 import org.niord.core.user.vo.GroupVo;
 import org.niord.core.user.vo.UserVo;
-import org.niord.core.web.SecurityContextProvider;
 import org.niord.model.DataFilter.UserResolver;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.transaction.Transactional;
-import javax.ws.rs.core.SecurityContext;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -53,13 +52,13 @@ public class UserService extends BaseService {
     private Logger log;
 
     @Inject
-    SecurityContextProvider securityContextProvider;
-
-    @Inject
     TicketService ticketService;
 
     @Inject
     KeycloakIntegrationService keycloakIntegrationService;
+
+    @Inject
+    SecurityIdentity identity;
 
 
     /************************/
@@ -70,12 +69,11 @@ public class UserService extends BaseService {
     /**
      * Returns the current Keycloak principal
      */
-    public KeycloakPrincipal getCallerPrincipal() {
-        return Optional.ofNullable(this.securityContextProvider)
-                .map(SecurityContextProvider::getSecurityContext)
-                .map(SecurityContext::getUserPrincipal)
-                .filter(KeycloakPrincipal.class::isInstance)
-                .map(KeycloakPrincipal.class::cast)
+    public OidcJwtCallerPrincipal getCallerPrincipal() {
+        return Optional.ofNullable(identity)
+                .map(SecurityIdentity::getPrincipal)
+                .filter(OidcJwtCallerPrincipal.class::isInstance)
+                .map(OidcJwtCallerPrincipal.class::cast)
                 .orElse(null);
     }
 
@@ -83,10 +81,9 @@ public class UserService extends BaseService {
     /**
      * Returns the current Keycloak Access Token
      */
-    public AccessToken getKeycloakAccessToken() {
-        return Optional.ofNullable(this.getCallerPrincipal())
-                .map(KeycloakPrincipal::getKeycloakSecurityContext)
-                .map(KeycloakSecurityContext::getToken)
+    public String getKeycloakAccessToken() {
+        return Optional.ofNullable(getCallerPrincipal())
+                .map(OidcJwtCallerPrincipal::getRawToken)
                 .orElse(null);
     }
 
@@ -95,8 +92,9 @@ public class UserService extends BaseService {
      * Returns the user attributes, i.e. the "other claims" map of the current Keycloak principal
      */
     public Map<String, Object> getUserAttributes() {
-        return Optional.ofNullable(this.getKeycloakAccessToken())
-                .map(AccessToken::getOtherClaims)
+        return Optional.ofNullable(getCallerPrincipal())
+                .map(OidcJwtCallerPrincipal::getClaims)
+                .map(JwtClaims::getClaimsMap)
                 .orElseGet(() -> new HashMap<>());
     }
 
@@ -108,12 +106,15 @@ public class UserService extends BaseService {
      * @return all the Keycloak domain IDs where the current user has the given role
      */
     public Set<String> getKeycloakDomainIdsForRole(String role) {
-        return Optional.ofNullable(this.getKeycloakAccessToken())
-                .map(AccessToken::getResourceAccess)
-                .orElseGet(HashMap::new)
-                .entrySet()
+        return Optional.ofNullable(this.getCallerPrincipal())
+                .map(OidcJwtCallerPrincipal::getClaims)
+                .map(claims -> claims.getClaimValue("resource_access"))
+                .filter(JsonObject.class::isInstance)
+                .map(JsonObject.class::cast)
+                .map(JsonObject::entrySet)
+                .orElse(Collections.emptySet())
                 .stream()
-                .filter(kv -> kv.getValue().isUserInRole(role))
+                .filter(entry -> entry.getValue().asJsonArray().contains(role))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
@@ -127,10 +128,7 @@ public class UserService extends BaseService {
      */
     @Transactional
     public User currentUser() {
-
-        // Get the current Keycloak principal
-        KeycloakPrincipal keycloakPrincipal = getCallerPrincipal();
-        if (keycloakPrincipal == null) {
+        if (this.identity == null || this.identity.isAnonymous()) {
 
             // Check if the ticket service has resolved a ticket for the current thread
             TicketService.TicketData ticketData = ticketService.getTicketDataForCurrentThread();
@@ -141,20 +139,17 @@ public class UserService extends BaseService {
             }
         }
 
-        @SuppressWarnings("all")
-        AccessToken token = keycloakPrincipal.getKeycloakSecurityContext().getToken();
-
-        User user = findByUsername(token.getPreferredUsername());
+        User user = findByUsername(this.getCallerPrincipal().getName());
 
         if (user == null) {
             // New user
-            user = new User(token);
+            user = new User(this.getCallerPrincipal());
             user = saveEntity(user);
             log.info("Created new user " + user);
 
-        } else if (user.userChanged(token)) {
+        } else if (user.userChanged(this.getCallerPrincipal())) {
             // User data updated
-            user.copyToken(token);
+            user.copyToken(this.getCallerPrincipal());
             user = saveEntity(user);
             log.info("Updated user " + user);
         }
@@ -178,10 +173,7 @@ public class UserService extends BaseService {
      * @return True if the caller has the specified role.
      */
     public boolean isCallerInRole(String role) {
-        return Optional.ofNullable(this.securityContextProvider)
-                .map(SecurityContextProvider::getSecurityContext)
-                .map(sc -> sc.isUserInRole(role))
-                .orElse(this.ticketService.validateRolesForCurrentThread(role));
+        return this.identity.hasRole(role);
     }
 
 

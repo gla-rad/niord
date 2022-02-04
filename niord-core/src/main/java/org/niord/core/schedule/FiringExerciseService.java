@@ -35,7 +35,6 @@ import org.niord.core.util.TimeUtils;
 import org.niord.model.message.*;
 import org.slf4j.Logger;
 
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
@@ -59,7 +58,6 @@ import static org.niord.core.settings.Setting.Type.Integer;
  * </ul>
  */
 @ApplicationScoped
-@Startup
 @SuppressWarnings("unused")
 public class FiringExerciseService extends BaseService {
 

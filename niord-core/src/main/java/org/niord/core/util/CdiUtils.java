@@ -35,24 +35,6 @@ public class CdiUtils {
     }
 
     /**
-     * Performs the injection of the given class upon the given injectionObject
-     *
-     * @param clazz The class of the object to inject upon
-     * @param injectionObject the object to inject upon
-     */
-    @SuppressWarnings({ "rawtypes", "unchecked", "unused"})
-    public static <T> void programmaticInjection(Class clazz, T injectionObject) throws NamingException {
-        InitialContext initialContext = new InitialContext();
-        Object lookup = initialContext.lookup("java:comp/BeanManager");
-        BeanManager beanManager = (BeanManager) lookup;
-        AnnotatedType annotatedType = beanManager.createAnnotatedType(clazz);
-        InjectionTarget injectionTarget = beanManager.createInjectionTarget(annotatedType);
-        CreationalContext creationalContext = beanManager.createCreationalContext(null);
-        injectionTarget.inject(injectionObject, creationalContext);
-        creationalContext.release();
-    }
-
-    /**
      * Looks up a CDI managed bean with the given class
      *
      * @param clazz The class of the object to look up
