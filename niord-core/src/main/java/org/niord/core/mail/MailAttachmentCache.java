@@ -39,7 +39,7 @@ import java.net.URL;
  * The content is only loaded once and then cached in this cache.
  */
 @ApplicationScoped
-public class MailAttachmentCache extends BaseCache<URL, CachedUrlData> {
+public class    MailAttachmentCache extends BaseCache<URL, CachedUrlData> {
 
     final static long LIFESPAN = 5 * 60 * 1000; // 5 minutes
     final static String CACHE_ID = "mailAttachmentCache";

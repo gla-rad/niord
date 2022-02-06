@@ -26,9 +26,10 @@ import org.niord.core.util.TimeUtils;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.annotation.Resource;
-import javax.ejb.*;
-import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
@@ -71,9 +72,8 @@ public class ScheduledMailService extends BaseService {
      * NB: Niord defines its own managed executor service to limit the number of threads,
      * and thus, the number of concurrent SMTP connections.
      */
-    @Resource(lookup = "java:jboss/ee/concurrency/executor/MailExecutorService")
-    ManagedExecutorService managedExecutorService;
-
+//    @Resource(lookup = "java:jboss/ee/concurrency/executor/MailExecutorService")
+//    ManagedExecutorService managedExecutorService;
 
     /**
      * Searches the filtered set of scheduled mails
@@ -191,11 +191,13 @@ public class ScheduledMailService extends BaseService {
                     .map(id -> new MailSenderTask(mailService, id))
                     .collect(Collectors.toList());
 
-            try {
-                managedExecutorService.invokeAll(tasks);
-            } catch (InterruptedException e) {
-                log.error("Error sending scheduled emails: " + scheduledMailIds, e);
-            }
+            // TODO: Impementhis this again on quarkus!!!
+            log.info("Sending scheduled emails is not currently supported!!!");
+//            try {
+//                managedExecutorService.invokeAll(tasks);
+//            } catch (InterruptedException e) {
+//                log.error("Error sending scheduled emails: " + scheduledMailIds, e);
+//            }
         }
     }
 
