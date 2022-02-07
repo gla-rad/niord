@@ -1,28 +1,32 @@
 [![Build Status](https://github.com/NiordOrg/niord/workflows/Java%20CI/badge.svg)](https://github.com/NiordOrg/niord/actions)
 # Niord
-The niord repository contains the common code-base for the NW + NM T&P editing and publishing system.
+The niord repository contains the common code-base for the NW + NM T&P editing
+and publishing system.
 
-# Important Notice
-The following concerns Niord 2.0 which is currently under development.
-The latest stable release is tagged with 1.0.1 in this repository.
+From version 3.0.0 onwards, Niord has been ported and run using the Red Har
+[Quarkus](https://quarkus.io/) framework.
 
 ## Development Setup
 
-To get started with developing Niord you need to check out the developer guide at 
-http://docs.niord.org/dev-guide/guide.html.
+To get started with developing Niord you need to check out the developer guide 
+at http://docs.niord.org/dev-guide/guide.html.
 
 ## Country-specific Implementations
 
-Country-specific implementations of the Niord system are easily created using a web-application overlay project.
-Here additional code can be added and web resources (images, stylesheets, javascript files, etc) can be replaced with 
+Country-specific implementations of the Niord system are easily created using a
+web-application overlay project. Here additional code can be added and web 
+resources (images, stylesheets, javascript files, etc) can be replaced with 
 custom versions.
 
-For an example, please refer to [niord-dk](https://github.com/NiordOrg/niord-dk) - a Danish implementation of Niord.
+For an example, please refer to [niord-dk](https://github.com/gla-rad/niord-uk) 
+- a UK implementation of Niord.
 
 ## Public API
-A swagger definition of the public portion of the Rest API is published at https://niord.e-navigation.net/rest/swagger.json.
+A swagger definition of the public portion of the Rest API is published at 
+https://niord.e-navigation.net/rest/swagger.json.
 
-The swagger definition is generated from the jersey annotated methods in [ApiRestService.java](https://github.com/NiordOrg/niord/blob/master/niord-web/src/main/java/org/niord/web/api/ApiRestService.java) and [S124RestService.java](https://github.com/NiordOrg/niord/blob/master/niord-s124/src/main/java/org/niord/s124/S124RestService.java).
+The swagger definition is generated from the jersey annotated methods in 
+[ApiRestService.java](https://github.com/NiordOrg/niord/blob/master/niord-web/src/main/java/org/niord/web/api/ApiRestService.java) and [S124RestService.java](https://github.com/NiordOrg/niord/blob/master/niord-s124/src/main/java/org/niord/s124/S124RestService.java).
 
 ## Configuration
 
@@ -52,8 +56,6 @@ Sensitive or environment-specific settings should be placed in a "${niord.home}/
         "editable"    : true
       }
     ]
-
-
 
 ## Tips and Tricks
 
