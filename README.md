@@ -1,4 +1,3 @@
-[![Build Status](https://github.com/NiordOrg/niord/workflows/Java%20CI/badge.svg)](https://github.com/NiordOrg/niord/actions)
 # Niord
 The niord repository contains the common code-base for the NW + NM T&P editing
 and publishing system.
@@ -18,7 +17,7 @@ web-application overlay project. Here additional code can be added and web
 resources (images, stylesheets, javascript files, etc) can be replaced with 
 custom versions.
 
-For an example, please refer to [niord-dk](https://github.com/gla-rad/niord-uk) 
+For an example, please refer to [niord-uk](https://github.com/gla-rad/niord-uk) 
 - a UK implementation of Niord.
 
 ## Public API
