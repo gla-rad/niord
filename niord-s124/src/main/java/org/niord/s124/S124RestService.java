@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -48,6 +49,7 @@ import java.io.StringWriter;
  * </pre>
  */
 @RequestScoped
+@Transactional
 @Path("/S-124")
 public class S124RestService {
 
