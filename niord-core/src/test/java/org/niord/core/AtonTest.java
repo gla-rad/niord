@@ -81,7 +81,7 @@ public class AtonTest {
 
         Assert.assertNotNull(aton2.getTags());
         Assert.assertEquals(aton2.getTags().length, 10);
-        Assert.assertEquals(aton2.getId(), 672436827L);
+        Assert.assertEquals(aton2.getId(), (Integer)672436827);
 
         Assert.assertEquals(aton, aton2);
     }

@@ -17,10 +17,14 @@ package org.niord.web.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.niord.core.NiordApp;
@@ -36,6 +40,7 @@ import org.niord.model.search.PagedSearchResultVo;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -59,11 +64,9 @@ import java.util.stream.Collectors;
  * (e.g. "2016-10-12T13:21:22.000+0000").<br>
  * To facilitate both formats, use the "dateFormat" parameter.
  */
-@Api(value = "/public/v1",
-     description = "Public API for accessing message and publication data from the Niord NW-NM system",
-     tags = {"messages", "publications" })
 @Path("/public/v1")
 @RequestScoped
+@Transactional
 @SuppressWarnings("unused")
 public class ApiRestService extends AbstractApiService {
 
@@ -86,42 +89,44 @@ public class ApiRestService extends AbstractApiService {
     /**
      * {@inheritDoc}
      */
-    @ApiOperation(
-            value = "Returns the published NW and NM messages",
-            response = MessageVo.class,
-            responseContainer = "List",
-            tags = {"messages"}
-    )
     @GET
     @Path("/messages")
+    @Operation(summary = "Returns the published NW and NM messages")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = MessageVo.class, type= SchemaType.ARRAY)
+            )
+    )
     @Produces({"application/json;charset=UTF-8"})
     @GZIP
     public Response searchMessages(
-            @ApiParam(value = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
 
-            @ApiParam(value = "The IDs of the domains to select messages from", example = "niord-client-nw")
+            @Parameter(description = "The IDs of the domains to select messages from", example = "niord-client-nw")
             @QueryParam("domain") Set<String> domainIds,
 
-            @ApiParam(value = "Specific message series to select messages from", example = "dma-nw")
+            @Parameter(description = "Specific message series to select messages from", example = "dma-nw")
             @QueryParam("messageSeries") Set<String> messageSeries,
 
-            @ApiParam(value = "The IDs of the publications to select message from")
+            @Parameter(description = "The IDs of the publications to select message from")
             @QueryParam("publication") Set<String> publicationIds,
 
-            @ApiParam(value = "The IDs of the areas to select messages from", example = "urn:mrn:iho:country:dk")
+            @Parameter(description = "The IDs of the areas to select messages from", example = "urn:mrn:iho:country:dk")
             @QueryParam("areaId") Set<String> areaIds,
 
-            @ApiParam(value = "Either NW (navigational warnings) or NM (notices to mariners)", example = "NW")
+            @Parameter(description = "Either NW (navigational warnings) or NM (notices to mariners)", example = "NW")
             @QueryParam("mainType") Set<MainType> mainTypes,
 
-            @ApiParam(value = "Well-Known Text for geographical extent", example = "POLYGON((7 54, 7 57, 13 56, 13 57, 7 54))")
+            @Parameter(description = "Well-Known Text for geographical extent", example = "POLYGON((7 54, 7 57, 13 56, 13 57, 7 54))")
             @QueryParam("wkt") String wkt,
 
-            @ApiParam(value = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
+            @Parameter(description = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
             @QueryParam("externalize") @DefaultValue("true") boolean externalize,
 
-            @ApiParam(value = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
+            @Parameter(description = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
             @QueryParam("dateFormat") @DefaultValue("UNIX_EPOCH") JsonDateFormat dateFormat
 
     ) throws Exception {
@@ -149,26 +154,29 @@ public class ApiRestService extends AbstractApiService {
     /**
      * {@inheritDoc}
      */
-    @ApiOperation(
-            value = "Returns the public (published, cancelled or expired) NW or NM message details",
-            response = MessageVo.class,
-            tags = {"messages"}
-    )
     @GET
     @Path("/message/{messageId}")
+    @Operation(description = "Returns the public (published, cancelled or expired) NW or NM message details")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = MessageVo.class)
+            )
+    )
     @Produces({"application/json;charset=UTF-8"})
     @GZIP
     public Response messageDetails(
-            @ApiParam(value = "The message UID or short ID", example = "NM-1275-16")
+            @Parameter(description = "The message UID or short ID", example = "NM-1275-16")
             @PathParam("messageId") String messageId,
 
-            @ApiParam(value = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
 
-            @ApiParam(value = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
+            @Parameter(description = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
             @QueryParam("externalize") @DefaultValue("true") boolean externalize,
 
-            @ApiParam(value = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
+            @Parameter(description = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
             @QueryParam("dateFormat") @DefaultValue("UNIX_EPOCH") JsonDateFormat dateFormat
 
     ) throws Exception {
@@ -203,17 +211,22 @@ public class ApiRestService extends AbstractApiService {
      * Message and will import the former.
      * @return the XSD for the Message class
      */
-    @ApiOperation(
-            value = "Returns XSD model of the Message class",
-            tags = {"messages"}
-    )
     @GET
     @Path("/xsd/{schemaFile}")
+    @Operation(description = "Returns XSD model of the Message class")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = String.class)
+            )
+    )
+    @Tag(ref = "message")
     @Produces("application/xml;charset=UTF-8")
     @GZIP
     @NoCache
     public String getMessageXsd(
-            @ApiParam(value = "The schema file, either schema1.xsd or schema2.xsd", example="schema2.xsd")
+            @Parameter(description = "The schema file, either schema1.xsd or schema2.xsd", example="schema2.xsd")
             @PathParam("schemaFile")
                     String schemaFile) throws Exception {
 
@@ -288,31 +301,34 @@ public class ApiRestService extends AbstractApiService {
     /**
      * Searches for publications
      */
-    @ApiOperation(
-            value = "Returns the publications",
-            response = PublicationVo.class,
-            responseContainer = "List",
-            tags = {"publications"}
-    )
     @GET
     @Path("/publications")
+    @Operation(description = "Returns the publications")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = PublicationVo.class, type= SchemaType.ARRAY)
+            )
+    )
+    @Tag(ref = "publications")
     @Produces({"application/json;charset=UTF-8"})
     @GZIP
     public Response searchPublications(
 
-            @ApiParam(value = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
 
-            @ApiParam(value = "Timestamp (Unix epoch) for the start date of the publications")
+            @Parameter(description = "Timestamp (Unix epoch) for the start date of the publications")
             @QueryParam("from") Long from,
 
-            @ApiParam(value = "Timestamp (Unix epoch) for the end date of the publications")
+            @Parameter(description = "Timestamp (Unix epoch) for the end date of the publications")
             @QueryParam("to") Long to,
 
-            @ApiParam(value = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
+            @Parameter(description = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
             @QueryParam("externalize") @DefaultValue("true") boolean externalize,
 
-            @ApiParam(value = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
+            @Parameter(description = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
             @QueryParam("dateFormat") @DefaultValue("UNIX_EPOCH") JsonDateFormat dateFormat
     ) {
 
@@ -337,27 +353,31 @@ public class ApiRestService extends AbstractApiService {
     /**
      * Returns the details for the given publications
      */
-    @ApiOperation(
-            value = "Returns the publication with the given ID",
-            response = PublicationVo.class,
-            tags = {"publications"}
-    )
     @GET
     @Path("/publication/{publicationId}")
+    @Operation(description = "Returns the publication with the given ID")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = PublicationVo.class)
+            )
+    )
+    @Tag(ref = "publications")
     @Produces({"application/json;charset=UTF-8"})
     @GZIP
     public Response publicationDetails(
 
-            @ApiParam(value = "The publication ID", example = "5eab7f50-d890-42d9-8f0a-d30e078d3d5a")
+            @Parameter(description = "The publication ID", example = "5eab7f50-d890-42d9-8f0a-d30e078d3d5a")
             @PathParam("publicationId") String publicationId,
 
-            @ApiParam(value = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
 
-            @ApiParam(value = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
+            @Parameter(description = "Whether to rewrite all embedded links and paths to be absolute URL's", example = "true")
             @QueryParam("externalize") @DefaultValue("true") boolean externalize,
 
-            @ApiParam(value = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
+            @Parameter(description = "The date format to use for JSON date-time encoding. Either 'UNIX_EPOCH' or 'ISO_8601'", example = "UNIX_EPOCH")
             @QueryParam("dateFormat") @DefaultValue("UNIX_EPOCH") JsonDateFormat dateFormat
     ) {
 
@@ -425,21 +445,25 @@ public class ApiRestService extends AbstractApiService {
     /**
      * Returns the details for the given area
      */
-    @ApiOperation(
-            value = "Returns the area with the given ID",
-            response = AreaVo.class,
-            tags = {"areas"}
-    )
     @GET
     @Path("/area/{areaId}")
+    @Operation(description = "Returns the area with the given ID")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = AreaVo.class)
+            )
+    )
+    @Tag(ref = "areas")
     @Produces({"application/json;charset=UTF-8"})
     @GZIP
     public Response areaDetails(
 
-            @ApiParam(value = "The area ID", example = "urn:mrn:iho:country:dk")
+            @Parameter(description = "The area ID", example = "urn:mrn:iho:country:dk")
             @PathParam("areaId") String areaId,
 
-            @ApiParam(value = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language
     ) {
 
@@ -465,22 +489,25 @@ public class ApiRestService extends AbstractApiService {
     /**
      * Returns the details for the given area
      */
-    @ApiOperation(
-            value = "Returns the sub-areas of the area with the given ID",
-            response = AreaVo.class,
-            responseContainer = "List",
-            tags = {"areas"}
-    )
     @GET
     @Path("/area/{areaId}/sub-areas")
+    @Operation(description = "Returns the sub-areas of the area with the given ID")
+    @APIResponse(
+            responseCode = "200",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = AreaVo.class, type = SchemaType.ARRAY)
+            )
+    )
+    @Tag(ref = "areas")
     @Produces({"application/json;charset=UTF-8"})
     @GZIP
     public Response subAreas(
 
-            @ApiParam(value = "The area ID", example = "urn:mrn:iho:country:dk")
+            @Parameter(description = "The area ID", example = "urn:mrn:iho:country:dk")
             @PathParam("areaId") String areaId,
 
-            @ApiParam(value = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language
     ) {
 

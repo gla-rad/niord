@@ -20,7 +20,7 @@ import org.niord.model.DataFilter;
 import org.niord.model.message.MainType;
 import org.niord.model.message.MessageVo;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.NotFoundException;
@@ -31,7 +31,7 @@ import java.util.Set;
  * A public web service API for accessing Niord data.
  */
 @WebService
-@Stateless
+@ApplicationScoped
 @SuppressWarnings("unused")
 public class ApiWebService extends AbstractApiService {
 
@@ -52,7 +52,6 @@ public class ApiWebService extends AbstractApiService {
                 .getData();
     }
 
-
     @WebMethod
     public MessageVo details(
             String language,
@@ -67,4 +66,5 @@ public class ApiWebService extends AbstractApiService {
             return  message.toVo(MessageVo.class, filter);
         }
     }
+
 }

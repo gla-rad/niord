@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -88,7 +89,7 @@ import java.util.stream.Stream;
 @XmlRootElement(name = "node")
 public class AtonNodeVo implements IJsonSerializable {
 
-    int id;
+    Integer id;
     double lat;
     double lon;
     String user;
@@ -115,40 +116,23 @@ public class AtonNodeVo implements IJsonSerializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         AtonNodeVo that = (AtonNodeVo) o;
-
-        if (id != that.id) return false;
-        if (Double.compare(that.lat, lat) != 0) return false;
-        if (Double.compare(that.lon, lon) != 0) return false;
-        if (uid != that.uid) return false;
-        if (visible != that.visible) return false;
-        if (version != that.version) return false;
-        if (changeset != that.changeset) return false;
-        if (user != null ? !user.equals(that.user) : that.user != null) return false;
-        if (timestamp != null ? !timestamp.equals(that.timestamp) : that.timestamp != null) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(tags, that.tags);
-
+        return Objects.equals(id, that.id)
+                && Double.compare(that.lat, lat) == 0
+                && Double.compare(that.lon, lon) == 0
+                && uid == that.uid
+                && visible == that.visible
+                && version == that.version
+                && changeset == that.changeset
+                && Objects.equals(user, that.user)
+                && Objects.equals(timestamp, that.timestamp)
+                && Arrays.equals(tags, that.tags);
     }
 
     /** {@inheritDoc} */
     @Override
-    @SuppressWarnings("all")
     public int hashCode() {
-        int result;
-        long temp;
-        result = (int) (id ^ (id >>> 32));
-        temp = Double.doubleToLongBits(lat);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(lon);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (int) (uid ^ (uid >>> 32));
-        result = 31 * result + (visible ? 1 : 0);
-        result = 31 * result + version;
-        result = 31 * result + changeset;
-        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        int result = Objects.hash(id, lat, lon, user, uid, visible, version, changeset, timestamp);
         result = 31 * result + Arrays.hashCode(tags);
         return result;
     }
@@ -207,11 +191,11 @@ public class AtonNodeVo implements IJsonSerializable {
     /*************************/
 
     @XmlAttribute
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
