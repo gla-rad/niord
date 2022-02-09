@@ -18,6 +18,7 @@ package org.niord.core.mail;
 
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.niord.core.db.CriteriaHelper;
 import org.niord.core.model.BaseEntity;
 import org.niord.core.service.BaseService;
@@ -26,12 +27,10 @@ import org.niord.core.util.TimeUtils;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
@@ -73,9 +72,11 @@ public class ScheduledMailService extends BaseService {
     /**
      * NB: Niord defines its own managed executor service to limit the number of threads,
      * and thus, the number of concurrent SMTP connections.
+     *
+     * Since moving to quarkus, we can use the default managed executor
      */
-    @Resource
-    ManagedExecutorService managedExecutorService;
+    @Inject
+    ManagedExecutor managedExecutor;
 
     /**
      * Searches the filtered set of scheduled mails
@@ -194,7 +195,7 @@ public class ScheduledMailService extends BaseService {
                     .collect(Collectors.toList());
 
             try {
-                managedExecutorService.invokeAll(tasks);
+                managedExecutor.invokeAll(tasks);
             } catch (InterruptedException e) {
                 log.error("Error sending scheduled emails: " + scheduledMailIds, e);
             }
