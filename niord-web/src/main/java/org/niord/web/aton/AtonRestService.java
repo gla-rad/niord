@@ -71,7 +71,7 @@ public class AtonRestService {
         param.maxSize(maxAtonNo);
 
         return atonService.search(param)
-                .map(atonService::toVo)
+                .map(AtonNode::toVo)
                 .getData();
     }
 
@@ -105,7 +105,7 @@ public class AtonRestService {
 
         PagedSearchResultVo<AtonNode> atons = atonService.search(param);
 
-        return atons.map(atonService::toVo);
+        return atons.map(AtonNode::toVo);
     }
 
     /**
@@ -131,7 +131,7 @@ public class AtonRestService {
         }
 
         // Return the VO object
-        return this.atonService.toVo(atonNode);
+        return atonNode.toVo();
     }
 
     /**
@@ -159,7 +159,7 @@ public class AtonRestService {
             throw new WebApplicationException(ex.getMessage(), 400);
         }
 
-        return this.atonService.toVo(atonNode);
+        return atonNode.toVo();
     }
 
 
@@ -189,7 +189,7 @@ public class AtonRestService {
             throw new WebApplicationException(ex.getMessage(), 400);
         }
 
-        return this.atonService.toVo(atonNode);
+        return atonNode.toVo();
     }
 
     /**
@@ -245,7 +245,7 @@ public class AtonRestService {
         AtonNode atonNode = new AtonNode(atonNodeTypeParam.getAton());
         atonNodeTypeParam.getNodeTypeNames()
                 .forEach(nt -> atonDefaultsService.mergeAtonWithNodeTypes(atonNode, nt));
-        return this.atonService.toVo(atonNode);
+        return atonNode.toVo();
     }
 
     /**
@@ -264,7 +264,7 @@ public class AtonRestService {
         AtonNode atonNode = new AtonNode(atonNodeTypeParam.getAton());
         atonNodeTypeParam.getNodeTypeNames()    // Here we actually have the type itself
                 .forEach(type -> atonDefaultsService.describeAtonForNodeTypes(atonNode, type));
-        return this.atonService.toVo(atonNode);
+        return atonNode.toVo();
     }
 
     /**

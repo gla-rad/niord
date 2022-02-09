@@ -16,16 +16,10 @@
 package org.niord.core.aton;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
-import org.apache.lucene.search.MatchNoDocsQuery;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.niord.core.area.Area;
-import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.chart.Chart;
 import org.niord.core.db.CriteriaHelper;
 import org.niord.core.db.SpatialWithinPredicate;
@@ -367,39 +361,17 @@ public class AtonService extends BaseService {
      * @return the IDs of the AtoN nodes that matches the search criteria
      */
     private List<Integer> searchAtonTagKeys(String value) {
-
-        value = normalize(value);
-
+        // Initialise the search scope to AtoN nodes
         SearchSession searchSession = Search.session(entityManager);
-
-        // Create a query parser with "or" operator as the default
-        QueryParser parser = new ComplexPhraseQueryParser(
-                "tags.v",
-                new StandardAnalyzer());
-        parser.setDefaultOperator(QueryParser.OR_OPERATOR);
-        parser.setAllowLeadingWildcard(true); // NB: Expensive!
-        org.apache.lucene.search.Query query;
-        try {
-            query = parser.parse(value);
-        } catch (ParseException e) {
-            // Make the client suffer
-            query = new MatchNoDocsQuery();
-        }
-
-        // wrap Lucene query in a javax.persistence.Query
         SearchScope<AtonNode> scope = searchSession.scope( AtonNode.class );
 
-        // execute search
-        @SuppressWarnings("unchecked")
-//        List<AtonNode> an = searchSession.search( scope )
-//                .where(f -> f.wildcard()
-//                        .fields("tags.v")
-//                        .matching("query"))
-//                .fetchAllHits();
-        List<AtonNode> an = new ArrayList<>();
-
-        // Returns the ID's of the AtoN nodes
-        return an.stream()
+        // Execute search
+        return searchSession.search( scope )
+                .where(f -> f.wildcard()
+                        .fields("tags.v")
+                        .matching("*" + normalize(value) + "*"))
+                .fetchAllHits()
+                .stream()
                 .map(BaseEntity::getId)
                 .collect(Collectors.toList());
     }
@@ -421,11 +393,6 @@ public class AtonService extends BaseService {
         }
         // Return success
         return true;
-    }
-
-    // Vo translations
-    public AtonNodeVo toVo(AtonNode atonNode) {
-        return atonNode.toVo();
     }
 
 }

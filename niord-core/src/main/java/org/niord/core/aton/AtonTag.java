@@ -16,6 +16,7 @@
 package org.niord.core.aton;
 
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.niord.core.aton.vo.AtonTagVo;
 import org.niord.core.model.BaseEntity;
 
@@ -34,6 +35,7 @@ import java.util.Objects;
  * and sub-pages.
  */
 @Entity
+@Indexed
 @Table(indexes = {
         @Index(name = "aton_tag_k", columnList="k"),
         @Index(name = "aton_tag_v", columnList="v")
