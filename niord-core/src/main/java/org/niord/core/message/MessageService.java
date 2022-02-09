@@ -18,6 +18,7 @@ package org.niord.core.message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.area.Area;
 import org.niord.core.area.AreaService;
@@ -50,13 +51,11 @@ import org.niord.model.message.*;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
@@ -98,8 +97,8 @@ public class MessageService extends BaseService {
     @Inject
     ConnectionFactory connectionFactory;
 
-    @Resource(mappedName = "java:/jms/topic/MessageStatusTopic")
-    Topic messageStatusTopic;
+    @ConfigProperty(name = "niord.jms.topic.messagestatustopic", defaultValue = "messageStatus")
+    String messageStatusTopic;
 
     @Inject
     UserService userService;
@@ -688,7 +687,7 @@ public class MessageService extends BaseService {
         body.put("STATUS", message.getStatus().name());
         body.put("PREV_STATUS", prevStatus.name());
         try (JMSContext jmsContext = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)){
-            jmsContext.createProducer().send(messageStatusTopic, body);
+            jmsContext.createProducer().send(jmsContext.createTopic(messageStatusTopic), body);
         } catch (Exception e) {
             log.error("Failed sending JMS: " + e, e);
         }

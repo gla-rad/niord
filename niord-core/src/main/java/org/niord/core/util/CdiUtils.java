@@ -15,12 +15,7 @@
  */
 package org.niord.core.util;
 
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.InjectionTarget;
-import javax.naming.InitialContext;
+import javax.enterprise.inject.spi.CDI;
 import javax.naming.NamingException;
 
 /**
@@ -42,11 +37,6 @@ public class CdiUtils {
      */
     @SuppressWarnings({ "unchecked", "unused" })
     public static <T> T getBean(Class<T> clazz) throws NamingException {
-        InitialContext initialContext = new InitialContext();
-        Object lookup = initialContext.lookup("java:comp/BeanManager");
-        BeanManager beanManager = (BeanManager) lookup;
-        Bean<T> bean = (Bean<T>)beanManager.getBeans(clazz).iterator().next();
-        CreationalContext<T> cc = beanManager.createCreationalContext(bean);
-        return (T)beanManager.getReference(bean, clazz, cc);
+        return CDI.current().select(clazz).get();
     }
 }
