@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
                         + " and lower(t.name) = lower(:name)"),
         @NamedQuery(name="NavtexTransmitter.findByType",
                 query="SELECT t FROM NavtexTransmitter t where t.promulgationType.typeId = :typeId "
-                        + " order by lower(t.name) asc")
+                        + " order by t.name asc")
 })
 @SuppressWarnings("unused")
 public class NavtexTransmitter extends BaseEntity<Integer> {

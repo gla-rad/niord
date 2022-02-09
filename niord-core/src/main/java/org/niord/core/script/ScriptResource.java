@@ -43,11 +43,11 @@ import static org.niord.core.script.ScriptResource.Type.JS;
         @NamedQuery(name="ScriptResource.findByPath",
                 query="SELECT t FROM ScriptResource t where lower(t.path) = lower(:path)"),
         @NamedQuery(name="ScriptResource.findByTypes",
-                query="SELECT t FROM ScriptResource t where t.type in (:types) order by lower(t.path)"),
+                query="SELECT t FROM ScriptResource t where t.type in (:types) order by t.path"),
         @NamedQuery(name="ScriptResource.findAll",
-                query="SELECT t FROM ScriptResource t order by lower(t.path)"),
+                query="SELECT t FROM ScriptResource t order by t.path"),
         @NamedQuery(name="ScriptResource.findAllPaths",
-                query="SELECT t.path FROM ScriptResource t order by lower(t.path)")
+                query="SELECT t.path FROM ScriptResource t order by t.path")
 })
 @SuppressWarnings("unused")
 public class ScriptResource extends VersionedEntity<Integer>  {

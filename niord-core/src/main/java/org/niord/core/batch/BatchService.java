@@ -513,7 +513,7 @@ public class BatchService extends BaseService {
         // Look up the names from the database
         //noinspection SqlDialectInspection
         return (List<String>) em
-                .createNativeQuery("SELECT DISTINCT JOBNAME FROM JOB_INSTANCE ORDER BY lower(JOBNAME)")
+                .createNativeQuery("SELECT DISTINCT JOBNAME FROM JOB_INSTANCE ORDER BY JOBNAME")
                 .getResultList();
     }
 

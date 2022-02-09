@@ -297,12 +297,12 @@ public class MessageService extends BaseService {
         if (!includeDeleted) {
             searchShortIdSql += "and m.status != 'DELETED' ";
         }
-        searchShortIdSql += "order by locate(lower(:sort), lower(m.shortId)) asc, m.updated desc ";
         em.createQuery(searchShortIdSql, Message.class)
                 .setParameter("term", "%" + txt + "%")
-                .setParameter("sort", txt)
                 .setMaxResults(maxGroupCount)
                 .getResultList()
+                .stream()
+                .sorted(Comparator.comparing(Message::getShortId, (id1, id2) -> id1.indexOf(txt) < id2.indexOf(txt) ? 1 : 0).thenComparing(Message::getUpdated))
                 .forEach(m -> result.add(new MessageIdMatch(m.getShortId(), SHORT_ID, m, lang)));
 
         return  result;

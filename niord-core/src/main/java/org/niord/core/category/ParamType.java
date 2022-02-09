@@ -33,7 +33,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
         @NamedQuery(name  = "ParamType.findAll",
-                query = "select t from ParamType t order by lower(t.name) asc"),
+                query = "select t from ParamType t order by t.name asc"),
         @NamedQuery(name  = "ParamType.findByName",
                 query = "select t from ParamType t where t.name = :name")
 })
