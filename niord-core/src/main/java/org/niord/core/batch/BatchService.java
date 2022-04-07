@@ -439,7 +439,10 @@ public class BatchService extends BaseService {
         try {
             return em.createNamedQuery("BatchData.findByInstanceId", BatchData.class)
                     .setParameter("instanceId", instanceId)
-                    .getSingleResult();
+                    .getResultList()
+                    .stream()
+                    .max(Comparator.comparing(BatchData::getCreated))
+                    .orElse(null);
         } catch (Exception e) {
             return null;
         }

@@ -77,9 +77,6 @@ import static org.niord.core.settings.Setting.Type;
 @SuppressWarnings("unused")
 public class RepositoryService {
 
-    @Context
-    ServletContext servletContext;
-
     @Inject
     @Setting(value="repoRootPath", defaultValue="${niord.home}/repo", description="The root directory of the Niord repository")
     Path repoRoot;
@@ -529,7 +526,7 @@ public class RepositoryService {
      * @return the file items
      */
     public List<FileItem> parseFileUploadRequest(HttpServletRequest request) throws FileUploadException {
-        FileItemFactory factory = newDiskFileItemFactory(servletContext);
+        FileItemFactory factory = newDiskFileItemFactory(request.getServletContext());
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setFileSizeMax(fileUploadMaxSize);
         upload.setSizeMax(fileUploadMaxSize);
