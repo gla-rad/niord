@@ -618,11 +618,11 @@ public class BatchService extends BaseService {
             batchType.setName(name);
             try {
                 batchType.setRunningExecutions(jobOperator.getRunningExecutions(name).size());
+                batchType.setInstanceCount(jobOperator.getJobInstanceCount(name));
             } catch (NoSuchJobException ignored) {
                 // When the JVM has restarted the call will fail until the job has executed the first time.
                 // A truly annoying behaviour, given that we use persisted batch jobs.
             }
-            batchType.setInstanceCount(jobOperator.getJobInstanceCount(name));
 
             // Update the global batch status with the batch type
             status.getTypes().add(batchType);
