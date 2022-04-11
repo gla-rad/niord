@@ -106,7 +106,7 @@ public class Area extends TreeBaseEntity<Area> implements ILocalizable<AreaDesc>
         this.setId(area.getId());
 
         if (compFilter.includeParent() && area.getParent() != null) {
-            parent = new Area(area.getParent(), filter);
+            setParent(new Area(area.getParent(), filter));
         }
         if (area.getDescs() != null) {
             area.getDescs()
@@ -168,13 +168,13 @@ public class Area extends TreeBaseEntity<Area> implements ILocalizable<AreaDesc>
             }
 
             if (compFilter.includeChildren()) {
-                children.forEach(child -> sysArea.checkCreateChildren().add(child.toVo(SystemAreaVo.class, filter)));
+                getChildren().forEach(child -> sysArea.checkCreateChildren().add(child.toVo(SystemAreaVo.class, filter)));
             }
         }
 
-        if (compFilter.includeParent() && parent != null) {
-            area.setParent(parent.toVo(clz, filter));
-        } else if (compFilter.includeParentId() && parent != null) {
+        if (compFilter.includeParent() && getParent() != null) {
+            area.setParent(getParent().toVo(clz, filter));
+        } else if (compFilter.includeParentId() && getParent() != null) {
             AreaVo parent = new AreaVo();
             parent.setId(parent.getId());
             area.setParent(parent);

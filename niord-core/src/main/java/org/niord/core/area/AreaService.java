@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -246,7 +245,6 @@ public class AreaService extends TreeBaseService<Area> {
      * @param area the template area to update the original with
      * @return the updated area
      */
-    @Transactional
     public Area updateAreaData(Area original, Area area) {
 
         original.setMrn(area.getMrn());

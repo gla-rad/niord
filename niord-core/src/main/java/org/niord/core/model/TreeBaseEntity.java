@@ -16,15 +16,8 @@
 
 package org.niord.core.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,13 +29,14 @@ public abstract class TreeBaseEntity<E extends TreeBaseEntity<E>> extends Versio
 
     protected boolean active = true;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
-    public E parent;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH })
+    @JoinColumn(name="parent_id", referencedColumnName="id")
+    private E parent;
 
     @SuppressWarnings("all")
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     @OrderBy("siblingSortOrder ASC")
-    public  List<E> children = new ArrayList<>();
+    private List<E> children = new ArrayList<>();
 
     @Column(length = 256)
     protected String lineage;

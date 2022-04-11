@@ -477,6 +477,18 @@ public class CategoryService extends TreeBaseService<Category> {
             category = findByName(desc.getName(), desc.getLang(), parentId);
         }
 
+        // Check if we can find the category domain
+        if(templateCategory.getDomains() != null && !templateCategory.getDomains().isEmpty()) {
+            templateCategory.setDomains(templateCategory
+                    .getDomains()
+                    .stream()
+                    .map(domain -> Optional.ofNullable(domain)
+                            .map(Domain::getDomainId)
+                            .map(this.domainService::findByDomainId)
+                            .orElse(domain))
+                    .collect(Collectors.toList()));
+        }
+
         // Create the category if no matching category was found
         if (create && category == null) {
             category = createCategory(templateCategory, parentId);

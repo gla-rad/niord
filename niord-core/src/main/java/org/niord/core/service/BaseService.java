@@ -83,7 +83,7 @@ public abstract class BaseService {
      * Persists or updates the given entity
      *
      * @param entity the entity to persist or update
-     * @return thed update entity
+     * @return the updated entity
      */
     public <E extends BaseEntity> E saveEntity(E entity) {
         if (entity.isPersisted()) {

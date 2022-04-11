@@ -124,7 +124,7 @@ public class Category extends TreeBaseEntity<Category> implements ILocalizable<C
         this.active = category.isActive();
 
         if (compFilter.includeParent() && category.getParent() != null) {
-            parent = new Category(category.getParent(), filter);
+            setParent(new Category(category.getParent(), filter));
         }
 
         if (category.getDescs() != null) {
@@ -177,9 +177,9 @@ public class Category extends TreeBaseEntity<Category> implements ILocalizable<C
         category.setMrn(mrn);
         category.setActive(active);
 
-        if (compFilter.includeParent() && parent != null) {
-            category.setParent(parent.toVo(clz, compFilter));
-        } else if (compFilter.includeParentId() && parent != null) {
+        if (compFilter.includeParent() && getParent() != null) {
+            category.setParent(getParent().toVo(clz, compFilter));
+        } else if (compFilter.includeParentId() && getParent() != null) {
             CategoryVo parent = new CategoryVo();
             parent.setId(parent.getId());
             category.setParent(parent);
@@ -198,7 +198,7 @@ public class Category extends TreeBaseEntity<Category> implements ILocalizable<C
             sysCategory.setSiblingSortOrder(siblingSortOrder);
 
             if (compFilter.includeChildren()) {
-                children.forEach(child -> sysCategory.checkCreateChildren().add(child.toVo(SystemCategoryVo.class, compFilter)));
+                getChildren().forEach(child -> sysCategory.checkCreateChildren().add(child.toVo(SystemCategoryVo.class, compFilter)));
             }
 
             if (!editorFields.isEmpty()) {
