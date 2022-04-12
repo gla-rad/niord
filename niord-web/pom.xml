@@ -22,25 +22,25 @@
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-josm-seachart</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-model</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-core</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
             <artifactId>niord-s124</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
