@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<presets author="Aun 'Skippern' Johnsen, Malcolm Herring, Translator.DE: S. 'XPcRUSHER' Heilmann" version="1.0.1" description="Seamark Tagging according to INT-1 symbols" shortdescription="Seamarks" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/png/OpenSeaMapLogo_16.png">
+<presets author="Aun 'Skippern' Johnsen, Malcolm Herring, Translator.DE: S. 'XPcRUSHER' Heilmann, Jo 'Josail' Ruppert" version="1.0.3" description="Seamark Tagging according to INT-1 symbols" shortdescription="Seamarks" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/png/OpenSeaMapLogo_16.png">
 
   <chunk id="function">
     <list_entry value="harbour_master" display_value="Harbour Master" de.display_value="Haupt Hafen"/>
@@ -11,8 +11,8 @@
     <list_entry value="railway_station" display_value="Railway Station" de.display_value="Bahnstation"/>
     <list_entry value="police_station" display_value="Police Station" de.display_value="Polizeirevier"/>
     <list_entry value="water-police_station" display_value="Water-Police Station" de.display_value="Wasserpolizeistation"/>
-    <list_entry value="pilot_office" display_value="Pilot Office" de.display_value="Pilot Office"/><!--was ist das?-->
-    <list_entry value="pilot_lookout" display_value="Pilot Lookout" de.display_value="Pilot Lookout"/><!--was ist das?-->
+    <list_entry value="pilot_office" display_value="Pilot Office" de.display_value="Pilot Office"/> <!--INT-1 T3 DE:Lotsenstelle-->
+    <list_entry value="pilot_lookout" display_value="Pilot Lookout" de.display_value="Pilot Lookout"/> <!--INT-1 T2 DE:Lotsenausguck-->
     <list_entry value="bank" display_value="Bank" de.display_value="Geldinstitut"/>
     <list_entry value="district_control" display_value="District Control" de.display_value="Distgrict Control"/>
     <list_entry value="transit_shed" display_value="Transit Shed"/>
@@ -814,7 +814,7 @@
       <group name="Harbours in General" de.name="Hafen Hauptelemente" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/F/F.svg">
 
         <item name="Harbour" de.name="Hafen" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/F/F.svg" type="node,closedway">
-          <label text="F: Harbour" de.name="F: Hafen, Festmacher, Hafenelemnte" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/F/F.svg"/>
+          <label text="F: Harbour" de.text="F: Hafen, Festmacher, Hafenelemnte" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/F/F.svg"/>
           <space/>
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Harbours" de.href="https://wiki.openstreetmap.org/wiki/DE:Hafen" text="Harbours" de.text="Häfen"/>
           <key key="harbour" value="yes"/>
@@ -1152,124 +1152,336 @@
       <item name="Dredged area (I20-23)" type="closedway">
         <label text="I20-23: Dredged Area"/>
         <key key="seamark:type" value="dredged_area"/>
+        <space/>
+        <label text="In most cases, the depth of a feature in the ocean is referred to LAT (Lowest Astronomical Tide)." de.text="Für Angaben im Meer wird die Tiefe in der Regel auf LAT (Lowest Astronomical Tide) bezogen."/>
+        <link href="https://wiki.openstreetmap.org/wiki/Key:depth" text="IHO S-57 depth source quality" de.text="IHO S-57 Qualität der Tiefenangabe"/>
+        <text key="depth" text="Depth in meters" de.text="Tiefe in Metern"/>
+        <combo key="depth:source_quality" text="Depth source quality" de.text="Qualität der Tiefenangabe" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="known"/>
+          <list_entry value="doubtful"/>
+          <list_entry value="unreliable"/>
+          <list_entry value="no_bottom"/>
+          <list_entry value="least_depth_known"/>
+          <list_entry value="least_depth_unknown"/>
+          <list_entry value="not_surveyd"/>
+          <list_entry value="not_confirmed"/>
+          <list_entry value="maintained"/>
+          <list_entry value="not_maintained"/>
+        </combo>
+        <space/>
+        <text key="source" text="Source of information" de.text="Informationsquelle"/>
+        <text key="survey:date" text="Date of survey" de.text="Datum der Untersuchung"/>
+        <text key="note" text="Note" de.text="Hinweis"/>
       </item>
 
       <item name="Swept area (I24)" type="closedway">
         <label text="I24: Swept Area"/>
         <key key="seamark:type" value="swept_area"/>
+        <space/>
+        <label text="In most cases, the depth of a feature in the ocean is referred to LAT (Lowest Astronomical Tide)." de.text="Für Angaben im Meer wird die Tiefe in der Regel auf LAT (Lowest Astronomical Tide) bezogen."/>
+        <link href="https://wiki.openstreetmap.org/wiki/Key:depth" text="IHO S-57 depth source quality" de.text="IHO S-57 Qualität der Tiefenangabe"/>
+        <text key="depth" text="Depth in meters" de.text="Tiefe in Metern"/>
+        <combo key="depth:source_quality" text="Depth source quality" de.text="Qualität der Tiefenangabe" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="known"/>
+          <list_entry value="doubtful"/>
+          <list_entry value="unreliable"/>
+          <list_entry value="no_bottom"/>
+          <list_entry value="least_depth_known"/>
+          <list_entry value="least_depth_unknown"/>
+          <list_entry value="not_surveyd"/>
+          <list_entry value="not_confirmed"/>
+          <list_entry value="maintained"/>
+          <list_entry value="not_maintained"/>
+        </combo>
+        <space/>
+        <text key="source" text="Source of information" de.text="Informationsquelle"/>
+        <text key="survey:date" text="Date of survey" de.text="Datum der Untersuchung"/>
+        <text key="note" text="Note" de.text="Hinweis"/>
       </item>
 
     </group>
 
     <!---***********************Section J: Nature of Seabed***************************-->
 
-    <group name="J: Nature of Seabed" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J15.svg">
+    <group name="J: Nature of Seabed" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4gn.svg">
 
-      <item name="Seabed Surface (J1-J12)+(J30-J39)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg" type="node,closedway">
-        <label text="J1-J12, J30-J39: Seabed Surface" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg"/>
+      <item name="Type of Seabed Surface and Quality (J1-J12)+(J30-J39)" de.name="Bodenart und Bodenbeschaffenheit (J1-J12)+(J30-J39)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J1.svg" type="node,closedway">
+        <label text="J1-J12, J30-J39: Type of Seabed Surface and Quality" de.text="J1-J12, J30-J39: Bodenart und Bodenbeschaffenheit" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J1.svg"/>
         <space/>
         <key key="seamark:type" value="seabed_area"/>
-        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects"/>
-        <multiselect key="seamark:seabed_area:surface" text="Surface Material"  use_last_as_default="force" >
-          <list_entry value="sand"/>
-          <list_entry value="mud"/>
-          <list_entry value="clay"/>
-          <list_entry value="silt"/>
-          <list_entry value="stones"/>
-          <list_entry value="gravel"/>
-          <list_entry value="pebbles"/>
-          <list_entry value="cobbles"/>
-          <list_entry value="rocky"/>
-          <list_entry value="boulders"/>
-          <list_entry value="coral"/>
-          <list_entry value="shells"/>
-          <list_entry value="lava"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects" text="Seamark objects" de.text="Seekartenzeichen (Seamark-Objekte)"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/INT-1_Section_J" text="Nature of the seabed (INT-1 Section J)" de.text="Grundbezeichnungen (INT-1 Kapitel J)"/>
+        <multiselect key="seamark:seabed_area:surface" text="Surface Type/Material" de.text="Bodenart/Material">
+          <list_entry value="sand" display_value="&#xA0;S&#xA0;&#xA0; &#xA0; Sand" de.display_value="&#xA0;S&#xA0;&#xA0; &#xA0; Sand"/>
+          <list_entry value="mud" display_value="&#xA0;M&#xA0;&#xA0; &#xA0; Mud" de.display_value="&#xA0;M&#xA0;&#xA0; &#xA0; Schlick"/>
+          <list_entry value="clay" display_value="&#xA0;Cy&#xA0; &#xA0; Clay" de.display_value="&#xA0;Cy&#xA0; &#xA0; Ton"/>
+          <list_entry value="silt" display_value="&#xA0;Si&#xA0; &#xA0; Silt" de.display_value="&#xA0;Si&#xA0; &#xA0; Schluff"/>
+          <list_entry value="rocky" display_value="&#xA0;R&#xA0;&#xA0; &#xA0; Rock, rocky" de.display_value="&#xA0;R&#xA0;&#xA0; &#xA0; Fels, felsig"/>
+          <list_entry value="stones" display_value="&#xA0;St&#xA0; &#xA0; Stones" de.display_value="&#xA0;St&#xA0; &#xA0; Steine"/>
+          <list_entry value="gravel" display_value="&#xA0;G&#xA0;&#xA0; &#xA0; Gravel" de.display_value="&#xA0;G&#xA0;&#xA0; &#xA0; Kies"/>
+          <list_entry value="pebbles" display_value="&#xA0;P&#xA0;&#xA0; &#xA0; Pebbels" de.display_value="&#xA0;P&#xA0;&#xA0; &#xA0; Kleine Steine"/>
+          <list_entry value="cobbles" display_value="&#xA0;Cb&#xA0; &#xA0; Cobbles" de.display_value="&#xA0;Cb&#xA0; &#xA0; Große Steine"/>
+          <list_entry value="boulders" display_value="&#xA0;Bo&#xA0; &#xA0; Boulder(s)" de.display_value="&#xA0;Bo&#xA0; &#xA0; Findling(e)"/>
+          <list_entry value="coral" display_value="&#xA0;Co&#xA0; &#xA0; Coral" de.display_value="&#xA0;Co&#xA0; &#xA0; Korallen"/>
+          <list_entry value="shells" display_value="&#xA0;Sh&#xA0; &#xA0; Shells, skeletal remains" de.display_value="&#xA0;Sh&#xA0; &#xA0; Schill, Bruchstücke von Muschelschalen"/>
+          <list_entry value="lava" display_value="&#xA0;Lv&#xA0; &#xA0;&#xA0;&#xA0; Lava" de.display_value="&#xA0;Lv&#xA0; &#xA0;&#xA0;&#xA0; Lava"/>
         </multiselect>
-        <combo key="seamark:seabed_area:quality" text="Surface Quality" >
-          <list_entry value="fine"/>
-          <list_entry value="medium"/>
-          <list_entry value="coarse"/>
-          <list_entry value="broken"/>
-          <list_entry value="sticky"/>
-          <list_entry value="soft"/>
-          <list_entry value="stiff"/>
-          <list_entry value="volcanic"/>
-          <list_entry value="calcareous"/>
-          <list_entry value="hard"/>
-        </combo>
+        <multiselect key="seamark:seabed_area:surface_qualification" text="Surface Quality" de.text="Bodenbeschaffenheit">
+          <list_entry value="" display_value="&#xA0;&#xA0;&#xA0; &#xA0; &#xA0; none" de.display_value="&#xA0;&#xA0;&#xA0; &#xA0; &#xA0; keine"/>
+          <list_entry value="fine" display_value="&#xA0;f&#xA0;&#xA0; &#xA0; &#xA0; fine, related to sand" de.display_value="&#xA0;f&#xA0;&#xA0; &#xA0; &#xA0; feinkörnig, bezogen auf Sand"/>
+          <list_entry value="medium" display_value="&#xA0;m&#xA0;&#xA0; &#xA0; medium, related to sand" de.display_value="&#xA0;m&#xA0;&#xA0; &#xA0; mittelkörnig, bezogen auf Sand"/>
+          <list_entry value="coarse" display_value="&#xA0;c&#xA0;&#xA0; &#xA0;&#xA0; coarse, related to sand" de.display_value="&#xA0;c&#xA0;&#xA0; &#xA0;&#xA0; grobkörnig, bezogen auf Sand"/>
+          <list_entry value="broken" display_value="&#xA0;bk&#xA0; &#xA0; broken" de.display_value="&#xA0;bk&#xA0; &#xA0; zerbrochen"/>
+          <list_entry value="sticky" display_value="&#xA0;sy&#xA0; &#xA0; sticky" de.display_value="&#xA0;sy&#xA0; &#xA0; zäh"/>
+          <list_entry value="soft" display_value="&#xA0;so&#xA0; &#xA0; soft" de.display_value="&#xA0;so&#xA0; &#xA0; weich"/>
+          <list_entry value="stiff" display_value="&#xA0;sf&#xA0; &#xA0; stiff" de.display_value="&#xA0;sf&#xA0; &#xA0; steif"/>
+          <list_entry value="volcanic" display_value="&#xA0;v&#xA0;&#xA0; &#xA0; volcanic" de.display_value="&#xA0;v&#xA0;&#xA0; &#xA0; vulkanisch"/>
+          <list_entry value="calcareous" display_value="&#xA0;ca&#xA0; &#xA0; calcareous" de.display_value="&#xA0;ca&#xA0; &#xA0; kalkig"/>
+          <list_entry value="hard" display_value="&#xA0;h&#xA0;&#xA0; &#xA0; hard" de.display_value="&#xA0;h&#xA0;&#xA0; &#xA0; hart"/>
+        </multiselect>
+        <space/>
+        <label text="Seabed specification, optional tags" de.text="Bestimmung der Bodenart, optionale Merkmale"/>
+        <space/>
+        <text key="depth" text="Estimated depth in meters" de.text="Geschätzte Tiefe in Metern"/>
+        <key key="depth:source_quality" value="unreliable"/> <!-- https://wiki.openstreetmap.org/wiki/Key:depth -->
+        <label text="Depth referring to LAT (Lowest Astronomical Tide)." de.text="Tiefe bezogen auf LAT (Lowest Astronomical Tide)."/>
+        <space/>
+        <text key="source" text="Source of information" de.text="Informationsquelle"/>
+        <text key="survey:date" text="Date of survey" de.text="Datum der Untersuchung"/>
+        <text key="note" text="Note" de.text="Hinweis"/>
       </item>
 
-      <item name="Weed (J13)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg" type="node,closedway">
-        <label text="J13: Weed" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg"/>
+      <!---*** J13.1-2: Weed/Kelp *** icon source https://wiki.openstreetmap.org/w/images/6/67/WEDKLP03m.svg https://registry.iho.int/portrayal/view.do?itemIdentifier=737&type=3&domain=&status=2&searchValue=WEDKLP03  https://legacy.iho.int/mtg_docs/com_wg/NCWG/NCWG2/NCWG2-08.9A%20seagrass.pdf ***-->
+      <item name="Weed/Kelp (J13.1-2)" de.name="Seetang/Kelp (J13.1-2)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.2br.svg" icon_size="32" type="node,closedway">
+        <label text="J13.1-2: Weed/Kelp" de.text="J13.1-2: Seetang/Kelp" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.2br.svg" icon_size="32"/>
+        <space/>
+        <label text="&#xA0;&#xA0;&#xA0; Wd" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.2.svg" alt="Weed/Kelp symbol from INT-1" icon_size="96"/>
         <space/>
         <key key="seamark:type" value="weed"/>
-        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects"/>
-        <combo key="seamark:weed:category" text="Category of Weed" >
-          <list_entry value="kelp"/>
-          <list_entry value="sea_weed"/>
-          <list_entry value="sea_grass"/>
-          <list_entry value="sargasso"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects" text="Seamark objects" de.text="Seekartenzeichen (Seamark-Objekte)"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/INT-1_Section_J" text="Nature of the seabed (INT-1 Section J)" de.text="Grundbezeichnungen (INT-1 Kapitel J)"/>
+        <combo key="seamark:weed:category" text="Category of Weed/Kelp" de.text="Seetang/Kelp-Kategorie">
+          <list_entry value="sea_weed" display_value="&#xA0; Wd&#xA0; &#xA0; Seeweed" de.display_value="&#xA0;Wd&#xA0; Seetang"/>
+          <list_entry value="kelp" display_value="Kelp" de.display_value="Kelp" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.2br.svg" icon_size="32"/>
+          <list_entry value="sargasso" display_value="Sargasso" de.display_value="Golftang (Sargassum)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.2br.svg" icon_size="32"/>
         </combo>
-      </item>
-
-      <item name="Sandwaves (J14)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg" type="node,closedway">
-        <label text="J14: Sandwaves" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg"/>
         <space/>
-        <key key="seamark:type" value="sandwaves"/>
-        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects"/>
+        <label text ="Notes:" de.text ="Hinweise:"/>
+        <label text ="Distinct seamark objects are used for seaweed (macroalgae) and seagrass (marine plants)." de.text ="Für Seetang (Makroalgen) und Seegras (Meerespflanzen) werden unterschiedliche Seamarkt-Objekte verwendet." />
+        <link href="https://legacy.iho.int/mtg_docs/com_wg/NCWG/NCWG2/NCWG2-08.9A%20seagrass.pdf" text="Seaweed vs. Seagrass (IHO NCWG2-08.9A)" de.text="Seetang vs. Seegras (IHO NCWG2-08.9A)" />
+        <label text ="Consider to use additionaly seamark:type=restricted_area, if specific regulation exists for this area,"
+               de.text ="Nutze gegebenenfalls zusätzlich 'Gebiet mit Schifffahrtsbeschränkung' falls bestimmte Regeln für dieses Gebeit festgelegt sind," />
+        <label text ="e.g. category 'nature reserve' or attribute 'anchoring prohibited'" de.text ="(seamark:type=restricted_area), z.B. Kategorie 'Naturschutzgebiete' oder Merkmal 'Ankern verboten', " />
+        <space/>
+        <label text="Seaweed specification, optional tags" de.text="Seetangart, optionale Merkmale"/>
+        <space/>
+        <combo key="genus" text="Genus" de.text="Gattung" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="Caulerpa"/>
+          <list_entry value="Fucus"/>
+          <list_entry value="Gracilaria"/>
+          <list_entry value="Laminaria"/>
+          <list_entry value="Macrocystis"/>
+          <list_entry value="Monostroma"/>
+          <list_entry value="Porphyra"/>
+          <list_entry value="Saccharina"/>
+          <list_entry value="Sargassum"/>
+          <list_entry value="etc."/>
+        </combo>
+        <link href="https://en.wikipedia.org/wiki/Seaweed" text="Some seaweed species" de.text="Einige Seetangarten" />
+        <combo key="species" text="Specie" de.text="Spezies" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="Sargassum sp."/>
+          <list_entry value="Laminaria sp."/>
+          <list_entry value="Saccharina sp."/>
+          <list_entry value="Macrocystis pyrifera"/>
+          <list_entry value="etc."/>
+        </combo>
+        <combo key="taxon" text="Taxonomy" de.text="Taxonomie" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="Sargassum sp."/>
+          <list_entry value="Laminaria sp."/>
+          <list_entry value="Saccharina sp."/>
+          <list_entry value="Macrocystis pyrifera"/>
+          <list_entry value="etc."/>
+        </combo>
+        <space/>
+        <text key="depth" text="Estimated depth in meters" de.text="Geschätzte Tiefe in Metern"/>
+        <key key="depth:source_quality" value="unreliable"/> <!-- https://wiki.openstreetmap.org/wiki/Key:depth -->
+        <label text="Depth referring to LAT (Lowest Astronomical Tide)." de.text="Tiefe bezogen auf LAT (Lowest Astronomical Tide)."/>
+        <space/>
+        <text key="source" text="Source of information" de.text="Informationsquelle"/>
+        <text key="survey:date" text="Date of survey" de.text="Datum der Untersuchung"/>
+        <text key="note" text="Note" de.text="Hinweis"/>
+        <text key="website" text="Related website" de.text="Zugehörige Webseite"/>
       </item>
 
-      <item name="Spring in Seabed (J15)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg" type="node">
-        <label text="J15: Spring in Seabed" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg"/>
+      <!---*** J13.3-4: Seagrass *** icon sources https://wiki.openstreetmap.org/w/images/c/c4/SEAGRA18.svg https://wiki.openstreetmap.org/w/images/e/eb/SEAGRA15.svg https://legacy.iho.int/mtg_docs/com_wg/NCWG/NCWG2/NCWG2-08.9A%20seagrass.pdf *** -->
+      <item name="Seagrass (J13.3-4)" de.name="Seegras (J13.3-4)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4gn.svg" type="node,closedway">
+        <label text="J13.3-4: Seagrass" de.text="J13.3-4 Seegras" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4gn.svg"/>
+        <space/>
+        <label text="&#xA0;&#xA0;&#xA0; Sg" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4.detail.svg" alt="Seagrass symbol from IHO NCWG2-08.9A 2016" icon_size="64"/>
+        <space/>
+        <key key="seamark:type" value="seagrass"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects" text="Seamark objects" de.text="Seekartenzeichen (Seamark-Objekte)"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/INT-1_Section_J" text="Nature of the seabed (INT-1 Section J)" de.text="Grundbezeichnungen (INT-1 Kapitel J)"/>
+        <combo key="seamark:seagrass:category" text="Category of Seagrass" de.text="Seegras-Kategorie">
+          <list_entry value="unspecified" display_value="Sg&#xA0; Seagrass unspecified" de.display_value="Sg&#xA0; Seegras, unspezifisch" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4gn.svg" icon_size="16"/>
+          <list_entry value="specified" display_value="Seagrass specified" de.display_value="Seegras bestimmter Art" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4gn.svg" icon_size="16"/>
+          <list_entry value="posidonia" display_value="Posidonia seagrass" de.display_value="Neptungras (Posidonia)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J13.4gn.svg" icon_size="16"/>
+        </combo>
+        <space/>
+        <label text ="Notes:" de.text ="Hinweise:"/>
+        <label text ="Distinct seamark objects are used for seaweed (macroalgae) and seagrass (marine plants)." de.text ="Für Seetang (Makroalgen) und Seegras (Meerespflanzen) werden unterschiedliche Seamarkt-Objekte verwendet." />
+        <link href="https://legacy.iho.int/mtg_docs/com_wg/NCWG/NCWG2/NCWG2-08.9A%20seagrass.pdf" text="Seagrass vs. Seaweed (IHO NCWG2-08.9A)" de.text="Seegras vs. Seetang (IHO NCWG2-08.9A)" />
+        <label text ="Consider to use additionaly seamark:type=restricted_area, if specific regulation exists for this area,"
+               de.text ="Nutze gegebenenfalls zusätzlich 'Gebiet mit Schifffahrtsbeschränkung' falls bestimmte Regeln für dieses Gebeit festgelegt sind," />
+        <label text ="e.g. category 'nature reserve' or attribute 'anchoring prohibited'" de.text ="(seamark:type=restricted_area), z.B. Kategorie 'Naturschutzgebiete' oder Merkmal 'Ankern verboten', " />
+        <space/>
+        <label text="Seagrass specification, optional tags" de.text="Seegrasart, optionale Merkmale"/>
+        <space/>
+        <combo key="genus" text="Genus" de.text="Gattung" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="Phyllospadix"/>
+          <list_entry value="Zostera"/>
+          <list_entry value="Enhalus"/>
+          <list_entry value="Halophila"/>
+          <list_entry value="Thalassia"/>
+          <list_entry value="Posidonia"/>
+          <list_entry value="Amphibolis"/>
+          <list_entry value="Cymodocea"/>
+          <list_entry value="Halodule"/>
+          <list_entry value="Syringodium"/>
+          <list_entry value="Thalassodendron"/>
+        </combo>
+        <link href="https://en.wikipedia.org/wiki/Seagrass" text="Seagrass species" de.text="Seegrasarten" />
+        <combo key="species" text="Specie" de.text="Spezies" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="Zostera sp."/>
+          <list_entry value="Posidonia oceanica"/>
+          <list_entry value="etc."/>
+        </combo>
+        <combo key="taxon" text="Taxonomy" de.text="Taxonomie" use_last_as_default="force" readonly="false" delimiter=";">
+          <list_entry value=""/>
+          <list_entry value="Zostera sp."/>
+          <list_entry value="Posidonia oceanica"/>
+          <list_entry value="etc."/>
+        </combo>
+        <space/>
+        <text key="depth" text="Estimated depth in meters" de.text="Geschätzte Tiefe in Metern"/>
+        <key key="depth:source_quality" value="unreliable"/> <!-- https://wiki.openstreetmap.org/wiki/Key:depth -->
+        <label text="Depth referring to LAT (Lowest Astronomical Tide)." de.text="Tiefe bezogen auf LAT (Lowest Astronomical Tide)."/>
+        <space/>
+        <text key="source" text="Source of information" de.text="Informationsquelle"/>
+        <text key="survey:date" text="Date of survey" de.text="Datum der Untersuchung"/>
+        <text key="note" text="Note" de.text="Hinweis"/>
+        <text key="website" text="Related website" de.text="Zugehörige Webseite"/>
+      </item>
+
+      <!---*** J14: Sandwaves ***-->
+      <item name="Sandwaves (J14)" de.name="Sandwellen (J14)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg" type="node,closedway">
+        <label text="J14: Sandwaves" de.text="J14: Sandwellen" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg"/>
+        <space/>
+        <key key="seamark:type" value="sand_waves"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects" text="Seamark objects" de.text="Seekartenzeichen (Seamark-Objekte)"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/INT-1_Section_J" text="Nature of the seabed (INT-1 Section J)" de.text="Grundbezeichnungen (INT-1 Kapitel J)"/>
+      </item>
+
+      <!---*** J15: Spring in Seabed ***-->
+      <item name="Spring in Seabed (J15)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J15.svg" type="node">
+        <label text="J15: Spring in Seabed" de.text="J15: Quelle am Meeresboden" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J14.svg"/>
         <space/>
         <key key="seamark:type" value="spring"/>
-        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects" text="Seamark objects" de.text="Seekartenzeichen (Seamark-Objekte)"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/INT-1_Section_J" text="Nature of the seabed (INT-1 Section J)" de.text="Grundbezeichnungen (INT-1 Kapitel J)"/>
+      </item>
+
+      <!---*** J20-22: Type of Seabed, Intertidel Areas ***-->
+      <item name="Type of Seabed, Intertidal Areas (J20-J22)" de.name="Bodenarten in Gezeitengebieten (J20-J22)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J20.svg" type="way,closedway">
+        <label text="J20-22: Type of Seabed, Intertidal Areas" de.text="J20-22: Bodenarten in Gezeitengebieten" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J20.svg"/>
+        <space/>
+
+        <label text="&#xA0;&#xA0;&#xA0; J20 seabed area pattern, Areas with stones and gravel" de.text="&#xA0;&#xA0;&#xA0; J20 Signatur für Gebiete mit Steinen und Kies" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J20.svg" alt="Stones and gravel pattern" icon_size="64" type="closedway"/>
+        <space/>
+
+        <label text="&#xA0;&#xA0;&#xA0; J21 line style, Rocky area, rock edge" de.text="&#xA0;&#xA0;&#xA0; J21 Stil für Linien, Felsengebiet, -riff" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J21.svg" alt="rocky reef line style" icon_size="64" type="way"/>
+        <space/>
+
+        <label text="&#xA0;&#xA0;&#xA0; J22 line style, Coral reef" de.text="&#xA0;&#xA0;&#xA0; J22 Stil für Linien, Korallenriff" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J22.svg" alt="coral reef line style" icon_size="64" type="way"/>
+        <space/>
+
+        <label text="&#xA0;&#xA0;&#xA0; J21 J22 seabed area pattern, Rocky area or coral reef" de.text="&#xA0;&#xA0;&#xA0; J21 J22 Signatur für Felsengebiet oder Korrallenriff" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J2122.svg" alt="rocky area coral reef pattern" icon_size="64" type="closedway"/>
+        <space/>
+
+        <key key="seamark:type" value="seabed_area"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Seamark_Objects" text="Seamark objects" de.text="Seekartenzeichen (Seamark-Objekte)"/>
+        <link href="https://wiki.openstreetmap.org/wiki/Seamarks/INT-1_Section_J" text="Nature of the seabed (INT-1 Section J)" de.text="Grundbezeichnungen (INT-1 Kapitel J)"/>
+        <space/>
+        <combo key="seamark:seabed_area:surface" text="Seabed type, rocky material" de.text="Bodenart, Gesteinsmaterial" use_last_as_default="force" >
+          <list_entry value="stones;gravel" display_value="&#xA0;St-G&#xA0; &#xA0; Stones/Gravel" de.display_value="&#xA0;St-G&#xA0; &#xA0; Steine/Kies" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J20.svg" icon_size="16"/>
+          <list_entry value="rocky" display_value="&#xA0;R&#xA0; &#xA0; Rocky area or edge" de.display_value="&#xA0;R&#xA0; &#xA0; Felsengebiet oder -riff" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J21.svg" icon_size="16"/>
+          <list_entry value="coral" display_value="&#xA0;Co&#xA0; &#xA0; Coral reef" de.display_value="&#xA0;Co&#xA0; &#xA0; Korallenriff" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/J/J22.svg" icon_size="16"/>
+        </combo>
+        <combo key="seamark:seabed_area:water_level" text="Reef and seabed surface level (water_level)" de.text="Meeresgrund und Wasserstand" use_last_as_default="true">
+          <list_entry value="submerged" display_value="submerged" de.display_value="ständig unter Wasser"/>
+          <list_entry value="covers" display_value="covers and uncovers" de.display_value="zeitweise unter Wasser und trockenfallend"/>
+          <list_entry value="awash" display_value="awash" de.display_value="in Höhe des Kartennulls (LAT)"/>
+        </combo>
+        <space/>
+        <label text="Seabed specification, optional tags" de.text="Bestimmung der Bodenart, optionale Merkmale"/>
+        <space/>
+        <text key="source" text="Source of information" de.text="Informationsquelle"/>
+        <text key="survey:date" text="Date of survey" de.text="Datum der Untersuchung"/>
+        <text key="note" text="Note" de.text="Hinweis"/>
       </item>
 
     </group>
 
     <!---***********************Section K: Rocks, Wrecks, Obstructions***************************-->
 
-    <group name="K: Rocks, Wrecks, Obstructions" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K12.svg">
+    <group name="K: Rocks, Wrecks, Obstructions" de.name="Felsen, Wracks und Schifffahrtshindernisse" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K12.svg">
 
-      <item name="Rock (K10-K15)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K11.svg" type="node">
-        <label text="K10-K15: Rock" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K11.svg"/>
+      <item name="Rock (K10-K15)" de.name="Felsen (K10-K15)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K11.svg" type="node">
+        <label text="K10-K15: Rock" de.text="K10-K15: Felsen" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K11.svg"/>
         <space/>
         <key key="seamark:type" value="rock"/>
-        <combo key="seamark:rock:water_level" text="Type Rock (water_level)" use_last_as_default="true">
-          <list_entry value="submerged" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K13.svg" icon_size="16"/>
-          <list_entry value="covers" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K11.svg" icon_size="16"/>
-          <list_entry value="awash" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K12.svg" icon_size="16"/>
+        <combo key="seamark:rock:water_level" text="Type Rock (water_level)" de.text="Art des Felsen (Wasserstand)"  use_last_as_default="true">
+          <list_entry value="submerged" display_value="submerged" de.display_value="ständig unter Wasser" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K13.svg" icon_size="16"/>
+          <list_entry value="covers"  display_value="covers and uncovers" de.display_value="zeitweise unter Wasser und trockenfallend" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K11.svg" icon_size="16"/>
+          <list_entry value="awash"  display_value="awash" de.display_value="in Höhe des Kartennulls (LAT)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K12.svg" icon_size="16"/>
         </combo>
       </item>
 
-      <item name="Wreck (K20-K30)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K24.svg" type="node,closedway">
-        <label text="K20-K30: Wreck" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K24.svg"/>
+      <item name="Wreck (K20-K30)" de.name="Wrack (K20-K30)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K24.svg" type="node,closedway">
+        <label text="K20-K30: Wreck" de.text="K20-K30: Wrack" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K24.svg"/>
         <space/>
         <key key="seamark:type" value="wreck"/>
-        <combo key="seamark:wreck:category" text="Wreck Category">
-          <list_entry value="non-dangerous"/>
-          <list_entry value="hull_showing"/>
-          <list_entry value="dangerous"/>
-          <list_entry value="mast_showing"/>
-          <list_entry value="distributed_remains"/>
+        <combo key="seamark:wreck:category" text="Wreck Category" de.text="Kategorie des Wracks">
+          <list_entry value="non-dangerous" display_value="non-dangerous" de.display_value="nicht gefährlich"/>
+          <list_entry value="hull_showing" display_value="hull_showing" de.display_value="Rumpf sichtbar"/>
+          <list_entry value="dangerous" display_value="dangerous" de.display_value="gefährlich"/>
+          <list_entry value="mast_showing" display_value="mast_showing" de.display_value="Mast sichtbar"/>
+          <list_entry value="distributed_remains" display_value="distributed_remains" de.display_value="verstreute Überreste"/>
         </combo>
         <combo key="seamark:wreck:water_level" text="Water level of wreck">
-          <list_entry value="dry"/>
-          <list_entry value="submerged"/>
-          <list_entry value="covers"/>
-          <list_entry value="awash"/>
+          <list_entry value="dry" display_value="hull never covers, dry" de.display_value="Rumpf ständig über Wasser, trockengefallen"/>
+          <list_entry value="submerged" display_value="submerged" de.display_value="ständig unter Wasser"/>
+          <list_entry value="covers" display_value="covers and uncovers" de.display_value="zeitweise unter Wasser und trockenfallend"/>
+          <list_entry value="awash" display_value="awash" de.display_value="in Höhe des Kartennulls (LAT)"/>
         </combo>
       </item>
 
-      <item name="Foul Ground (K31)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K31.svg" type="node,closedway">
-        <label text="K31: Foul Ground" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K31.svg"/>
+      <item name="Foul Ground (K31)" de.name="Unreiner Grund (K31)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K31.svg" type="node,closedway">
+        <label text="K31: Foul Ground" de.text="K31: Unreiner Grund" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K31.svg"/>
         <space/>
         <key key="seamark:type" value="obstruction"/>
         <key key="seamark:obstruction:category" value="foul_ground"/>
       </item>
 
-      <item name="Obstruction (K40-K43)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K40.svg" type="node,closedway">
+      <!-- completion of translation to German required -->
+      <item name="Obstruction (K40-K43)" de.name="Schifffahrtshindernisse (K40-K43)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K40.svg" type="node,closedway">
         <label text="K40-K43: Obstruction" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K40.svg"/>
         <space/>
         <key key="seamark:type" value="obstruction"/>
@@ -1300,7 +1512,7 @@
         </combo>
       </item>
 
-      <item name="Fish Stakes, Traps, Net (K44.*, K45)" type="node,closedway">
+      <item name="Fish Stakes, Traps, Net (K44.*, K45)" de.name="Fischereianlagen (K44.*, K45)" type="node,closedway">
         <label text="K44.*: Fish Stakes, Traps"/>
         <label text="K45: Tunny net"/>
         <space/>
@@ -1313,14 +1525,14 @@
         </combo>
       </item>
 
-      <item name="Fish Haven, Fish Reef (K46.*)" type="node,closedway">
-        <label text="K46: Fish Haven"/>
+      <item name="Fish Haven, Fish Reef (K46.*)" de.name="Fischschutzgebiete (K46.*)" type="node,closedway">
+        <label text="K46: Fish Haven" de.text="K46: Fischschutzgebiet"/>
         <space/>
         <key key="seamark:type" value="obstruction"/>
         <key key="seamark:obstruction:category" value="fish_haven"/>
       </item>
 
-      <item name="Shellfish Beds (K47)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K48.1.svg" type="node,closedway">
+      <item name="Shellfish Beds (K47)" de.name="Muschelkultur (K47)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K48.1.svg" type="node,closedway">
         <label text="K47: Shellfish Beds" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K48.1.svg"/>
         <space/>
         <key key="seamark:type" value="marine_farm"/>
@@ -1330,7 +1542,7 @@
         </combo>
       </item>
 
-      <item name="Marine Farms (K48.*)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K48.1.svg" type="node,closedway">
+      <item name="Marine Farms (K48.*)" de.name="Fischzuchtgebiet (K48.*)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K48.1.svg" type="node,closedway">
         <label text="K48: Marine farms" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/K/K48.1.svg"/>
         <space/>
         <key key="seamark:type" value="marine_farm"/>
@@ -1982,7 +2194,7 @@
 
     <!---***********************Section P: Lights***************************-->
 
-    <group name="P: Lights" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.major.svg" >
+    <group name="P: Lights" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.major.svg">
 
       <group name="Single non-directional Lights (P1-P16)" type="node,closedway" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.minor.svg">
         <item name="Lights in General" type="node,closedway" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.minor.svg">
@@ -2032,7 +2244,7 @@
       <group name="Directional Lights (P30)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.minor.svg">
 
         <item name="Sector 1" type="node,closedway">
-          <label text="Directional Lights (P30) - Sector 1"/>
+          <label text="Sector 1"/>
           <space/>
           <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:1:colour" text="Colour">
@@ -2057,7 +2269,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Directional Lights (P30) - Sector 2" type="node,closedway">
+        <item name="Sector 2" type="node,closedway">
           <label text="Sector 2"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2083,7 +2295,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Directional Lights (P30) - Sector 3" type="node,closedway">
+        <item name="Sector 3" type="node,closedway">
           <label text="Sector 3"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2109,7 +2321,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Directional Lights (P30) - Sector 4" type="node,closedway">
+        <item name="Sector 4" type="node,closedway">
           <label text="Sector 4"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2135,7 +2347,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Directional Lights (P30) - Sector 5" type="node,closedway">
+        <item name="Sector 5" type="node,closedway">
           <label text="Sector 5"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2165,7 +2377,7 @@
 
       <group name="Sectored Lights (P40-46)" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.minor.svg">
 
-        <item name="Sectored Lights (P40-46) - Sector 1" type="node,closedway">
+        <item name="Sector 1" type="node,closedway">
           <label text="Sector 1"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2194,7 +2406,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Sectored Lights (P40-46) - Sector 2" type="node,closedway">
+        <item name="Sector 2" type="node,closedway">
           <label text="Sector 2"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2223,7 +2435,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Sectored Lights (P40-46) - Sector 3" type="node,closedway">
+        <item name="Sector 3" type="node,closedway">
           <label text="Sector 3"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2252,7 +2464,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Sectored Lights (P40-46) - Sector 4" type="node,closedway">
+        <item name="Sector 4" type="node,closedway">
           <label text="Sector 4"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -2281,7 +2493,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Sectored Lights (P40-46) - Sector 5" type="node,closedway">
+        <item name="Sector 5" type="node,closedway">
           <label text="Sector 5"/>
           <space/>
           <key key="seamark:type" value="light"/>
@@ -4018,7 +4230,7 @@
         <group name="CEVNI" de.name="CEVNI Schilder Europa" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/Q/Q126/CEVNI/no_entry.svg">
 
           <item name="Prohibition Notices" de.name="Verbotszeichen" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/Q/Q126/CEVNI/no_berthing_lateral_limit.svg" type="node">
-            <label text="CEVNI Prohibition Notice" de.name="CEVNI Verbotszeichen" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/Q/Q126/CEVNI/no_berthing_lateral_limit.svg"/>
+            <label text="CEVNI Prohibition Notice" de.text="CEVNI Verbotszeichen" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/Q/Q126/CEVNI/no_berthing_lateral_limit.svg"/>
             <link href="https://wiki.openstreetmap.org/wiki/Seamarks/CEVNI_Notice_Marks#Prohibitory_Signs" de.href="https://wiki.openstreetmap.org/wiki/DE:OpenSeaMap/CEVNI_Notice_Marks#Verbote"/>
             <space/>
             <key key="seamark:type" value="notice"/>
