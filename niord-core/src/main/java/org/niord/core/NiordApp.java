@@ -42,6 +42,11 @@ public class NiordApp implements QuarkusApplication {
     // The possible execution modes of Niord
     public enum ExecutionMode { DEVELOPMENT, TEST, PRODUCTION }
 
+    private static final Setting ORGANISATION =
+            new Setting("organisation", "GRAD")
+                    .description("The organisation of the service")
+                    .editable(true);
+
     private static final Setting BASE_URI =
             new Setting("baseUri", "http://localhost:8080")
                     .description("The base application server URI")
@@ -101,6 +106,14 @@ public class NiordApp implements QuarkusApplication {
         return "undefined";
     }
 
+
+    /**
+     * Returns the organisation responsible for this application
+     * @return the organisation responsible for this application
+     */
+    public String getOrganisation() {
+        return settingsService.getString(ORGANISATION);
+    }
 
     /**
      * Returns the base URI used to access this application
