@@ -2522,7 +2522,7 @@
           <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Lights" text="Lights"/>
         </item>
 
-        <item name="Sectored Lights (P40-46) - Sector 6" type="node,closedway">
+        <item name="Sector 6" type="node,closedway">
           <label text="Sector 6"/>
           <space/>
           <key key="seamark:type" value="light"/>

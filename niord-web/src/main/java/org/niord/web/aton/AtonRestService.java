@@ -17,11 +17,9 @@ package org.niord.web.aton;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.niord.core.aton.AtonDefaultsService;
-import org.niord.core.aton.AtonNode;
-import org.niord.core.aton.AtonSearchParams;
-import org.niord.core.aton.AtonService;
+import org.niord.core.aton.*;
 import org.niord.core.aton.vo.AtonNodeVo;
+import org.niord.core.aton.vo.AtonTagMetaVo;
 import org.niord.core.user.Roles;
 import org.niord.model.IJsonSerializable;
 import org.niord.model.search.PagedSearchResultVo;
@@ -33,9 +31,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * REST interface for accessing AtoNs.
@@ -249,7 +247,8 @@ public class AtonRestService {
     }
 
     /**
-     * Returns the name of all node types where the name matches the parameter
+     * Returns the metadata of all node tag types where the name matches the
+     * parameter.
      *
      * @param atonNodeTypeParam the AtoN and node type names
      * @return the name of all node types where the name matches the parameter
@@ -260,11 +259,14 @@ public class AtonRestService {
     @Produces("application/json;charset=UTF-8")
     @GZIP
     @NoCache
-    public Object describeAtonForNodeTypes(AtonNodeTypeParam atonNodeTypeParam) {
-        AtonNode atonNode = new AtonNode(atonNodeTypeParam.getAton());
-        atonNodeTypeParam.getNodeTypeNames()    // Here we actually have the type itself
-                .forEach(type -> atonDefaultsService.describeAtonForNodeTypes(atonNode, type));
-        return atonNode.toVo();
+    public Map<String, AtonTagMetaVo> describeAtonForNodeTypes(AtonNodeTypeParam atonNodeTypeParam) {
+        return Optional.ofNullable(atonNodeTypeParam)
+                .map(AtonNodeTypeParam::getNodeTypeNames)
+                .orElse(Collections.emptyList())
+                .stream()
+                .flatMap(type -> atonDefaultsService.describeAtonForNodeTypes(new AtonNode(atonNodeTypeParam.getAton()), type).stream())
+                .map(AtonTagMeta::toVo)
+                .collect(Collectors.toMap(AtonTagMetaVo::getK, Function.identity(), (existing, replacement) -> existing));
     }
 
     /**

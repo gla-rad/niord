@@ -59,9 +59,9 @@
         </tag-value>
     </xsl:template>
 
-    <xsl:template match="item[descendant::node()[contains(@key, ':2:') or contains(@key, ':3:') or contains(@key, ':4:') or contains(@key, ':5:') or contains(@key, ':6:')]]">
-        <!-- skip if sub-node has indexed keys > 1 -->
-    </xsl:template>
+<!--    <xsl:template match="item[descendant::node()[contains(@key, ':2:') or contains(@key, ':3:') or contains(@key, ':4:') or contains(@key, ':5:') or contains(@key, ':6:')]]">-->
+<!--        &lt;!&ndash; skip if sub-node has indexed keys > 1 &ndash;&gt;-->
+<!--    </xsl:template>-->
 
     <xsl:template match="item">
         <node-type>

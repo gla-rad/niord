@@ -208,24 +208,24 @@ public class AtonDefaultsService {
      * @param aton the AtoN to be described
      * @param nodeType the node type
      */
-    public void describeAtonForNodeTypes(AtonNode aton, String nodeType) {
+    public List<AtonTagMeta> describeAtonForNodeTypes(AtonNode aton, String nodeType) {
         // Sanity checks
         if (aton == null || StringUtils.isBlank(nodeType)) {
-            return;
+            return Collections.emptyList();
         }
 
         // Describe the AtoN tags by the type
-        Optional.of(nodeType)
-                .map(this::getNodeByType)
-                .ifPresent(type -> {
-                    type.getTags().forEach(tag -> {
-                        if (aton.getTagValue(tag.getK()) == null) {
-                            String def = StringUtils.capitalize(tag.getK().split(":")[tag.getK().split(":").length - 1]);
-                            String text = StringUtils.defaultString(StringUtils.trimToNull(tag.getText()), def);
-                            aton.getTags().add(new AtonTag(tag.getK(), text));
-                        }
-                    });
-                });
+        return Optional.of(nodeType)
+                .map(this::getNodesByType)
+                .orElse(Collections.emptyList())
+                .stream()
+                .flatMap(type -> type.getTags().stream())
+                .map(tag -> {
+                    String def = StringUtils.capitalize(tag.getK().split(":")[tag.getK().split(":").length - 1]);
+                    String text = StringUtils.defaultString(StringUtils.trimToNull(tag.getText()), def);
+                    return new AtonTagMeta(tag.getK(), text, tag.getType());
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -453,12 +453,11 @@ public class AtonDefaultsService {
      * @param type the type of the AtoN node
      * @return The matching node type
      */
-    private ODNodeType getNodeByType(String type) {
+    private List<ODNodeType> getNodesByType(String type) {
         return osmNodeTypes.values().stream()
                 .filter(t -> t.tag("seamark:type") != null)
                 .filter(t -> Objects.equals(t.tag("seamark:type").v, type))
-                .findAny()
-                .orElse(null);
+                .collect(Collectors.toList());
     }
 
     /*************************/
@@ -540,6 +539,7 @@ public class AtonDefaultsService {
         String k;
         String v;
         String text;
+        String type;
         List<ODTagValues> tagValueRefs;
         List<ODTagValue> tagValues;
 
@@ -568,6 +568,15 @@ public class AtonDefaultsService {
 
         public void setText(String text) {
             this.text = text;
+        }
+
+        @XmlAttribute
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
 
         @XmlElement(name = "tag-values")
