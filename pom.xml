@@ -24,7 +24,6 @@
     </properties>
 
     <modules>
-        <module>niord-josm-seachart</module>
         <module>niord-model</module>
         <module>niord-core</module>
         <module>niord-s124</module>
@@ -168,6 +167,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>grad</id>
+            <url>https://gla-rrnav1.dyndns.org:8081/repository/grad/</url>
+        </repository>
+        <repository>
+            <id>grad-snapshots</id>
+            <url>https://gla-rrnav1.dyndns.org:8081/repository/grad-snapshots/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <pluginRepositories>
         <pluginRepository>

@@ -123,5 +123,9 @@ public class AtonIconRenderer {
 		public RuleSet ruleset() {
 			return RuleSet.SEAMARK;
 		}
+
+		public ChartContext.Chart chart() {
+			return null;
+		}
 	}
 }

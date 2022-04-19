@@ -19,11 +19,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.niord</groupId>
-            <artifactId>niord-josm-seachart</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.niord</groupId>
@@ -63,6 +58,13 @@
             <groupId>org.ebaysf.web</groupId>
             <artifactId>cors-filter</artifactId>
             <version>1.0.1</version>
+        </dependency>
+
+        <!-- JOSM Seachart Library from: https://josm.openstreetmap.de/wiki/Plugins -->
+        <dependency>
+            <groupId>org.josm.plugins</groupId>
+            <artifactId>seachart</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>
