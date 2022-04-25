@@ -295,6 +295,34 @@ public class AtonDefaultsService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Describes the selected AtoN tags based on the provided keys that should
+     * match the tag entries loaded.
+     * name.
+     *
+     * @param tagKeys the keys of the tags to be described
+     */
+    public List<AtonTagMeta> describeAtonForTagKeys(List<String> tagKeys) {
+        // Sanity checks
+        if (tagKeys == null || tagKeys.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Describe the AtoN tags by the type
+        return this.osmNodeTypes.values()
+                .stream()
+                .map(ODNodeType::getTags)
+                .flatMap(List::stream)
+                .distinct()
+                .filter(tag -> tagKeys.contains(tag.getK()))
+                .map(tag -> {
+                    String def = StringUtils.capitalize(tag.getK().split(":")[tag.getK().split(":").length - 1]);
+                    String text = StringUtils.defaultString(StringUtils.trimToNull(tag.getText()), def);
+                    return new AtonTagMeta(tag.getK(), text, tag.getType());
+                })
+                .collect(Collectors.toList());
+    }
+
 
     /**
      * Computes an auto-complete list for OSM tag keys, based on the current AtoN and key

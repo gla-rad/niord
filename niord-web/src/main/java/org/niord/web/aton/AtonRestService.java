@@ -270,6 +270,28 @@ public class AtonRestService {
     }
 
     /**
+     * Returns the metadata of all node tag types where the keys match the
+     * provided selections.
+     *
+     * @param tagKeys the AtoN tag keys list
+     * @return the name of all node types where the name matches the parameter
+     */
+    @POST
+    @Path("/defaults/desc-for-tag-keys")
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @GZIP
+    @NoCache
+    public Map<String, AtonTagMetaVo> describeAtonForTagKeys(List<String> tagKeys) {
+        return Optional.ofNullable(tagKeys)
+                .orElse(Collections.emptyList())
+                .stream()
+                .flatMap(type -> atonDefaultsService.describeAtonForTagKeys(tagKeys).stream())
+                .map(AtonTagMeta::toVo)
+                .collect(Collectors.toMap(AtonTagMetaVo::getK, Function.identity(), (existing, replacement) -> existing));
+    }
+
+    /**
      * Creates an auto-complete list for OSM tag keys, based on the current AtoN and key
      *
      * @param key the currently typed key
