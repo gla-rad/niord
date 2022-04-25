@@ -2200,7 +2200,6 @@
         <item name="Lights in General" type="node,closedway" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/P/P1.minor.svg">
           <label text="Single non-directional Light"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2230,8 +2229,6 @@
           <label text="Major and Minor Lights (P1)"/>
           <space/>
           <label text="*** Select only if no supporting structure is defined ***"/>
-          <space/>
-          <key key="seamark:type" value="light"/>
           <combo key="seamark:type" text="Light object">
             <list_entry value="light_minor" display_value="Minor Light"/>
             <list_entry value="light_major" display_value="Major Light"/>
@@ -2246,7 +2243,6 @@
         <item name="Sector 1" type="node,closedway">
           <label text="Sector 1"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:1:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2272,7 +2268,6 @@
         <item name="Sector 2" type="node,closedway">
           <label text="Sector 2"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:2:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2298,7 +2293,6 @@
         <item name="Sector 3" type="node,closedway">
           <label text="Sector 3"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:3:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2324,7 +2318,6 @@
         <item name="Sector 4" type="node,closedway">
           <label text="Sector 4"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:4:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2350,7 +2343,6 @@
         <item name="Sector 5" type="node,closedway">
           <label text="Sector 5"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:5:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2380,7 +2372,6 @@
         <item name="Sector 1" type="node,closedway">
           <label text="Sector 1"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:1:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2409,7 +2400,6 @@
         <item name="Sector 2" type="node,closedway">
           <label text="Sector 2"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:2:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2438,7 +2428,6 @@
         <item name="Sector 3" type="node,closedway">
           <label text="Sector 3"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:3:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2467,7 +2456,6 @@
         <item name="Sector 4" type="node,closedway">
           <label text="Sector 4"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:4:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2496,7 +2484,6 @@
         <item name="Sector 5" type="node,closedway">
           <label text="Sector 5"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:5:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2525,7 +2512,6 @@
         <item name="Sector 6" type="node,closedway">
           <label text="Sector 6"/>
           <space/>
-          <key key="seamark:type" value="light"/>
           <multiselect key="seamark:light:6:colour" text="Colour">
             <reference ref="lightcolours"/>
           </multiselect>
@@ -2560,7 +2546,7 @@
         <space/>
         <key key="seamark:type" value="light_vessel"/>
         <label text="Vessel attributes"/>
-        <multiselect key="seamark:light_vessel:colour" text="Light Vessel Colour(s)">
+        <multiselect key="seamark:light_vessel:colour" text="Colour(s)">
           <reference ref="lightcolours"/>
           <reference ref="othercolours"/>
         </multiselect>
@@ -2572,7 +2558,7 @@
         </combo>
         <space/>
         <label text="Light attributes"/>
-        <multiselect key="seamark:light:colour" text="Colour(s)">
+        <multiselect key="seamark:light:colour" text="Colour">
           <reference ref="lightcolours"/>
         </multiselect>
         <combo key="seamark:light:character" text="Character">
@@ -4835,7 +4821,6 @@
         <label text="S18: Virtual AIS, Automatic Identification System" icon="https://raw.githubusercontent.com/OpenNauticalChart/josm/master/icons/svg/S/S1.svg"/>
         <space/>
         <key key="seamark:type" value="virtual_aton"/>
-        <text key="seamark:name" text="Name"/>
         <combo key="seamark:virtual_aton:category" text="Category">
           <list_entry value="north_cardinal" display_value="North Cardinal"/>
           <list_entry value="south_cardinal" display_value="South Cardinal"/>
@@ -4850,7 +4835,7 @@
           <list_entry value="special_purpose" display_value="Special Purpose"/>
           <list_entry value="wreck" display_value="Wreck"/>
         </combo>
-        <text key="seamark:virtual_aton:mmsi" text="MMSI"/>
+        <text key="seamark:radio_station:mmsi" text="MMSI"/>
         <link href="https://wiki.openstreetmap.org/wiki/Seamarks/Virtual_AtoNs" text="Virtual AtoNs"/>
       </item>
 

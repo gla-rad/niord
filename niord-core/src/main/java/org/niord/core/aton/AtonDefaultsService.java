@@ -17,20 +17,19 @@ package org.niord.core.aton;
 
 import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
@@ -94,11 +93,36 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class AtonDefaultsService {
 
+    /**
+     * The default logger.
+     */
     @Inject
     private Logger log;
 
-    // TODO: Inject from setting
-    private IalaBuoyageSystem ialaSystem = IalaBuoyageSystem.IALA_A;
+    /**
+     * The INT-1-Preset default parsing rules.
+     */
+    @ConfigProperty(name = "niord.aton-defaults.int-1-preset.parser", defaultValue = "/aton/aton-osm-defaults.xslt")
+    private String defaultsParsing;
+
+    /**
+     * The IALA System to be skipped during the defaults parsing.
+     */
+    @ConfigProperty(name = "niord.aton-defaults.int-1-preset.iala-skip-system", defaultValue = "IALA-A")
+    private IalaBuoyageSystem ialaSkipSystem;
+
+    /**
+     * The file name of the INT-1-Present configuration XML.
+     */
+    @ConfigProperty(name = "niord.aton-defaults.int-1-preset.fileName", defaultValue = "/aton/INT-1-preset.xml")
+    private String int1Preset;
+
+    /**
+     * Additional configuration files to append information to the INT-1-present
+     * configuration.
+     */
+    @ConfigProperty(name = "niord.aton-defaults.int-1-preset.extensions")
+    private Optional<List<String>> getInt1PresetExts;
 
     private OsmDefaults osmDefaults;
 
@@ -126,9 +150,10 @@ public class AtonDefaultsService {
      */
     private void generateDefaults() {
         try {
-            long t0 = System.currentTimeMillis();
-            Source xsltSource = new StreamSource(getClass().getResourceAsStream("/aton/aton-osm-defaults.xslt"));
-            Source xmlSource = new StreamSource(getClass().getResourceAsStream("/aton/INT-1-preset.xml"));
+            final long t0 = System.currentTimeMillis();
+            final ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            final Source xsltSource = new StreamSource(classloader.getResourceAsStream(this.defaultsParsing));
+            final Source xmlSource = new StreamSource(classloader.getResourceAsStream(this.int1Preset));
 
             // Capture the generated xml as a string
             StringWriter xml = new StringWriter();
@@ -137,7 +162,7 @@ public class AtonDefaultsService {
             // Execute the xslt
             TransformerFactory transFact = TransformerFactory.newInstance();
             Transformer trans = transFact.newTransformer(xsltSource);
-            trans.setParameter("ialaSkipSystem", ialaSystem.other().toString());
+            trans.setParameter("ialaSkipSystem", this.ialaSkipSystem.other().toString());
             trans.transform(xmlSource, result);
 
             // Fix spelling mistakes
@@ -158,6 +183,48 @@ public class AtonDefaultsService {
                     .forEach(nt -> osmNodeTypes.put(nt.getName(), nt));
 
             log.trace("Created AtoN defaults in " + (System.currentTimeMillis() - t0) +  " ms");
+
+            // Now the same for the INT-1-Preset extensions
+            if(getInt1PresetExts.isPresent()) {
+                this.getInt1PresetExts.get()
+                        .stream()
+                        .map(classloader::getResourceAsStream)
+                        .map(StreamSource::new)
+                        .map(source -> {
+                            // Parse each of the extensions separately
+                            StringWriter xmlExt = new StringWriter();
+                            Result resultExt = new StreamResult(xmlExt);
+                            try {
+                                trans.transform(source, resultExt);
+                                return (OsmDefaults) unmarshaller.unmarshal(new StringReader(xmlExt.toString()));
+                            } catch (TransformerException | JAXBException ex) {
+                                this.log.error("Failed creating AtoN extension in " + ex, ex);
+                                return null;
+                            }
+                        })
+                        .forEach(osmDefaultsExt -> {
+                            // Update look-up tables for fast access
+                            osmDefaultsExt.getTagValues()
+                                    .stream()
+                                    .forEach(tv -> {
+                                        if(osmTagValues.containsKey(tv.getId())) {
+                                            osmTagValues.get(tv.getId()).getTags().addAll(tv.getTags());
+                                        } else {
+                                            osmTagValues.put(tv.getId(), tv);
+                                        }
+                                    });
+                            osmDefaultsExt.getNodeTypes()
+                                    .stream()
+                                    .forEach(nt -> {
+                                        if(osmNodeTypes.containsKey(nt.getName())) {
+                                            osmNodeTypes.get(nt.getName()).getTags().addAll(nt.getTags());
+                                        } else {
+                                            osmNodeTypes.put(nt.getName(), nt);
+                                        }
+                                    });
+                        });
+                log.trace("Added AtoN S-125 extension defaults in " + (System.currentTimeMillis() - t0) + " ms");
+            }
         } catch (Exception e) {
             log.error("Failed creating AtoN defaults in " + e, e);
         }
