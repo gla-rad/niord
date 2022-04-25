@@ -169,7 +169,8 @@ public class AtonDefaultsService {
             String resultXml = xml.toString();
             resultXml = resultXml
                     .replace("topamrk", "topmark")
-                    .replace("patern", "pattern");
+                    .replace("patern", "pattern")
+                    .replace("Supplimentary", "Supplementary");
 
             // Read in the result as OsmDefaults data
             JAXBContext jaxbContext = JAXBContext.newInstance(OsmDefaults.class);
