@@ -21,7 +21,6 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
@@ -73,7 +72,6 @@ public class S124RestService {
                     schema = @Schema(implementation = String.class)
             )
     )
-    @Tag(ref = "S-124")
     @Produces({"application/gml+xml;charset=UTF-8"})
     public Response s124MessageDetails(
             @Parameter(name = "The message UID or short ID", example = "NW-061-17")
