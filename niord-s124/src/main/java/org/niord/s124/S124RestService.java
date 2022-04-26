@@ -74,10 +74,9 @@ public class S124RestService {
     )
     @Produces({"application/gml+xml;charset=UTF-8"})
     public Response s124MessageDetails(
-            @Parameter(name = "The message UID or short ID", example = "NW-061-17")
+            @Parameter(description = "The message UID or short ID", example = "NW-061-17")
             @PathParam("messageId") String messageId,
-
-            @Parameter(name = "Two-letter ISO 639-1 language code", example = "en")
+            @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") @DefaultValue("en") String language
 
     ) throws Exception {
