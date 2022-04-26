@@ -39,7 +39,6 @@ public class SpatialIndexCreator extends BaseService {
     /**
      * Checks and creates spatial indexes
      */
-    @Transactional
     private void createSpatialIndexes(/*@Observes StartupEvent ev*/) {
 
         try {
