@@ -10,6 +10,12 @@ From version 3.0.0 onwards, Niord has been ported and run using the Red Har
 To get started with developing Niord you need to check out the developer guide 
 at http://docs.niord.org/dev-guide/guide.html.
 
+From version 3.0.0 onwards, the niord-parent project structured and individual
+Maven modules that can be independently deployed through a Maven repositoty
+such as [Nexus](https://www.sonatype.com/products/nexus-repository). This
+means that a country specific implementation is enough to get a deployment
+started.
+
 ## Country-specific Implementations
 
 Country-specific implementations of the Niord system are easily created using a
@@ -19,7 +25,7 @@ custom versions.
 
 For an example, please refer to [niord-dk](https://github.com/NiordOrg/niord-dk)
 - a DK implementation of Niord.
-- 
+
 For the UK example, please refer to [niord-uk](https://github.com/gla-rad/niord-uk) 
 - a UK implementation of Niord.
 
@@ -67,11 +73,10 @@ Sensitive or environment-specific settings should be placed in a "${niord.home}/
 Notice the following describes the setup for a previous version of Niord.
 
 * First, check out and open the parent niord project in IntelliJ.
-* In Run -> Edit configuration..., configure a new local JBoss server based on the [niord-appsrv](https://github.com/NiordOrg/niord-appsrv) project.
-* Deploy "niord-web:war exploded" to the server.
-* If working on a country-specific Niord implementation, e.g. [niord-dk](https://github.com/NiordOrg/niord-dk), 
-  import this maven project via the "Maven Projects" tab. Deploy the imported project to Wildfly instead of "niord-web".
-* If you have only updated web resources, there is no need to re-deploy the web application. Use the "Update resources" function instead.
+* In Run -> Edit configuration..., configure a Maven configuration to clean and build using: *[clean install]* in the top directory.
+* Optionally you can also create a configuration to deploy your artefacts through: *[deploy]*.
+* If working on a country-specific Niord implementation, e.g. [niord-uk](https://github.com/gla-rad/niord-uk/tree/niord-grad-quarkus), 
+  import this maven project via the "Maven Projects" tab. Then you can run the country-specific *niord-web* module.
 * To get rid of superfluous IntelliJ code editor warnings, disable the "Declaration access can be weaker" 
   and "Dangling Javadoc comment" inspections.
 
