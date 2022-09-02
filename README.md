@@ -17,7 +17,10 @@ web-application overlay project. Here additional code can be added and web
 resources (images, stylesheets, javascript files, etc) can be replaced with 
 custom versions.
 
-For an example, please refer to [niord-uk](https://github.com/gla-rad/niord-uk) 
+For an example, please refer to [niord-dk](https://github.com/NiordOrg/niord-dk)
+- a DK implementation of Niord.
+- 
+For the UK example, please refer to [niord-uk](https://github.com/gla-rad/niord-uk) 
 - a UK implementation of Niord.
 
 ## Public API
@@ -25,7 +28,8 @@ A swagger definition of the public portion of the Rest API is published at
 https://niord.e-navigation.net/rest/swagger.json.
 
 The swagger definition is generated from the jersey annotated methods in 
-[ApiRestService.java](https://github.com/NiordOrg/niord/blob/master/niord-web/src/main/java/org/niord/web/api/ApiRestService.java) and [S124RestService.java](https://github.com/NiordOrg/niord/blob/master/niord-s124/src/main/java/org/niord/s124/S124RestService.java).
+[ApiRestService.java](https://github.com/NiordOrg/niord/blob/master/niord-web/src/main/java/org/niord/web/api/ApiRestService.java) and 
+[S124RestService.java](https://github.com/NiordOrg/niord/blob/master/niord-s124/src/main/java/org/niord/s124/S124RestService.java).
 
 ## Configuration
 
