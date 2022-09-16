@@ -342,7 +342,7 @@ public class MessageService extends BaseService {
      * @param message the template for the message to create
      * @return the new message
      */
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional
     public Message createMessage(Message message) throws Exception {
 
         // Validate the message
@@ -412,7 +412,7 @@ public class MessageService extends BaseService {
      * @param message the template for the message to update
      * @return the updated message
      */
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional
     public Message updateMessage(Message message) throws Exception {
 
         Message original = findByUid(message.getUid());
@@ -598,7 +598,7 @@ public class MessageService extends BaseService {
      * @param uid the UID of the message
      * @param status    the status
      */
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional
     public Message updateStatus(String uid, Status status) throws Exception {
         Date now = new Date();
         Message message = findByUid(uid);
