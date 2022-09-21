@@ -5,7 +5,7 @@
 
     <groupId>org.niord</groupId>
     <artifactId>niord-parent</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Niord parent project</name>
 

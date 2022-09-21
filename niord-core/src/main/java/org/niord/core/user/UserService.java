@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -114,7 +115,10 @@ public class UserService extends BaseService {
                 .map(JsonObject::entrySet)
                 .orElse(Collections.emptySet())
                 .stream()
-                .filter(entry -> entry.getValue().asJsonArray().contains(role))
+                .filter(entry -> entry.getValue()
+                        .asJsonObject()
+                        .getJsonArray("roles")
+                        .contains(Json.createValue(role)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
