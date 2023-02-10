@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.niord</groupId>
         <artifactId>niord-parent</artifactId>
-        <version>3.1.2-SNAPSHOT</version>
+        <version>3.1.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -80,6 +80,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
+            <version>1.15.1</version>
         </dependency>
 
         <!-- HTML parsing and PDF generating dependencies -->
