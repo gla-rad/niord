@@ -17,7 +17,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <io.quarkus.version>2.10.2.Final</io.quarkus.version>
         <quarkus-qpid-jms.version>0.35.0</quarkus-qpid-jms.version>
-        <keycloak.version>16.1.1</keycloak.version>
+        <keycloak.version>20.0.3</keycloak.version>
         <batik.version>1.14</batik.version>
         <hibernate.search-orm.version>6.1.0.Final</hibernate.search-orm.version>
         <hibernate.spatial.version>5.6.7.Final</hibernate.spatial.version>
@@ -171,11 +171,11 @@
     <repositories>
         <repository>
             <id>grad</id>
-            <url>https://rnavlab.gla-rad.org:8081/repository/grad/</url>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad/</url>
         </repository>
         <repository>
             <id>grad-snapshots</id>
-            <url>https://rnavlab.gla-rad.org:8081/repository/grad-snapshots/</url>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad-snapshots/</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -199,11 +199,11 @@
     <distributionManagement>
         <repository>
             <id>grad</id>
-            <url>https://palatia.grad-rrnav.pub:8081/repository/grad/</url>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad/</url>
         </repository>
         <snapshotRepository>
             <id>grad-snapshots</id>
-            <url>https://palatia.grad-rrnav.pub:8081/repository/grad-snapshots/</url>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
