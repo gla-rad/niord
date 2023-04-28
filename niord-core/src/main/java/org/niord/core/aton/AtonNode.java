@@ -66,6 +66,13 @@ public class AtonNode extends BaseEntity<Integer> {
     @Column(columnDefinition = "GEOMETRY", nullable = false)
     Geometry geometry;
 
+    @ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="parent_id")
+    private AtonNode parent;
+
+    @OneToMany(mappedBy="parent")
+    private Set<AtonNode> children = new HashSet<>();
+
     @IndexedEmbedded
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "atonNode", orphanRemoval = true)
     List<AtonTag> tags = new ArrayList<>();
@@ -88,6 +95,11 @@ public class AtonNode extends BaseEntity<Integer> {
         this.version = node.getVersion();
         this.changeset = node.getChangeset();
         this.timestamp = node.getTimestamp();
+        if(node.getChildren() != null) {
+            setChildren(Arrays.stream(node.getChildren())
+                    .map(AtonNode::new)
+                    .collect(Collectors.toSet()));
+        }
         if (node.getTags() != null) {
             setTags(Arrays.stream(node.getTags())
                     .map(t -> new AtonTag(t, AtonNode.this))
@@ -109,6 +121,9 @@ public class AtonNode extends BaseEntity<Integer> {
         vo.setVersion(version);
         vo.setChangeset(changeset);
         vo.setTimestamp(timestamp);
+        vo.setChildren(children.stream()
+                .map(AtonNode::toVo)
+                .toArray(AtonNodeVo[]::new));
         vo.setTags(tags.stream()
                 .map(AtonTag::toVo)
                 .toArray(AtonTagVo[]::new));
@@ -316,6 +331,22 @@ public class AtonNode extends BaseEntity<Integer> {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public AtonNode getParent() {
+        return parent;
+    }
+
+    public void setParent(AtonNode parent) {
+        this.parent = parent;
+    }
+
+    public Set<AtonNode> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<AtonNode> children) {
+        this.children = children;
     }
 
     public List<AtonTag> getTags() {
