@@ -70,7 +70,7 @@ public class AtonNode extends BaseEntity<Integer> {
     @JoinColumn(name="parent_id")
     private AtonNode parent;
 
-    @OneToMany(mappedBy="parent")
+    @OneToMany(mappedBy="parent", cascade = {CascadeType.ALL})
     private Set<AtonNode> children = new HashSet<>();
 
     @IndexedEmbedded
