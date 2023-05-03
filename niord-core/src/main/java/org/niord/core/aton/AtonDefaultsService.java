@@ -238,7 +238,7 @@ public class AtonDefaultsService {
      * @return the name of all node types where the name matches the parameter
      */
     public List<String> getNodeTypeNames(String name) {
-        return osmDefaults.getNodeTypes().stream()
+        return this.osmNodeTypes.values().stream()
                 .map(ODNodeType::getName)
                 .filter(n -> name == null || StringUtils.containsIgnoreCase(n, name))
                 .distinct()
@@ -260,12 +260,14 @@ public class AtonDefaultsService {
             return;
         }
 
-        osmNodeTypes.get(nodeTypeName).getTags().forEach(tag -> {
-            if (aton.getTagValue(tag.getK()) == null) {
-                String v = StringUtils.defaultString(tag.getV());
-                aton.getTags().add(new AtonTag(tag.getK(), v));
-            }
-        });
+        this.osmNodeTypes.get(nodeTypeName)
+                .getTags()
+                .forEach(tag -> {
+                    if (aton.getTagValue(tag.getK()) == null) {
+                        String v = StringUtils.defaultString(tag.getV());
+                        aton.getTags().add(new AtonTag(tag.getK(), v));
+                    }
+                });
     }
 
 
@@ -310,8 +312,7 @@ public class AtonDefaultsService {
         }
 
         // Describe the AtoN tags by the type
-        return this.osmNodeTypes.values()
-                .stream()
+        return this.osmNodeTypes.values().stream()
                 .map(ODNodeType::getTags)
                 .flatMap(List::stream)
                 .distinct()
