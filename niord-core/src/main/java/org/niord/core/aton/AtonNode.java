@@ -66,17 +66,16 @@ public class AtonNode extends BaseEntity<Integer> {
     @Column(columnDefinition = "GEOMETRY", nullable = false)
     Geometry geometry;
 
-    @ManyToOne(cascade={CascadeType.ALL})
+    @ManyToOne()
     @JoinColumn(name="parent_id")
     private AtonNode parent;
 
-    @OneToMany(mappedBy="parent", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy="parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AtonNode> children = new HashSet<>();
 
     @IndexedEmbedded
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atonNode", orphanRemoval = true)
+    @OneToMany(mappedBy = "atonNode", cascade = CascadeType.ALL, orphanRemoval = true)
     List<AtonTag> tags = new ArrayList<>();
-
 
     /** Constructor */
     public AtonNode() {
@@ -139,6 +138,9 @@ public class AtonNode extends BaseEntity<Integer> {
             timestamp = new Date();
         }
         geometry = JtsConverter.toJtsPoint(lat, lon);
+
+        // Now also update the children if any
+        this.updateChildren();
     }
 
 
@@ -151,7 +153,43 @@ public class AtonNode extends BaseEntity<Integer> {
         return getTagValue(AtonTag.TAG_ATON_UID);
     }
 
+    /**
+     * Returns the AtonNode child with the matching ID.
+     *
+     * @param childId the AtoN child ID
+     * @return the child that matches the prevoded ID
+     */
+    public AtonNode getChild(Integer childId) {
+        return this.children.stream()
+                .filter(c -> Objects.equals(c.getId(), childId))
+                .findFirst()
+                .orElse(null);
+    }
 
+    /**
+     * Updates the information of a child AtoN node based on the object
+     * provided. If that does not already exists in the children list however,
+     * the provided object will be added to the list.
+     *
+     * @param atonNode the AtoN node to use for the update
+     * @return the updated child AtoN node entry
+     */
+    public AtonNode updateChild(AtonNode atonNode) {
+        if (Objects.isNull(atonNode)) {
+            return null;
+        }
+
+        // Check is the child exists
+        AtonNode child = this.getChild(atonNode.getId());
+        if (child == null) {
+            child = atonNode;
+            child.setParent(this);
+            this.children.add(child);
+        } else {
+            child.updateNode(atonNode);
+        }
+        return child;
+    }
     /**
      * Returns the value of the tag with the given key. Returns null if the tag does not exist
      * @param k the key
@@ -257,11 +295,36 @@ public class AtonNode extends BaseEntity<Integer> {
         this.version = template.getVersion();
         this.changeset = template.getChangeset();
         this.timestamp = template.getTimestamp();
+
+        // Fix the children - recursively
+        this.children.removeAll(this.getChildren()
+                .stream()
+                .filter(c -> template.getChild(c.getId()) == null)
+                .collect(Collectors.toSet()));
+        template.getChildren().forEach(this::updateChild);
+
+        // Fix the tags
         this.tags.removeAll(this.getTags()
                 .stream()
                 .filter(t -> template.getTag(t.getK()) == null)
                 .collect(Collectors.toList()));
-        template.getTags().forEach(t -> updateTag(t.getK(), t.getV()));
+        template.getTags().forEach(t -> this.updateTag(t.getK(), t.getV()));
+    }
+
+    /**
+     * This helper function allows the AtoN node parents to easily copy their
+     * information to their children entries. This is going to be called just
+     * before the persistence to keep things nice and tidy.
+     */
+    public void updateChildren() {
+        this.children.forEach(child -> {
+            child.setParent(this);
+            child.setLat(this.getLat());
+            child.setLon(this.getLon());
+            child.setUid(uid);
+            child.setUser(user);
+            child.setVisible(false);
+        });
     }
 
 

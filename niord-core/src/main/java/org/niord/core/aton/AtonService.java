@@ -322,6 +322,9 @@ public class AtonService extends BaseService {
 
         Root<AtonNode> atonRoot = c.from(AtonNode.class);
 
+        // Never look for children
+        criteriaHelper.add(cb.isNull(atonRoot.get("parent")));
+
         if (StringUtils.isNotBlank(param.getName())) {
             /**
             Join<AtonNode, AtonTag> tags = atonRoot.join("tags", JoinType.LEFT);
@@ -329,7 +332,7 @@ public class AtonService extends BaseService {
                     // .equals(tags.get("k"), AtonTag.TAG_ATON_UID)
                     .matchText(tags.get("v"), param.getName());
              **/
-            // Use Hibernate Search to match the name
+            // Use Hibernate Search to match the name of a parent AtoN
             criteriaHelper.in(atonRoot.get("id"), searchAtonTagKeys(param.getName()));
         }
 
