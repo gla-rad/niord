@@ -98,6 +98,7 @@ public class AtonNodeVo implements IJsonSerializable {
     int version;
     int changeset;
     Date timestamp;
+    AtonNodeVo[] children;
     AtonTagVo[] tags;
 
     /**
@@ -260,6 +261,16 @@ public class AtonNodeVo implements IJsonSerializable {
 
     public void setChangeset(int changeset) {
         this.changeset = changeset;
+    }
+
+    @JsonProperty("children")
+    @XmlElement(name = "children")
+    public AtonNodeVo[] getChildren() {
+        return children;
+    }
+
+    public void setChildren(AtonNodeVo[] children) {
+        this.children = children;
     }
 
     @XmlJavaTypeAdapter(Iso8601DateXmlAdapter.class)
