@@ -65,12 +65,6 @@ public class NiordApp implements QuarkusApplication {
                     .editable(true)
                     .web(true);
 
-    private static final Setting ANALYTICS_TRACKING_ID =
-            new Setting("analyticsTrackingId", "")
-                    .description("The google analytics tracking ID.")
-                    .editable(true)
-                    .web(true);
-
     @Inject
     Logger log;
 
@@ -212,16 +206,6 @@ public class NiordApp implements QuarkusApplication {
         }
         // Default to least-harm mode...
         return ExecutionMode.DEVELOPMENT;
-    }
-
-
-    /**
-     * Returns the Google Analytics tracking ID, or null if undefined
-     * @return the Google Analytics tracking ID, or null if undefined
-     */
-    public String getAnalyticsTrackingId() {
-        String tracingId = settingsService.getString(ANALYTICS_TRACKING_ID);
-        return StringUtils.isNotBlank(tracingId) ? tracingId : null;
     }
 
 
