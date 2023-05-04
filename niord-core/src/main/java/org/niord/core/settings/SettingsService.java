@@ -77,7 +77,6 @@ public class SettingsService extends BaseService {
     @Transactional
     void init(@Observes StartupEvent ev) {
         try {
-
             // Read the settings from the "/niord.json" classpath file
             Map<String, Setting> settingMap = loadSettingsFromClasspath();
 
@@ -96,7 +95,7 @@ public class SettingsService extends BaseService {
             settingMap.values().forEach(s -> {
                 s.updateType();
                 em.persist(s);
-                log.info(String.format("Loaded setting %s from niord.json", s.getKey()));
+                log.info(String.format("Loaded setting %s = %s from niord.json", s.getKey(), s.getValue().toString()));
             });
 
         } catch (Exception e) {
@@ -121,14 +120,21 @@ public class SettingsService extends BaseService {
     /** Called upon startup. Read the settings from the "${niord.home}/niord.json" file and update the settingMap */
     @Transactional
     Map<String, Setting> loadSettingsFromNiordHome(Map<String, Setting> settingMap) throws IOException {
+        log.info("loadSettingsFromNiordHome start");
+
         Object niordHome = peek("niord.home");
         if (niordHome == null && settingMap.containsKey("niord.home")) {
+            log.info(String.format("niordHome value is null. Defaulting to value from settingMap(DB) = %s.", settingMap.get("niord.home").getValue().toString()));
             niordHome = settingMap.get("niord.home").getValue();
         }
         if (niordHome != null && niordHome instanceof String) {
             niordHome = expandSettingValue((String)niordHome);
             Path niordFile = Paths.get(niordHome.toString(), "niord.json");
+            log.info(String.format("loadSettingsFromNiordHome generate filepath from environment variable. Expecting settings file in location %s", niordFile.toAbsolutePath()));
+
             if (Files.exists(niordFile) && Files.isRegularFile(niordFile)) {
+                log.info("loadSettingsFromNiordHome. File exists. Loading settings");
+
                 List<Setting> settings = mapper.readValue(
                         niordFile.toFile(),
                         new TypeReference<List<Setting>>(){});
@@ -230,6 +236,7 @@ public class SettingsService extends BaseService {
 
         // If a corresponding system property is set, it takes precedence
         if (System.getProperty(key) != null) {
+            log.info(String.format("Peek system value. Property: %s has system value %s. Return", key, System.getProperty(key).toString()));
             return System.getProperty(key);
         }
 
@@ -244,6 +251,7 @@ public class SettingsService extends BaseService {
             result = expandSettingValue((String)result);
         }
 
+        log.info(String.format("Peek finished. Key = %s return value %s", key, result.toString()));
         return result;
     }
 
