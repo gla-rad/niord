@@ -15,7 +15,7 @@
  */
 package org.niord.core.batch.vo;
 
-import jakarta.batch.runtime.BatchStatus;
+import javax.batch.runtime.BatchStatus;
 import org.niord.model.IJsonSerializable;
 
 import java.util.Date;
