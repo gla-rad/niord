@@ -1,0 +1,50 @@
+package org.niord.core.aton.vo;
+
+import org.niord.model.IJsonSerializable;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ * An AtoN Aggregation Type.
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ */
+@XmlRootElement(name = "aggregation")
+public class AtonAggregationVo implements IJsonSerializable  {
+
+    // Class Variables
+    private Integer id;
+    private String aggregationType;
+    private String[] peers;
+
+    /*************************/
+    /** Getters and Setters **/
+    /*************************/
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @XmlAttribute
+    public String getAggregationType() {
+        return aggregationType;
+    }
+
+    public void setAggregationType(String aggregationType) {
+        this.aggregationType = aggregationType;
+    }
+
+    @XmlAttribute
+    public  String[] getPeers() {
+        return peers;
+    }
+
+    public void setPeers(String[] peers) {
+        this.peers = peers;
+    }
+}
