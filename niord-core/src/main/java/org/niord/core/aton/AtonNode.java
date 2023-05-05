@@ -70,11 +70,27 @@ public class AtonNode extends BaseEntity<Integer> {
     @JoinColumn(name="parent_id")
     private AtonNode parent;
 
-    @OneToMany(mappedBy="parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="parent", cascade = { CascadeType.ALL }, orphanRemoval = true)
     private Set<AtonNode> children = new HashSet<>();
 
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "aton_aggregation_join_table",
+            joinColumns = { @JoinColumn(name = "aton_id") },
+            inverseJoinColumns = { @JoinColumn(name = "aggregation_id") }
+    )
+    private Set<AtonAggregation> aggregations = new HashSet<>();
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "aton_association_join_table",
+            joinColumns = { @JoinColumn(name = "aton_id") },
+            inverseJoinColumns = { @JoinColumn(name = "association_id") }
+    )
+    private Set<AtonAssociation> associations = new HashSet<>();
+
     @IndexedEmbedded
-    @OneToMany(mappedBy = "atonNode", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "atonNode", cascade = { CascadeType.ALL }, orphanRemoval = true)
     List<AtonTag> tags = new ArrayList<>();
 
     /** Constructor */
@@ -97,6 +113,16 @@ public class AtonNode extends BaseEntity<Integer> {
         if(node.getChildren() != null) {
             setChildren(Arrays.stream(node.getChildren())
                     .map(AtonNode::new)
+                    .collect(Collectors.toSet()));
+        }
+        if(node.getAggregations() != null) {
+            setAggregations(Arrays.stream(node.getAggregations())
+                    .map(AtonAggregation::new)
+                    .collect(Collectors.toSet()));
+        }
+        if(node.getAssociations() != null) {
+            setAssociations(Arrays.stream(node.getAssociations())
+                    .map(AtonAssociation::new)
                     .collect(Collectors.toSet()));
         }
         if (node.getTags() != null) {
@@ -410,6 +436,22 @@ public class AtonNode extends BaseEntity<Integer> {
 
     public void setChildren(Set<AtonNode> children) {
         this.children = children;
+    }
+
+    public Set<AtonAggregation> getAggregations() {
+        return aggregations;
+    }
+
+    public void setAggregations(Set<AtonAggregation> aggregations) {
+        this.aggregations = aggregations;
+    }
+
+    public Set<AtonAssociation> getAssociations() {
+        return associations;
+    }
+
+    public void setAssociations(Set<AtonAssociation> associations) {
+        this.associations = associations;
     }
 
     public List<AtonTag> getTags() {
