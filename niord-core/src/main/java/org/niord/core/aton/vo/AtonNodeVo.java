@@ -99,8 +99,7 @@ public class AtonNodeVo implements IJsonSerializable {
     int changeset;
     Date timestamp;
     AtonNodeVo[] children;
-    AtonAggregationVo[] aggregations;
-    AtonAssociationVo[] associations;
+    AtonLinkVo[] links;
     AtonTagVo[] tags;
 
     /**
@@ -275,24 +274,14 @@ public class AtonNodeVo implements IJsonSerializable {
         this.children = children;
     }
 
-    @JsonProperty("aggregations")
-    @XmlElement(name = "aggregations")
-    public AtonAggregationVo[] getAggregations() {
-        return aggregations;
+    @JsonProperty("links")
+    @XmlElement(name = "links")
+    public AtonLinkVo[] getLinks() {
+        return links;
     }
 
-    public void setAggregations(AtonAggregationVo[] aggregations) {
-        this.aggregations = aggregations;
-    }
-
-    @JsonProperty("associations")
-    @XmlElement(name = "associations")
-    public AtonAssociationVo[] getAssociations() {
-        return associations;
-    }
-
-    public void setAssociations(AtonAssociationVo[] associations) {
-        this.associations = associations;
+    public void setLinks(AtonLinkVo[] links) {
+        this.links = links;
     }
 
     @XmlJavaTypeAdapter(Iso8601DateXmlAdapter.class)
