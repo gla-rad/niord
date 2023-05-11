@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.locationtech.jts.geom.Geometry;
+import org.niord.core.aton.vo.AtonLinkVo;
 import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.aton.vo.AtonTagVo;
 import org.niord.core.geojson.JtsConverter;
@@ -73,21 +74,8 @@ public class AtonNode extends BaseEntity<Integer> {
     @OneToMany(mappedBy="parent", cascade = { CascadeType.ALL }, orphanRemoval = true)
     private Set<AtonNode> children = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "aton_aggregation_join_table",
-            joinColumns = { @JoinColumn(name = "aton_id") },
-            inverseJoinColumns = { @JoinColumn(name = "aggregation_id") }
-    )
-    private Set<AtonAggregation> aggregations = new HashSet<>();
-
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "aton_association_join_table",
-            joinColumns = { @JoinColumn(name = "aton_id") },
-            inverseJoinColumns = { @JoinColumn(name = "association_id") }
-    )
-    private Set<AtonAssociation> associations = new HashSet<>();
+    @ManyToMany(mappedBy = "peers")
+    private Set<AtonLink> links = new HashSet<>();
 
     @IndexedEmbedded
     @OneToMany(mappedBy = "atonNode", cascade = { CascadeType.ALL }, orphanRemoval = true)
@@ -115,14 +103,9 @@ public class AtonNode extends BaseEntity<Integer> {
                     .map(AtonNode::new)
                     .collect(Collectors.toSet()));
         }
-        if(node.getAggregations() != null) {
-            setAggregations(Arrays.stream(node.getAggregations())
-                    .map(AtonAggregation::new)
-                    .collect(Collectors.toSet()));
-        }
-        if(node.getAssociations() != null) {
-            setAssociations(Arrays.stream(node.getAssociations())
-                    .map(AtonAssociation::new)
+        if(node.getLinks() != null) {
+            setLinks(Arrays.stream(node.getLinks())
+                    .map(AtonLink::new)
                     .collect(Collectors.toSet()));
         }
         if (node.getTags() != null) {
@@ -149,6 +132,9 @@ public class AtonNode extends BaseEntity<Integer> {
         vo.setChildren(children.stream()
                 .map(AtonNode::toVo)
                 .toArray(AtonNodeVo[]::new));
+        vo.setLinks(links.stream()
+                .map(AtonLink::toVo)
+                .toArray(AtonLinkVo[]::new));
         vo.setTags(tags.stream()
                 .map(AtonTag::toVo)
                 .toArray(AtonTagVo[]::new));
@@ -438,20 +424,12 @@ public class AtonNode extends BaseEntity<Integer> {
         this.children = children;
     }
 
-    public Set<AtonAggregation> getAggregations() {
-        return aggregations;
+    public Set<AtonLink> getLinks() {
+        return links;
     }
 
-    public void setAggregations(Set<AtonAggregation> aggregations) {
-        this.aggregations = aggregations;
-    }
-
-    public Set<AtonAssociation> getAssociations() {
-        return associations;
-    }
-
-    public void setAssociations(Set<AtonAssociation> associations) {
-        this.associations = associations;
+    public void setLinks(Set<AtonLink> links) {
+        this.links = links;
     }
 
     public List<AtonTag> getTags() {

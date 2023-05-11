@@ -434,7 +434,6 @@ public class MessageTagService extends BaseService {
         for (Message message : messagesForUids(messageUids)) {
             if (tag.getMessages().contains(message)) {
                 tag.getMessages().remove(message);
-                message.getTags().remove(tag);
             }
         }
 
