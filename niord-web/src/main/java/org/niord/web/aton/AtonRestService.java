@@ -83,6 +83,7 @@ public class AtonRestService {
     @NoCache
     public PagedSearchResultVo<AtonNodeVo> search(
             @QueryParam("name") String name,
+            @QueryParam("atonUids") Set<String> atonUids,
             @QueryParam("chart") Set<String> charts,
             @QueryParam("area") Set<Integer> areas,
             @QueryParam("minLat") Double minLat,
@@ -96,6 +97,7 @@ public class AtonRestService {
         AtonSearchParams param = new AtonSearchParams()
             .name(name)
             .extent(minLat, minLon, maxLat, maxLon)
+            .atonUids(atonUids)
             .chartNumbers(charts)
             .areaIds(areas)
             .emptyOnOverflow(emptyOnOverflow);

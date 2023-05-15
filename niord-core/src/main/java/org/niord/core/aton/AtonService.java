@@ -33,9 +33,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -326,18 +324,21 @@ public class AtonService extends BaseService {
         criteriaHelper.add(cb.isNull(atonRoot.get("parent")));
 
         if (StringUtils.isNotBlank(param.getName())) {
-            /**
             Join<AtonNode, AtonTag> tags = atonRoot.join("tags", JoinType.LEFT);
             criteriaHelper
-                    // .equals(tags.get("k"), AtonTag.TAG_ATON_UID)
-                    .matchText(tags.get("v"), param.getName());
-             **/
-            // Use Hibernate Search to match the name of a parent AtoN
-            criteriaHelper.in(atonRoot.get("id"), searchAtonTagKeys(param.getName()));
+                    .like(tags.get("v"), normalize(param.getName()));
         }
 
         if (param.getExtent() != null) {
-            criteriaHelper.add(new SpatialWithinPredicate(cb, atonRoot.get("geometry"), param.getExtent()));
+            criteriaHelper
+                    .add(new SpatialWithinPredicate(cb, atonRoot.get("geometry"), param.getExtent()));
+        }
+
+        if (!param.getAtonUids().isEmpty()) {
+            Join<AtonNode, AtonTag> tags = atonRoot.join("tags", JoinType.LEFT);
+            criteriaHelper
+                    .equals(tags.get("k"), AtonTag.TAG_ATON_UID)
+                    .in(tags.get("v"), param.getAtonUids());
         }
 
         if (!param.getChartNumbers().isEmpty()) {
