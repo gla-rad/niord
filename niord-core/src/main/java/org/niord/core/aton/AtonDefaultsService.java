@@ -175,13 +175,13 @@ public class AtonDefaultsService {
             // Read in the result as OsmDefaults data
             JAXBContext jaxbContext = JAXBContext.newInstance(OsmDefaults.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            osmDefaults = (OsmDefaults) unmarshaller.unmarshal(new StringReader(resultXml));
+            this.osmDefaults = (OsmDefaults) unmarshaller.unmarshal(new StringReader(resultXml));
 
             // Build look-up tables for fast access
-            osmDefaults.getTagValues().stream()
-                    .forEach(tv -> osmTagValues.put(tv.getId(), tv));
-            osmDefaults.getNodeTypes().stream()
-                    .forEach(nt -> osmNodeTypes.put(nt.getName(), nt));
+            this.osmDefaults.getTagValues().stream()
+                    .forEach(tv -> this.osmTagValues.put(tv.getId(), tv));
+            this.osmDefaults.getNodeTypes().stream()
+                    .forEach(nt -> this.osmNodeTypes.put(nt.getName(), nt));
 
             log.trace("Created AtoN defaults in " + (System.currentTimeMillis() - t0) +  " ms");
 
@@ -256,7 +256,7 @@ public class AtonDefaultsService {
     public void mergeAtonWithNodeTypes(AtonNode aton, String nodeTypeName) {
 
         // Sanity checks
-        if (aton == null || StringUtils.isBlank(nodeTypeName) || !osmNodeTypes.containsKey(nodeTypeName)) {
+        if (aton == null || StringUtils.isBlank(nodeTypeName) || !this.osmNodeTypes.containsKey(nodeTypeName)) {
             return;
         }
 
@@ -360,7 +360,7 @@ public class AtonDefaultsService {
 
         // If there is no match from the matching node types, just look for any matching tag key
         if (result.isEmpty()) {
-            result = osmDefaults.getNodeTypes().stream()
+            result = this.osmNodeTypes.values().stream()
                     .flatMap(nt -> nt.getTags().stream())
                     .map(ODTag::getK)
                     .filter(k -> StringUtils.containsIgnoreCase(k, keyStr))
@@ -403,7 +403,7 @@ public class AtonDefaultsService {
         // If we did not find any matching key-value in the set of node types
         // that matches the AtoN, look for any matching key-value
         if (values.isEmpty()) {
-            values = osmDefaults.getNodeTypes().stream()
+            values = this.osmNodeTypes.values().stream()
                     .map(nt -> computeValuesForNodeType(nt, key, valueStr))
                     .filter(v -> !v.isEmpty())
                     .flatMap(Collection::stream)
@@ -474,16 +474,44 @@ public class AtonDefaultsService {
         // Look for "<tag-values ref="id"/>" sub-elements
         if (tag.getTagValueRefs() != null) {
             return tag.getTagValueRefs().stream()
-                    .filter(tvs -> tvs.getRef() != null && osmTagValues.containsKey(tvs.getRef()))
-                    .map(tvs -> osmTagValues.get(tvs.getRef()))
-                    .filter(tvs -> tvs != null && tvs.getTags() != null)
-                    .flatMap(tvs -> tvs.getTags().stream())
-                    .map(ODTagValue::getV)
+                    .filter(tvs -> tvs.getRef() != null && this.osmTagValues.containsKey(tvs.getRef()))
+                    .map(tvs -> this.osmTagValues.get(tvs.getRef()))
+                    .filter(tvs -> tvs != null && (tvs.getTags() != null || tvs.getTagValues() != null))
+                    .map(this::computeValuesForTagValues)
+                    .flatMap(Collection::stream)
                     .collect(Collectors.toList());
 
         } else if (tag.getTagValues() != null) {
             // Look for "<tag-value v="value"/>" sub-elements
             return tag.getTagValues().stream()
+                    .map(ODTagValue::getV)
+                    .collect(Collectors.toList());
+        }
+
+        // No joy
+        return Collections.emptyList();
+    }
+
+    /**
+     * Computes the list of values from an ODTagValues object in an iterative
+     * manner so that we can also capture references of references.
+     *
+     * @param tagValues tha tag values to find the values for
+     * @return the list of values
+     */
+    private List<String> computeValuesForTagValues(ODTagValues tagValues) {
+        if (tagValues == null) {
+            return Collections.emptyList();
+
+        }
+
+        if(tagValues.getTagValues() != null && !tagValues.getTagValues().isEmpty()) {
+            return tagValues.getTagValues().stream()
+                    .map(this::computeValuesForTagValues)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        } else if(tagValues.getRef() != null) {
+            return this.osmTagValues.get(tagValues.getRef()).getTags().stream()
                     .map(ODTagValue::getV)
                     .collect(Collectors.toList());
         }
@@ -502,7 +530,7 @@ public class AtonDefaultsService {
     private List<ODNodeType> computeMatchingNodeTypes(AtonNode aton) {
 
         // Compute an AtoN match score for each node type
-        Map<ODNodeType, Integer> nodeTypeScore = osmDefaults.getNodeTypes().stream()
+        Map<ODNodeType, Integer> nodeTypeScore = this.osmNodeTypes.values().stream()
             .collect(Collectors.toMap(Function.identity(), nt -> computeNodeTypeMatch(aton, nt)));
 
         // Returns all node types with a non-trivial match (score > 2) sorted by the score
@@ -551,7 +579,7 @@ public class AtonDefaultsService {
      * @return The matching node type
      */
     private List<ODNodeType> getNodesByType(String type) {
-        return osmNodeTypes.values().stream()
+        return this.osmNodeTypes.values().stream()
                 .filter(t -> t.tag("seamark:type") != null)
                 .filter(t -> Objects.equals(t.tag("seamark:type").v, type))
                 .collect(Collectors.toList());
@@ -703,6 +731,7 @@ public class AtonDefaultsService {
         String id;
         String ref;
         List<ODTagValue> tags;
+        List<ODTagValues> tagValues = new ArrayList<>();
 
         @XmlAttribute
         public String getId() {
@@ -729,6 +758,15 @@ public class AtonDefaultsService {
 
         public void setTags(List<ODTagValue> tags) {
             this.tags = tags;
+        }
+
+        @XmlElement(name = "tag-values")
+        List<ODTagValues> getTagValues() {
+            return tagValues;
+        }
+
+        public void setTagValues(List<ODTagValues> tagValues) {
+            this.tagValues = tagValues;
         }
     }
 
