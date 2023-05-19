@@ -511,7 +511,12 @@ public class AtonDefaultsService {
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
         } else if(tagValues.getRef() != null) {
-            return this.osmTagValues.get(tagValues.getRef()).getTags().stream()
+            return Optional.of(tagValues.getRef())
+                    .map(this.osmTagValues::get)
+                    .map(this::computeValuesForTagValues)
+                    .orElse(Collections.emptyList());
+        } else if(tagValues.getTags() != null && !tagValues.getTags().isEmpty()) {
+            return tagValues.getTags().stream()
                     .map(ODTagValue::getV)
                     .collect(Collectors.toList());
         }
