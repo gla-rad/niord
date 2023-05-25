@@ -447,4 +447,27 @@ public class AtonNode extends BaseEntity<Integer> {
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
+
+    /*************************/
+    /** Equals and Hashcode **/
+    /*************************/
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AtonNode)) return false;
+        AtonNode atonNode = (AtonNode) o;
+        return Objects.equals(getId(), atonNode.getId())
+                && Objects.equals(getAtonUid(), atonNode.getAtonUid())
+                && Double.compare(atonNode.getLat(), getLat()) == 0
+                && Double.compare(atonNode.getLon(), getLon()) == 0;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getAtonUid(), getLat(), getLon());
+    }
+
 }
