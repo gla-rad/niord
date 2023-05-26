@@ -177,6 +177,9 @@ public class AtonService extends BaseService {
             throw new Exception("The AtoN cannot be deleted as it does not exist");
         }
 
+        // Remove any links
+        orig.getLinks().forEach(link -> link.getPeers().remove(orig));
+
         // Delete the AtoN entry
         em.remove(orig);
 

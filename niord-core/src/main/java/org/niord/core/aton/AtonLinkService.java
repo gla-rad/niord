@@ -297,9 +297,7 @@ public class AtonLinkService extends BaseService {
 
         int prevMsgCnt = link.getPeers().size();
         for (AtonNode atonNode : this.atonService.findByAtonUids(atonUids.toArray(String[]::new))) {
-            if (!link.getPeers().contains(atonNode)) {
-                link.getPeers().add(atonNode);
-            }
+            link.getPeers().add(atonNode);
         }
 
         if (link.getPeers().size() != prevMsgCnt) {
@@ -327,9 +325,7 @@ public class AtonLinkService extends BaseService {
 
         int prevMsgCnt = link.getPeers().size();
         for (AtonNode atonNode : this.atonService.findByAtonUids(atonUids.toArray(String[]::new))) {
-            if (link.getPeers().contains(atonNode)) {
-                link.getPeers().remove(atonNode);
-            }
+            link.getPeers().remove(atonNode);
         }
 
         if (link.getPeers().size() != prevMsgCnt) {
