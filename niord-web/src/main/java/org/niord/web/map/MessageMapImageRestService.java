@@ -195,7 +195,7 @@ public class MessageMapImageRestService {
     /**
      * Called to upload a custom message map image via a multipart form-data request
      *
-     * @param request the servlet request
+     * @param input the multi-part form input
      * @return a status
      */
     @POST
