@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MultivaluedMap;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -242,5 +243,24 @@ public class WebUtils {
         } catch (Exception e) {
             return value;
         }
+    }
+
+    /**
+     * Retrieves a file name from the request headers from the "filename" field
+     * of the request headers.
+     *
+     * @param header the multivalued map of the request headers
+     * @return the name of the file as specified in the filename header field
+     */
+    private String getFileName(MultivaluedMap<String, String> header) {
+        String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+        for (String filename : contentDisposition) {
+            if ((filename.trim().startsWith("filename"))) {
+                String[] name = filename.split("=");
+                String finalFileName = name[1].trim().replaceAll("\"", "");
+                return finalFileName;
+            }
+        }
+        return "unknown";
     }
 }
