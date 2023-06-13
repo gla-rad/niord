@@ -15,9 +15,11 @@
  */
 package org.niord.web.map;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.message.Message;
 import org.niord.core.message.MessageService;
 import org.niord.core.repo.RepositoryService;
@@ -29,13 +31,12 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -43,6 +44,7 @@ import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Returns the map thumbnail image associated with a message.
@@ -201,28 +203,26 @@ public class MessageMapImageRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.EDITOR)
-    public String uploadMessageMapImage(@PathParam("folder") String path, @Context HttpServletRequest request) throws Exception {
+    public String uploadMessageMapImage(@PathParam("folder") String path, @MultipartForm MultipartFormDataInput input) throws Exception {
+
+        // Initialise the form parsing parameters
+        final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+        final List<InputPart> inputParts = uploadForm.get("file");
 
         // Validate that the path is a temporary repository folder path
         Path folder = repositoryService.validateTempRepoPath(path);
 
-        List<FileItem> items = repositoryService.parseFileUploadRequest(request);
-
-        // Get hold of the first uploaded image
-        FileItem imageItem = items.stream()
-                .filter(item -> !item.isFormField())
+        // Get hold of the first uploaded publication file
+        InputPart imagePart = inputParts.stream()
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new WebApplicationException("No uploaded message image file", 400));
 
-        if (imageItem == null) {
-            throw new WebApplicationException(400);
-        }
         // Construct the file path for the message
         String imageName = String.format("custom_thumb_%d.png", messageMapImageGenerator.getMapImageSize());
         Path imageRepoPath = folder.resolve(imageName);
 
         try {
-            byte[] data = IOUtils.toByteArray(imageItem.getInputStream());
+            byte[] data = IOUtils.toByteArray(imagePart.getBody(InputStream.class, null));
             if (messageMapImageGenerator.generateMessageMapImage(data, imageRepoPath)) {
                 log.info("Generated image thumbnail from uploaded image");
             } else {

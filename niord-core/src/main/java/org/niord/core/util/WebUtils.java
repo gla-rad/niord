@@ -252,7 +252,7 @@ public class WebUtils {
      * @param header the multivalued map of the request headers
      * @return the name of the file as specified in the filename header field
      */
-    private String getFileName(MultivaluedMap<String, String> header) {
+    public static String getFileName(MultivaluedMap<String, String> header) {
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
         for (String filename : contentDisposition) {
             if ((filename.trim().startsWith("filename"))) {
