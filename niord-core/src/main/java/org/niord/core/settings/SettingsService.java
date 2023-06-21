@@ -17,6 +17,7 @@ package org.niord.core.settings;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.arc.Lock;
 import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.cache.CacheElement;
@@ -24,8 +25,6 @@ import org.niord.core.service.BaseService;
 import org.niord.core.util.JsonUtils;
 import org.slf4j.Logger;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
@@ -52,7 +51,7 @@ import static org.keycloak.util.JsonSerialization.mapper;
  * or the {@code @Setting} annotation can be used.
  */
 @ApplicationScoped
-@Lock(LockType.READ)
+@Lock(Lock.Type.READ)
 @SuppressWarnings("unused")
 public class SettingsService extends BaseService {
 
@@ -288,7 +287,7 @@ public class SettingsService extends BaseService {
      * @param template the setting to update
      * @return the updated setting
      */
-    @Lock(LockType.WRITE)
+    @Lock(Lock.Type.WRITE)
     public Setting set(Setting template) {
         Setting setting = em.find(Setting.class, template.getKey());
         if (setting == null) {

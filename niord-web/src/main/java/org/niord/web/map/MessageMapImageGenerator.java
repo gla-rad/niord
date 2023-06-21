@@ -15,6 +15,7 @@
  */
 package org.niord.web.map;
 
+import io.quarkus.arc.Lock;
 import org.locationtech.jts.awt.PointShapeFactory;
 import org.locationtech.jts.awt.ShapeWriter;
 import org.locationtech.jts.geom.Geometry;
@@ -30,8 +31,6 @@ import org.niord.model.geojson.*;
 import org.niord.model.message.MainType;
 import org.slf4j.Logger;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -54,7 +53,7 @@ import static org.niord.core.settings.Setting.Type.Integer;
  * Generates message map thumbnail images.
  */
 @ApplicationScoped
-@Lock(LockType.READ)
+@Lock(Lock.Type.READ)
 public class MessageMapImageGenerator {
 
     static final String STATIC_IMAGE_URL = "%s?center=%f,%f&zoom=%d&size=%dx%d";

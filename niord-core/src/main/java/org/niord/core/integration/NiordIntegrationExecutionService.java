@@ -45,10 +45,9 @@ import org.niord.model.message.Status;
 import org.slf4j.Logger;
 
 import javax.ejb.Asynchronous;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
@@ -88,7 +87,7 @@ public class NiordIntegrationExecutionService extends BaseService {
      * Processes the given Niord Integration
      */
     @Asynchronous
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void processNiordIntegration(NiordIntegrationVo integration) {
 
         // Check that proper message series have been defined

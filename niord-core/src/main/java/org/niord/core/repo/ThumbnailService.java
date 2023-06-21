@@ -16,6 +16,7 @@
 
 package org.niord.core.repo;
 
+import io.quarkus.arc.Lock;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -24,8 +25,6 @@ import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -51,7 +50,7 @@ import java.util.concurrent.Executors;
  * </p>
  */
 @ApplicationScoped
-@Lock(LockType.READ)
+@Lock(Lock.Type.READ)
 public class ThumbnailService {
 
     private static final int EXECUTOR_POOL_SIZE = 2;

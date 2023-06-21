@@ -15,6 +15,7 @@
  */
 package org.niord.core.repo;
 
+import io.quarkus.arc.Lock;
 import io.quarkus.scheduler.Scheduled;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -35,8 +36,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -72,7 +71,7 @@ import static org.niord.core.settings.Setting.Type;
  */
 @javax.ws.rs.Path("/repo")
 @ApplicationScoped
-@Lock(LockType.READ)
+@Lock(Lock.Type.READ)
 @PermitAll
 @SuppressWarnings("unused")
 public class RepositoryService {

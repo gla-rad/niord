@@ -15,8 +15,11 @@
  */
 package org.niord.core.message;
 
+import dev.turingcomplete.quarkussimplifiedasync.core.Async;
+import io.quarkus.arc.Lock;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.scheduler.Scheduled;
+import io.vertx.core.Future;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -45,7 +48,6 @@ import org.niord.model.message.Status;
 import org.slf4j.Logger;
 
 import javax.annotation.PreDestroy;
-import javax.ejb.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.control.ActivateRequestContext;
 import javax.enterprise.event.Observes;
@@ -56,7 +58,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Timer;
 import java.util.*;
-import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.niord.core.settings.Setting.Type.Boolean;
@@ -71,7 +72,7 @@ import static org.niord.core.settings.Setting.Type.Boolean;
  * be too complex to index all related entities by language.
  */
 @ApplicationScoped
-@Lock(LockType.READ)
+@Lock(Lock.Type.READ)
 @SuppressWarnings("unused")
 public class MessageLuceneIndex extends BaseService {
 
@@ -404,10 +405,10 @@ public class MessageLuceneIndex extends BaseService {
     /**
      * Call this to re-index the message index completely
      */
-    @Asynchronous
+    @Async
     public Future<Integer> recreateIndexAsync() throws IOException {
         int updateCount = recreateIndex();
-        return new AsyncResult<>(updateCount);
+        return Future.succeededFuture(updateCount);
     }
 
 

@@ -21,8 +21,6 @@ import org.niord.core.settings.annotation.Setting;
 import org.slf4j.Logger;
 
 import javax.annotation.Resource;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.Message;
@@ -152,8 +150,7 @@ public class MailService extends BaseService {
      * @param scheduledMailId the ID of the scheduled mail to send
      * @return the updated mail entity
      */
-    @Transactional
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public ScheduledMail sendScheduledMail(Integer scheduledMailId) {
         try {
             ScheduledMail scheduledMail = em.find(ScheduledMail.class, scheduledMailId);

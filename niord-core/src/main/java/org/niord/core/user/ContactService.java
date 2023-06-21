@@ -22,8 +22,6 @@ import org.niord.core.service.BaseService;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -165,7 +163,7 @@ public class ContactService extends BaseService {
      * @return the newly created contact
      * @noinspection all
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Contact importContact(Contact contact) {
         return createContact(contact);
     }

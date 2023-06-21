@@ -18,6 +18,7 @@ package org.niord.core.promulgation;
 
 import io.quarkus.arc.All;
 import io.quarkus.arc.InstanceHandle;
+import io.quarkus.arc.Lock;
 import org.niord.core.NiordApp;
 import org.niord.core.category.TemplateExecutionService;
 import org.niord.core.domain.DomainService;
@@ -28,8 +29,6 @@ import org.niord.core.promulgation.vo.BaseMessagePromulgationVo;
 import org.niord.core.promulgation.vo.PromulgationServiceVo;
 import org.slf4j.Logger;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.*;
@@ -49,7 +48,7 @@ import java.util.stream.Collectors;
  * are each tied to a promulgation type.
  */
 @ApplicationScoped
-@Lock(LockType.READ)
+@Lock(Lock.Type.READ)
 @SuppressWarnings("unused")
 public class PromulgationManager {
 
