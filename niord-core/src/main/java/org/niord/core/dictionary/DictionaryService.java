@@ -27,7 +27,6 @@ import org.niord.core.service.BaseService;
 import org.niord.model.DataFilter;
 import org.slf4j.Logger;
 
-import javax.ejb.LockType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -59,7 +58,8 @@ public class DictionaryService extends BaseService {
     private Map<String, DictionaryVo> cachedDictionaries = new ConcurrentHashMap<>();
 
     /** Called upon application startup */
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Lock(Lock.Type.WRITE)
     void init(@Observes StartupEvent ev) {
 
         // Cache all dictionaries
@@ -305,6 +305,7 @@ public class DictionaryService extends BaseService {
      * Depending on the override parameter, either update the associated dictionary with new entries or overrides all.
      * @param override whether to override all entries or just new ones
      */
+    @Transactional
     @Lock(Lock.Type.WRITE)
     public void loadDefaultResourceBundles(boolean override) {
         // Load default resource bundles into dictionaries
