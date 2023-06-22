@@ -195,7 +195,7 @@ public class AtonRestService {
     /**
      * Delete an AtoN node.
      *
-     * @param atonUid the UID of the AtoN to be updated
+     * @param atonUid the UID of the AtoN to be deleted
      * @return the outcome of the operation
      */
     @DELETE
@@ -206,13 +206,41 @@ public class AtonRestService {
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public boolean deleteAton(@PathParam("atonUid") String atonUid) {
-        log.debug("Deleting aton with UID" + atonUid);
+        log.debug("Deleting aton with UID " + atonUid);
 
         try {
             return atonService.deleteAton(atonUid);
         } catch (Exception ex) {
             throw new WebApplicationException(ex.getMessage(), 400);
         }
+    }
+
+    /**
+     * Delete multiple AtoN nodes.
+     *
+     * @param atonUids the UIDs of the AtoNs to be deleted
+     * @return the outcome of the operation
+     */
+    @DELETE
+    @Path("/aton")
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @GZIP
+    @NoCache
+    @RolesAllowed(Roles.EDITOR)
+    public boolean deleteAtons(String[] atonUids) {
+        log.debug("Deleting atons with UIDs " + Arrays.toString(atonUids));
+
+        // Build a response progressively
+        boolean response = true;
+        for(String atonUid : atonUids) {
+            try {
+                response &= atonService.deleteAton(atonUid);
+            } catch (Exception ex) {
+                throw new WebApplicationException(ex.getMessage(), 400);
+            }
+        }
+        return response;
     }
 
     /**
