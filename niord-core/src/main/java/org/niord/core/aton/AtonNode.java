@@ -71,14 +71,14 @@ public class AtonNode extends BaseEntity<Integer> {
     @JoinColumn(name="parent_id")
     private AtonNode parent;
 
-    @OneToMany(mappedBy="parent", cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OneToMany(mappedBy="parent", cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<AtonNode> children = new HashSet<>();
 
-    @ManyToMany(mappedBy = "peers")
+    @ManyToMany(mappedBy = "peers", fetch = FetchType.EAGER)
     private Set<AtonLink> links = new HashSet<>();
 
     @IndexedEmbedded
-    @OneToMany(mappedBy = "atonNode", cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OneToMany(mappedBy = "atonNode", cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.EAGER)
     List<AtonTag> tags = new ArrayList<>();
 
     /** Constructor */

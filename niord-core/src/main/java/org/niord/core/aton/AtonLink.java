@@ -55,7 +55,7 @@ public class AtonLink extends VersionedEntity<Integer> {
     private AtonLinkType linkType;
     private AtonLinkTypeCategory linkCategory;
     private int atonCount;
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "aton_link_join_table",
             joinColumns = { @JoinColumn(name = "aton_id") },
