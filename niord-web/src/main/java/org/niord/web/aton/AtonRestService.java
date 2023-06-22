@@ -29,7 +29,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import java.util.*;
 import java.util.function.Function;
@@ -40,7 +39,6 @@ import java.util.stream.Collectors;
  */
 @Path("/atons")
 @RequestScoped
-@Transactional
 @PermitAll
 public class AtonRestService {
 
@@ -228,8 +226,8 @@ public class AtonRestService {
     @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
-    public boolean deleteAtons(String[] atonUids) {
-        log.debug("Deleting atons with UIDs " + Arrays.toString(atonUids));
+    public boolean deleteAtons(List<String> atonUids) {
+        log.debug("Deleting atons with UIDs " + String.join(",", atonUids));
 
         // Build a response progressively
         boolean response = true;

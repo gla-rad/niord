@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,7 @@ public class AtonService extends BaseService {
      * @param value the tag value
      * @return the AtoNs with the given tag key-value
      */
+    @Transactional
     public List<AtonNode> findByTag(String key, String value) {
         return em
                 .createNamedQuery("AtonNode.findByTag", AtonNode.class)
@@ -82,6 +84,7 @@ public class AtonService extends BaseService {
      * @param values the tag values
      * @return the AtoNs with the given tag key and values
      */
+    @Transactional
     public List<AtonNode> findByTagValues(String key, String... values) {
         Set<String> valueSet = new HashSet<>(Arrays.asList(values));
         return em
@@ -97,6 +100,7 @@ public class AtonService extends BaseService {
      * @param atonUid the AtoN UID
      * @return the AtoNs with the given AtoN UID or null if not found
      */
+    @Transactional
     public AtonNode findByAtonUid(String atonUid) {
         return findByTag(AtonTag.TAG_ATON_UID, atonUid).stream()
                 .findFirst()
@@ -109,6 +113,7 @@ public class AtonService extends BaseService {
      * @param atonUids the AtoN UIDs
      * @return the AtoNs with the given AtoN UIDs
      */
+    @Transactional
     public List<AtonNode> findByAtonUids(String... atonUids) {
         return findByTagValues(AtonTag.TAG_ATON_UID, atonUids);
     }
@@ -119,6 +124,7 @@ public class AtonService extends BaseService {
      * @param aton The AtoN to be created
      * @return The created AtoN node object
      */
+    @Transactional
     public AtonNode createAton(AtonNode aton) throws Exception {
         // Make sure a duplicate AtoN does not exist
         AtonNode orig = findByAtonUid(aton.getAtonUid());
@@ -150,6 +156,7 @@ public class AtonService extends BaseService {
      * @param aton The AtoN to be updated
      * @return The updated AtoN node object
      */
+    @Transactional
     public AtonNode updateAton(AtonNode aton) throws Exception {
         // Find the original AtoN entry
         AtonNode orig = findByAtonUid(aton.getAtonUid());
@@ -170,6 +177,7 @@ public class AtonService extends BaseService {
      * Deletes the AtoN that matches the provided AtoN UID identifier.
      * @param atonUid The UID of the AtoN to be deleted
      */
+    @Transactional
     public boolean deleteAton(String atonUid) throws Exception {
         // Find the original AtoN entry
         AtonNode orig = findByAtonUid(atonUid);
@@ -192,6 +200,7 @@ public class AtonService extends BaseService {
      * Replaces the AtoN DB
      * @param atons the new AtoNs
      */
+    @Transactional
     public void updateAtons(List<AtonNode> atons) {
 
         // Persist new list of AtoNs
@@ -227,6 +236,7 @@ public class AtonService extends BaseService {
      *
      * @return the AtoNs within that matches the search parameters
      */
+    @Transactional
     public PagedSearchResultVo<AtonNode> search(AtonSearchParams param) {
         try {
             //"select count(a) from AtonNode a, Chart c where c.chartNumber in ('101') and within(a.geometry, c.geometry) = true";
@@ -286,6 +296,7 @@ public class AtonService extends BaseService {
      *
      * @return the AtoN lon-lat positions
      */
+    @Transactional
     public List<double[]> searchPositions(AtonSearchParams param) {
         try {
             CriteriaHelper<Tuple> criteriaHelper = CriteriaHelper.initWithTupleQuery(em);
@@ -316,7 +327,7 @@ public class AtonService extends BaseService {
      *
      * @return the AtoNs within that matches the search parameters
      */
-    public <T> Root<AtonNode> buildSearchCriteria(CriteriaHelper<T> criteriaHelper, AtonSearchParams param) {
+    private <T> Root<AtonNode> buildSearchCriteria(CriteriaHelper<T> criteriaHelper, AtonSearchParams param) {
 
         CriteriaBuilder cb = criteriaHelper.getCriteriaBuilder();
         CriteriaQuery<T> c = criteriaHelper.getCriteriaQuery();
