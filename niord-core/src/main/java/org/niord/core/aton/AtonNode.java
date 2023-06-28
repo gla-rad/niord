@@ -191,8 +191,8 @@ public class AtonNode extends BaseEntity<Integer> {
             return null;
         }
 
-        // Check is the child exists
-        AtonNode child = this.getChild(atonNode.getId());
+        // Check if the child exists
+        AtonNode child = atonNode.getId() == null ? null : this.getChild(atonNode.getId());
         if (child == null) {
             child = atonNode;
             child.setParent(this);
