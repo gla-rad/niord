@@ -285,9 +285,16 @@ public class AtonNode extends BaseEntity<Integer> {
      */
     @Transient
     public boolean hasChanged(AtonNode template) {
+        // Sanity Check
+        if(template == null) {
+            return true;
+        }
+        // Otherwise check per field
         return Math.abs(template.getLat() - lat) > 0.00001 ||
                 Math.abs(template.getLon() - lon) > 0.00001 ||
                 template.isVisible() != visible ||
+                template.getChildren().stream()
+                        .anyMatch(c -> c.hasChanged(getChild(c.getId()))) ||
                 template.getTags().stream()
                         .anyMatch(t -> !Objects.equals(t.getV(), getTagValue(t.getK())));
     }
