@@ -173,6 +173,7 @@ public class AtonNode extends BaseEntity<Integer> {
      */
     public AtonNode getChild(Integer childId) {
         return this.children.stream()
+                .filter(c -> Objects.nonNull(c.getId()))
                 .filter(c -> Objects.equals(c.getId(), childId))
                 .findFirst()
                 .orElse(null);
@@ -192,7 +193,7 @@ public class AtonNode extends BaseEntity<Integer> {
         }
 
         // Check if the child exists
-        AtonNode child = atonNode.getId() == null ? null : this.getChild(atonNode.getId());
+        AtonNode child = this.getChild(atonNode.getId());
         if (child == null) {
             child = atonNode;
             child.setParent(this);
