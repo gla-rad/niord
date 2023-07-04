@@ -45,7 +45,7 @@ public class AtonIconRestService {
 
     static final String OVERVIEW_ICON_REPO = "aton_icons";
     static final int OVERVIEW_ICON_HEIGHT = 90;
-    static final int OVERVIEW_ICON_WIDTH = 70;
+    static final int OVERVIEW_ICON_WIDTH = 90;
     static final double OVERVIEW_ICON_SCALE = 0.3;
 
     @Inject
