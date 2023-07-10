@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.niord.core.mail.ScheduledMail;
@@ -27,11 +28,10 @@ import org.niord.model.DataFilter;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
 
 /**
  * REST interface for searching scheduled e-mails.

@@ -20,10 +20,10 @@ import org.niord.model.DataFilter;
 import org.niord.model.message.MainType;
 import org.niord.model.message.MessageVo;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.ws.rs.NotFoundException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebService;
+import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Set;
 

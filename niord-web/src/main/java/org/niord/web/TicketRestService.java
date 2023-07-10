@@ -15,18 +15,17 @@
  */
 package org.niord.web;
 
+import jakarta.annotation.security.PermitAll;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.niord.core.user.TicketService;
 import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.ejb.SessionContext;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import jakarta.ejb.SessionContext;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
 import java.util.Set;
 
 /**

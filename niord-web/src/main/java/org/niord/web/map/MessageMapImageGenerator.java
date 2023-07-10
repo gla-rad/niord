@@ -31,9 +31,9 @@ import org.niord.model.geojson.*;
 import org.niord.model.message.MainType;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import javax.imageio.ImageIO;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;

@@ -16,6 +16,8 @@
 
 package org.niord.web;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.niord.core.message.MessageTag;
@@ -26,12 +28,10 @@ import org.niord.core.user.Roles;
 import org.niord.model.search.PagedSearchParamsVo.SortOrder;
 import org.slf4j.Logger;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;

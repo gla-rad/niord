@@ -16,6 +16,8 @@
 
 package org.niord.web;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
@@ -25,12 +27,10 @@ import org.niord.model.IJsonSerializable;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -193,7 +193,7 @@ public class ContactRestService {
 
     /************************/
     /** Helper classes     **/
-    /************************/
+    /***/
 
 
     @SuppressWarnings("unused")
