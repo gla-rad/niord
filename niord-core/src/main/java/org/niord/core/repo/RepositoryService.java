@@ -17,17 +17,11 @@ package org.niord.core.repo;
 
 import io.quarkus.arc.Lock;
 import io.quarkus.scheduler.Scheduled;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileCleaningTracker;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.niord.core.settings.annotation.Setting;
 import org.niord.core.user.Roles;
 import org.niord.core.util.WebUtils;
@@ -38,8 +32,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -83,10 +75,6 @@ public class RepositoryService {
     @Inject
     @Setting(value="repoCacheTimeout", defaultValue="5", description="Cache timeout of repo files in minutes", type=Type.Integer)
     Integer cacheTimeout;
-
-    @Inject
-    @Setting(value="repoFileUploadMaxSize", defaultValue="1073741824", description="Max size of uploaded file", type=Type.Long)
-    Long fileUploadMaxSize;
 
     @Inject
     Logger log;
@@ -369,14 +357,14 @@ public class RepositoryService {
      * Handles upload of files
      *
      * @param path the folder to upload to
-     * @param request the request
+     * @param input the multi-part input request
      */
     @POST
     @javax.ws.rs.Path("/upload/{folder:.+}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    public List<String> uploadFile(@PathParam("folder") String path, @Context HttpServletRequest request) throws FileUploadException, IOException {
+    public List<String> uploadFile(@PathParam("folder") String path, MultipartInput input) throws IOException {
 
         Path folder = repoRoot.resolve(path);
 
@@ -394,28 +382,25 @@ public class RepositoryService {
         }
 
         List<String> result = new ArrayList<>();
-        List<FileItem> items = parseFileUploadRequest(request);
 
-        for (FileItem item : items) {
-            if (!item.isFormField()) {
-                // Argh - IE includes the path in the item.getName()!
-                String fileName = Paths.get(item.getName()).getFileName().toString();
-                File destFile = getUniqueFile(folder, fileName).toFile();
-                log.info("File " + fileName + " is uploaded to " + destFile);
-                try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(destFile))) {
-                    InputStream in = new BufferedInputStream(item.getInputStream());
-                    byte[] buffer = new byte[1024];
-                    int len = in.read(buffer);
-                    while (len != -1) {
-                        out.write(buffer, 0, len);
-                        len = in.read(buffer);
-                    }
-                    out.flush();
+        for (Map.Entry<String, InputStream> file : WebUtils.getMultipartInputFiles(input).entrySet()) {
+            // Argh - IE includes the path in the item.getName()!
+            String fileName = Paths.get(file.getKey()).getFileName().toString();
+            File destFile = getUniqueFile(folder, fileName).toFile();
+            log.info("File " + fileName + " is uploaded to " + destFile);
+            try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(destFile))) {
+                InputStream in = new BufferedInputStream(file.getValue());
+                byte[] buffer = new byte[1024];
+                int len = in.read(buffer);
+                while (len != -1) {
+                    out.write(buffer, 0, len);
+                    len = in.read(buffer);
                 }
-
-                // Return the repo-relative path as a result
-                result.add(Paths.get(path, destFile.getName()).toString());
+                out.flush();
             }
+
+            // Return the repo-relative path as a result
+            result.add(Paths.get(path, destFile.getName()).toString());
         }
 
         return result;
@@ -471,19 +456,19 @@ public class RepositoryService {
      * Only the "user" role is required to upload to the "temp" root
      *
      * @param path the folder to upload to
-     * @param request the request
+     * @param input the multi-part input request
      */
     @POST
     @javax.ws.rs.Path("/upload-temp/{folder:.+}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    public List<String> uploadTempFile(@PathParam("folder") String path, @Context HttpServletRequest request) throws FileUploadException, IOException {
+    public List<String> uploadTempFile(@PathParam("folder") String path, MultipartInput input) throws IOException {
 
         // Check that the specified folder is indeed under the "temp" root
         validateTempRepoPath(path);
 
-        return uploadFile(path, request);
+        return uploadFile(path, input);
     }
 
 
@@ -502,36 +487,6 @@ public class RepositoryService {
         }
         return folder;
     }
-
-
-
-    /**
-     * Creates a new DiskFileItemFactory. See:
-     * http://commons.apache.org/proper/commons-fileupload/using.html
-     * @return the new DiskFileItemFactory
-     */
-    private DiskFileItemFactory newDiskFileItemFactory(ServletContext servletContext) {
-        File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-        FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(servletContext);
-        DiskFileItemFactory factory = new DiskFileItemFactory(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD, repository);
-        factory.setFileCleaningTracker(fileCleaningTracker);
-        return factory;
-    }
-
-
-    /**
-     * Parses the file upload request and returns the file items
-     * @param request the request
-     * @return the file items
-     */
-    public List<FileItem> parseFileUploadRequest(HttpServletRequest request) throws FileUploadException {
-        FileItemFactory factory = newDiskFileItemFactory(request.getServletContext());
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setFileSizeMax(fileUploadMaxSize);
-        upload.setSizeMax(fileUploadMaxSize);
-        return upload.parseRequest(request);
-    }
-
 
     /**
      * Every hour, check the repo "temp" root, and delete old files and folders

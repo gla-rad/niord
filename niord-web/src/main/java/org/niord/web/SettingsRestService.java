@@ -18,6 +18,7 @@ package org.niord.web;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.settings.Setting;
 import org.niord.core.settings.SettingsService;
@@ -30,10 +31,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Objects;
@@ -118,15 +117,15 @@ public class SettingsRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded settings json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
     @Path("/upload-settings")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
-    public String importCharts(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "settings-import");
+    public String importCharts(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "settings-import");
     }
 
     /**

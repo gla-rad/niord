@@ -18,6 +18,7 @@ package org.niord.web;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.niord.core.NiordApp;
 import org.niord.core.domain.Domain;
 import org.niord.core.domain.DomainService;
@@ -665,7 +666,8 @@ public class MessageRestService  {
     /**
      * Called to upload message attachments to a temporary message folder
      *
-     * @param request the servlet request
+     * @param path the folder to upload the files to
+     * @param input the multi-part input request
      * @return a the updated list of attachments
      */
     @POST
@@ -675,11 +677,9 @@ public class MessageRestService  {
     @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
-    public List<AttachmentVo> uploadMessageAttachments(
-            @PathParam("folder") String path,
-            @Context HttpServletRequest request) throws Exception {
+    public List<AttachmentVo> uploadMessageAttachments(@PathParam("folder") String path, MultipartInput input) throws Exception {
 
-        List<String> uploadedFiles = repositoryService.uploadTempFile(path, request);
+        List<String> uploadedFiles = repositoryService.uploadTempFile(path, input);
 
         return uploadedFiles.stream()
                 .map(f -> {

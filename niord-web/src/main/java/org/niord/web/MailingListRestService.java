@@ -19,6 +19,7 @@ package org.niord.web;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.mail.IMailable;
 import org.niord.core.mail.vo.ScheduledMailVo;
@@ -38,10 +39,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
@@ -404,7 +403,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     /**
      * Imports an uploaded mailing-list json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -412,8 +411,8 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.SYSADMIN)
-    public String importPublications(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "mailing-list-import");
+    public String importPublications(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "mailing-list-import");
     }
 
 

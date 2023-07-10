@@ -18,6 +18,7 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.NiordApp;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.domain.DomainService;
@@ -194,7 +195,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded reports json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -202,8 +203,8 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.SYSADMIN)
-    public String importReports(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "report-import");
+    public String importReports(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "report-import");
     }
 
 
