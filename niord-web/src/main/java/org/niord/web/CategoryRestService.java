@@ -17,6 +17,7 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.category.Category;
@@ -34,10 +35,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
@@ -318,7 +317,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded Categories json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -326,8 +325,8 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.SYSADMIN)
-    public String importCategories(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "category-import");
+    public String importCategories(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "category-import");
     }
 
 

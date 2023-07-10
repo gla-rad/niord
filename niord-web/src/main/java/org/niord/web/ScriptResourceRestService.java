@@ -19,6 +19,7 @@ package org.niord.web;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.script.ScriptResource;
 import org.niord.core.script.ScriptResourceHistory;
@@ -33,9 +34,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
@@ -153,7 +152,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded script resources json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -161,8 +160,8 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.SYSADMIN)
-    public String importScriptResources(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "script-resource-import");
+    public String importScriptResources(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "script-resource-import");
     }
 
 

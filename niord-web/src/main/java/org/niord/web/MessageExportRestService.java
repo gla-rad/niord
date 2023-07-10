@@ -18,10 +18,10 @@ package org.niord.web;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.domain.DomainService;
 import org.niord.core.message.MessageExportService;
@@ -111,7 +111,7 @@ public class MessageExportRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded messages zip archive
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -119,17 +119,17 @@ public class MessageExportRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.ADMIN)
-    public String importMessages(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "msg-archive-import");
+    public String importMessages(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "msg-archive-import");
     }
 
 
     /** {@inheritDoc} */
     @Override
-    protected void checkBatchJob(String batchJobName, FileItem fileItem, Map<String, Object> params) throws Exception {
+    protected void checkBatchJob(String batchJobName, String filename, InputStream inputStream, Map<String, Object> params) throws Exception {
 
         // Check that the zip file contains a messages.json file
-        if (!checkForMessagesFileInImportArchive(fileItem.getInputStream())) {
+        if (!checkForMessagesFileInImportArchive(inputStream)) {
             throw new Exception("Zip archive is missing a valid messages.json entry");
         }
 

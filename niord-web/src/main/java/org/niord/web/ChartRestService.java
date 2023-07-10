@@ -17,6 +17,7 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.chart.Chart;
@@ -32,10 +33,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
@@ -147,7 +146,7 @@ public class ChartRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded Charts json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -155,8 +154,8 @@ public class ChartRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.ADMIN)
-    public String importCharts(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "chart-import");
+    public String importCharts(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "chart-import");
     }
 
 

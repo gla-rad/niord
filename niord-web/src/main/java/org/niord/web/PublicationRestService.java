@@ -21,8 +21,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.NiordApp;
 import org.niord.core.batch.AbstractBatchableRestService;
@@ -594,7 +592,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     /**
      * Uploads a publication file
      *
-     * @param input the multi-part form input
+     * @param input the multi-part form data input request
      * @return the updated publication descriptor
      */
     @POST
@@ -602,31 +600,30 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    public PublicationDescVo uploadPublicationFile(@PathParam("folder") String path, @MultipartForm MultipartFormDataInput input) throws Exception {
+    public PublicationDescVo uploadPublicationFile(@PathParam("folder") String path, MultipartFormDataInput input) throws Exception {
 
         // Initialise the form parsing parameters
-        final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        final List<InputPart> inputParts = uploadForm.get("file");
+        final Map<String, Object> params = WebUtils.getMultipartInputFormParams(input);
+        final Map<String, InputStream> files = WebUtils.getMultipartInputFiles(input);
 
         // Get hold of the first uploaded publication file
-        InputPart inputPart = inputParts.stream()
+        Map.Entry<String, InputStream> inputFileEntry = files.entrySet()
+                .stream()
                 .findFirst()
                 .orElseThrow(() -> new WebApplicationException("No uploaded publication file", 400));
-        String inputPartFileName = WebUtils.getFileName(inputPart.getHeaders());
 
         // Check for the associated publication desc record
-        PublicationDescVo desc = uploadForm.get("data")
-                .stream()
+        PublicationDescVo desc = Optional.of(params)
+                .map(map -> map.get("data"))
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
                 .map(item -> {
                     try {
-                        return new ObjectMapper().
-                                readValue(item.getBodyAsString(), PublicationDescVo.class);
+                        return new ObjectMapper().readValue(item, PublicationDescVo.class);
                     } catch (Exception ignored) {
+                        return null;
                     }
-                    return null;
                 })
-                .filter(Objects::nonNull)
-                .findFirst()
                 .orElseThrow(() -> new WebApplicationException("No publication descriptor found", 400));
 
         // Validate that the path is a temporary repository folder path
@@ -634,11 +631,11 @@ public class PublicationRestService extends AbstractBatchableRestService {
 
         String fileName = StringUtils.defaultIfBlank(
                 desc.getFileName(),
-                Paths.get(inputPartFileName).getFileName().toString()); // NB: IE includes the path in item.getName()!
+                Paths.get(inputFileEntry.getKey()).getFileName().toString()); // NB: IE includes the path in item.getName()!
 
         File destFile = folder.resolve(fileName).toFile();
         try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(destFile))) {
-            IOUtils.copy(inputPart.getBody(InputStream.class, null), out);
+            IOUtils.copy(inputFileEntry.getValue(), out);
         } catch (IOException ex) {
             log.error("Error creating publication file " + destFile, ex);
             throw new WebApplicationException("Error creating destination file: " + destFile, 500);
@@ -647,7 +644,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
         desc.setFileName(fileName);
         desc.setLink(repositoryService.getRepoUri(destFile.toPath()));
 
-        log.info("Copied publication file " + inputPartFileName + " to destination " + destFile);
+        log.info("Copied publication file " + inputFileEntry.getKey() + " to destination " + destFile);
 
         return desc;
     }
@@ -709,7 +706,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     /**
      * Imports an uploaded Publications json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -717,8 +714,8 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.ADMIN)
-    public String importPublications(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "publication-import");
+    public String importPublications(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "publication-import");
     }
 
 

@@ -18,6 +18,7 @@ package org.niord.web;
 
 import org.jboss.resteasy.annotations.GZIP;
 import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.publication.PublicationCategory;
 import org.niord.core.publication.PublicationCategoryService;
@@ -30,10 +31,8 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Objects;
@@ -138,7 +137,7 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     /**
      * Imports an uploaded Publications json file
      *
-     * @param request the servlet request
+     * @param input the multi-part form data input request
      * @return a status
      */
     @POST
@@ -146,8 +145,8 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.ADMIN)
-    public String importPublications(@Context HttpServletRequest request) throws Exception {
-        return executeBatchJobFromUploadedFile(request, "publication-category-import");
+    public String importPublications(MultipartFormDataInput input) throws Exception {
+        return executeBatchJobFromUploadedFile(input, "publication-category-import");
     }
 
 }
