@@ -25,7 +25,7 @@ import org.niord.core.aton.vo.AtonTagVo;
 import org.niord.core.geojson.JtsConverter;
 import org.niord.core.model.BaseEntity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -350,7 +350,7 @@ public class AtonNode extends BaseEntity<Integer> {
 
     /*************************/
     /** Getters and Setters **/
-    /*************************/
+    /***/
 
     public double getLat() {
         return lat;

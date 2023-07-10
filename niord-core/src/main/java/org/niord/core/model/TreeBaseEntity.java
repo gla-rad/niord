@@ -16,7 +16,7 @@
 
 package org.niord.core.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -158,7 +158,7 @@ public abstract class TreeBaseEntity<E extends TreeBaseEntity<E>> extends Versio
 
     /*************************/
     /** Getters and Setters **/
-    /*************************/
+    /***/
 
     public boolean isActive() {
         return active;

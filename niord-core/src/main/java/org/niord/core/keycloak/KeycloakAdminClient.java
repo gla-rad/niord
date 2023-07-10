@@ -16,10 +16,10 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -95,7 +95,7 @@ public class KeycloakAdminClient {
         if (userResource.isPresent()) {
             try {
                 Optional.of(userResource.get().toRepresentation()).orElseThrow(() -> new RuntimeException(String.format("User with UUID : %s not found!", uuid).toString()));
-            } catch (javax.ws.rs.NotFoundException ex) {
+            } catch (jakarta.ws.rs.NotFoundException ex) {
                 log.error("{}:findUserByUUID {}", this.getClass().getCanonicalName(), ex.getMessage());
                 return userRepresentationFallback;
             } catch (RuntimeException e) {

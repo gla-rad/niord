@@ -19,7 +19,7 @@ import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import org.niord.core.domain.DomainResolver;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.Optional;
 
 /**

@@ -17,6 +17,9 @@ package org.niord.core.repo;
 
 import io.quarkus.arc.Lock;
 import io.quarkus.scheduler.Scheduled;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,14 +30,11 @@ import org.niord.core.user.Roles;
 import org.niord.core.util.WebUtils;
 import org.slf4j.Logger;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -61,7 +61,7 @@ import static org.niord.core.settings.Setting.Type;
  *     of the repository will be deleted after 24 hours.
  * </p>
  */
-@javax.ws.rs.Path("/repo")
+@jakarta.ws.rs.Path("/repo")
 @ApplicationScoped
 @Lock(Lock.Type.READ)
 @PermitAll
@@ -206,7 +206,7 @@ public class RepositoryService {
      * @return the response
      */
     @GET
-    @javax.ws.rs.Path("/file/{file:.+}")
+    @jakarta.ws.rs.Path("/file/{file:.+}")
     public Response streamFile(@PathParam("file") String path,
                                @Context Request request) throws IOException {
 
@@ -250,7 +250,7 @@ public class RepositoryService {
      * @return the response
      */
     @DELETE
-    @javax.ws.rs.Path("/file/{file:.+}")
+    @jakarta.ws.rs.Path("/file/{file:.+}")
     @Produces("text/plain")
     @RolesAllowed(Roles.EDITOR)
     public Response deleteFile(@PathParam("file") String path) throws IOException {
@@ -280,7 +280,7 @@ public class RepositoryService {
      * @return the thumbnail to use for the file specified by the path
      */
     @GET
-    @javax.ws.rs.Path("/thumb/{file:.+}")
+    @jakarta.ws.rs.Path("/thumb/{file:.+}")
     public Response getThumbnail(@PathParam("file") String path,
                                  @QueryParam("size") @DefaultValue("64") int size) throws IOException, URISyntaxException {
 
@@ -317,7 +317,7 @@ public class RepositoryService {
      * @return the list of files in the folder specified by the path
      */
     @GET
-    @javax.ws.rs.Path("/list/{folder:.+}")
+    @jakarta.ws.rs.Path("/list/{folder:.+}")
     @Produces("application/json;charset=UTF-8")
     @NoCache
     public List<RepoFileVo> listFiles(@PathParam("folder") String path) throws IOException {
@@ -360,7 +360,7 @@ public class RepositoryService {
      * @param input the multi-part input request
      */
     @POST
-    @javax.ws.rs.Path("/upload/{folder:.+}")
+    @jakarta.ws.rs.Path("/upload/{folder:.+}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
@@ -437,7 +437,7 @@ public class RepositoryService {
      * @return a new unique "temp" directory
      */
     @GET
-    @javax.ws.rs.Path("/new-temp-dir")
+    @jakarta.ws.rs.Path("/new-temp-dir")
     @Produces("application/json;charset=UTF-8")
     public RepoFileVo getNewTempDir() {
 
@@ -459,7 +459,7 @@ public class RepositoryService {
      * @param input the multi-part input request
      */
     @POST
-    @javax.ws.rs.Path("/upload-temp/{folder:.+}")
+    @jakarta.ws.rs.Path("/upload-temp/{folder:.+}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)

@@ -26,9 +26,9 @@ import org.niord.core.repo.RepositoryService;
 import org.niord.core.util.JsonUtils;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;

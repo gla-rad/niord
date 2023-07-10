@@ -22,7 +22,7 @@ import org.niord.core.geojson.JtsConverter;
 import org.niord.core.util.WebUtils;
 import org.niord.model.search.PagedSearchParamsVo;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -96,7 +96,7 @@ public class AtonSearchParams extends PagedSearchParamsVo {
 
     /*******************************************/
     /** Method chaining Getters and Setters   **/
-    /*******************************************/
+    /***/
 
     public String getName() {
         return name;

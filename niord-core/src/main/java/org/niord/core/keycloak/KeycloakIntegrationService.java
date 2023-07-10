@@ -44,8 +44,8 @@ import org.niord.core.user.vo.UserVo;
 import org.niord.core.util.WebUtils;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;

@@ -20,8 +20,8 @@ import io.quarkus.arc.Lock;
 import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;

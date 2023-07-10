@@ -21,7 +21,7 @@ import org.niord.core.mail.IMailable;
 import org.niord.core.model.VersionedEntity;
 import org.niord.core.user.vo.UserVo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Implementation of a user entity
@@ -151,7 +151,7 @@ public class User extends VersionedEntity<Integer> implements IMailable {
 
     /*************************/
     /** Getters and Setters **/
-    /*************************/
+    /***/
 
     public String getUsername() {
         return username;

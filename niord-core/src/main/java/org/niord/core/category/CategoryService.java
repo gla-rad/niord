@@ -28,11 +28,11 @@ import org.niord.core.service.TreeBaseService;
 import org.niord.model.search.PagedSearchParamsVo;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.criteria.*;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.criteria.*;
 import javax.script.ScriptException;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -20,10 +20,10 @@ import io.quarkus.runtime.StartupEvent;
 import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.util.Arrays;
 
 import static org.niord.core.category.StandardParamType.STANDARD_PARAM_TYPES;

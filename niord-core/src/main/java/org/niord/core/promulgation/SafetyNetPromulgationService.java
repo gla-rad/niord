@@ -30,9 +30,9 @@ import org.niord.core.util.TextUtils;
 import org.niord.model.DataFilter;
 import org.niord.model.message.Type;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 

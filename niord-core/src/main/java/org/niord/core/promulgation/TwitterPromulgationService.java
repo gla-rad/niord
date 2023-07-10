@@ -33,10 +33,10 @@ import org.niord.model.message.Status;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
 
-import javax.ejb.LockType;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.ejb.LockType;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;

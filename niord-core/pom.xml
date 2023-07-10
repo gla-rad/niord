@@ -55,7 +55,7 @@
         <dependency>
             <groupId>io.quarkiverse.jberet</groupId>
             <artifactId>quarkus-jberet</artifactId>
-            <version>1.2.1</version>
+            <version>2.0.1</version>
         </dependency>
 
         <dependency>
@@ -186,13 +186,13 @@
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-spatial</artifactId>
             <version>${hibernate.spatial.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.search</groupId>
-            <artifactId>hibernate-search-mapper-orm</artifactId>
+            <artifactId>hibernate-search-mapper-orm-jakarta</artifactId>
             <version>${hibernate.search-orm.version}</version>
         </dependency>
         <dependency>

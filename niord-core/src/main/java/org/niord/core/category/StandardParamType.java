@@ -19,7 +19,7 @@ package org.niord.core.category;
 import org.niord.core.category.vo.StandardParamTypeVo;
 import org.niord.model.DataFilter;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 /**
  * Entity class for the standard-based template parameter type, i.e.

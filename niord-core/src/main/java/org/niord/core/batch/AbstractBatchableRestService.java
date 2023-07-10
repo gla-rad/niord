@@ -20,7 +20,7 @@ import org.niord.core.repo.RepositoryService;
 import org.niord.core.util.WebUtils;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.InputStream;
 import java.util.Map;
 

@@ -28,11 +28,11 @@ import org.niord.core.user.vo.UserVo;
 import org.niord.model.DataFilter.UserResolver;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.transaction.Transactional;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;

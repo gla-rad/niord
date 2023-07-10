@@ -23,10 +23,10 @@ import org.niord.core.repo.RepositoryService;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.WebApplicationException;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.WebApplicationException;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;

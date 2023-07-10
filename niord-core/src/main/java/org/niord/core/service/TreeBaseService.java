@@ -20,7 +20,7 @@ import org.niord.core.settings.Setting;
 import org.niord.core.settings.SettingsService;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;

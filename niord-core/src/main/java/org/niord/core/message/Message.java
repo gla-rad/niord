@@ -33,8 +33,8 @@ import org.niord.model.geojson.FeatureCollectionVo;
 import org.niord.model.geojson.FeatureVo;
 import org.niord.model.message.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -713,7 +713,7 @@ public class Message extends VersionedEntity<Integer> implements ILocalizable<Me
 
     /*************************/
     /** Getters and Setters **/
-    /*************************/
+    /***/
 
     public User getCreatedBy() {
         return createdBy;

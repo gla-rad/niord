@@ -24,8 +24,8 @@ import org.niord.core.promulgation.vo.BaseMessagePromulgationVo;
 import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
 
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
 /**
  * Base class for the different types of promulgation services, such as NavtexPromulgationService, etc.

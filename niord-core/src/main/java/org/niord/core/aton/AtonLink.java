@@ -19,7 +19,7 @@ import org.hibernate.annotations.Type;
 import org.niord.core.aton.vo.AtonLinkVo;
 import org.niord.core.model.VersionedEntity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,7 +48,6 @@ import java.util.stream.Collectors;
 public class AtonLink extends VersionedEntity<Integer> {
 
     // Class Variable
-    @Type(type = "uuid-char")
     @Column(length = 36)
     private UUID linkId;
     private String name;

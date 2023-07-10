@@ -20,11 +20,11 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.niord.core.aton.vo.AtonTagVo;
 import org.niord.core.model.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -88,7 +88,7 @@ public class AtonTag extends BaseEntity<Integer> {
 
     /*************************/
     /** Getters and Setters **/
-    /*************************/
+    /***/
 
     public String getK() {
         return k;

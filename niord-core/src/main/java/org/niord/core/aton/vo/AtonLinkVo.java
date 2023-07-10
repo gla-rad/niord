@@ -19,7 +19,7 @@ import org.niord.core.aton.AtonLinkType;
 import org.niord.core.aton.AtonLinkTypeCategory;
 import org.niord.model.IJsonSerializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.UUID;
 

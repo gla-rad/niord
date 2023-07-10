@@ -20,15 +20,15 @@ import org.apache.commons.lang.StringUtils;
 import org.niord.core.model.VersionedEntity;
 import org.niord.core.script.vo.ScriptResourceVo;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Cacheable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Lob;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.validation.constraints.NotNull;
 
 import static org.niord.core.script.ScriptResource.Type.FM;
 import static org.niord.core.script.ScriptResource.Type.JS;
@@ -116,7 +116,7 @@ public class ScriptResource extends VersionedEntity<Integer>  {
 
     /*************************/
     /** Getters and Setters **/
-    /*************************/
+    /***/
 
     public Type getType() {
         return type;

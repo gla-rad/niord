@@ -23,8 +23,8 @@ import org.hibernate.query.criteria.internal.expression.LiteralExpression;
 import org.hibernate.query.criteria.internal.predicate.AbstractSimplePredicate;
 import org.locationtech.jts.geom.Geometry;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
 import java.io.Serializable;
 
 /**
