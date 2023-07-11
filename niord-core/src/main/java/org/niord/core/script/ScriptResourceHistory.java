@@ -15,19 +15,12 @@
  */
 package org.niord.core.script;
 
+import jakarta.persistence.*;
 import org.niord.core.script.vo.ScriptResourceHistoryVo;
 import org.niord.core.model.BaseEntity;
 import org.niord.core.user.User;
 import org.niord.core.util.GzipUtils;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -57,6 +50,7 @@ public class ScriptResourceHistory extends BaseEntity<Integer> {
     Date created;
 
     @Lob
+    @Column(name = "snapshot", columnDefinition="BLOB")
     byte[] snapshot;
 
     @PrePersist

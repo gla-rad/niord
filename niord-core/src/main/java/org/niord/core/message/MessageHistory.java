@@ -15,22 +15,13 @@
  */
 package org.niord.core.message;
 
+import jakarta.persistence.*;
 import org.niord.core.message.vo.MessageHistoryVo;
 import org.niord.core.model.BaseEntity;
 import org.niord.core.user.User;
 import org.niord.core.util.GzipUtils;
 import org.niord.model.message.Status;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -69,6 +60,7 @@ public class MessageHistory extends BaseEntity<Integer> {
     Date created;
 
     @Lob
+    @Column(name = "snapshot", columnDefinition="BLOB")
     byte[] snapshot;
 
     @PrePersist

@@ -19,8 +19,8 @@
         <quarkus-qpid-jms.version>2.3.0</quarkus-qpid-jms.version>
         <keycloak.version>20.0.3</keycloak.version>
         <batik.version>1.14</batik.version>
-        <hibernate.search-orm.version>6.2.0.Final</hibernate.search-orm.version>
-        <hibernate.spatial.version>6.2.0.Final</hibernate.spatial.version>
+        <hibernate.spatial.version>6.2.5.Final</hibernate.spatial.version>
+        <hibernate.search-orm.version>6.1.7.Final</hibernate.search-orm.version>
     </properties>
 
     <modules>

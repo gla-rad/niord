@@ -66,6 +66,7 @@ public class ScriptResource extends VersionedEntity<Integer>  {
     String path;
 
     @Lob
+    @Column(name = "content", columnDefinition="longtext")
     String content;
 
 

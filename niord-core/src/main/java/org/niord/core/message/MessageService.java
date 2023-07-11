@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.hibernate.query.sqm.NodeBuilder;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.area.Area;
 import org.niord.core.area.AreaService;
@@ -1068,9 +1069,10 @@ public class MessageService extends BaseService {
             Join<Message, FeatureCollection> fcRoot = partRoot.join("geometry", JoinType.LEFT);
             Join<FeatureCollection, Feature> fRoot = fcRoot.join("features", JoinType.LEFT);
             Predicate geomPredicate = new SpatialIntersectsPredicate(
-                    criteriaHelper.getCriteriaBuilder(),
+                    getNodeBuilder(),
                     fRoot.get("geometry"),
-                    param.getExtent());
+                    param.getExtent(),
+                    false);
 
             if (param.getIncludeNoPos() != null && param.getIncludeNoPos().booleanValue()) {
                 // search for message with no geometry in addition to messages within extent

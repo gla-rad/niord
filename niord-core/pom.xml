@@ -48,8 +48,8 @@
 
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
-            <version>13.0.5.Final</version>
+            <artifactId>infinispan-core-jakarta</artifactId>
+            <version>14.0.12.Final</version>
         </dependency>
 
         <dependency>
@@ -192,18 +192,13 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.search</groupId>
-            <artifactId>hibernate-search-mapper-orm-jakarta</artifactId>
+            <artifactId>hibernate-search-mapper-orm-orm6</artifactId>
             <version>${hibernate.search-orm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-backend-lucene</artifactId>
             <version>${hibernate.search-orm.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-queryparser</artifactId>
-            <version>8.10.1</version>
         </dependency>
 
         <dependency>

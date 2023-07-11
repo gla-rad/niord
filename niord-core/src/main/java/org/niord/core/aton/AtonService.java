@@ -16,6 +16,7 @@
 package org.niord.core.aton;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.query.sqm.NodeBuilder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -345,7 +346,7 @@ public class AtonService extends BaseService {
 
         if (param.getExtent() != null) {
             criteriaHelper
-                    .add(new SpatialWithinPredicate(cb, atonRoot.get("geometry"), param.getExtent()));
+                    .add(new SpatialWithinPredicate((NodeBuilder)cb, atonRoot.get("geometry"), param.getExtent(), false));
         }
 
         if (!param.getAtonUids().isEmpty()) {
@@ -358,14 +359,19 @@ public class AtonService extends BaseService {
         if (!param.getChartNumbers().isEmpty()) {
             Root<Chart> chartRoot = c.from(Chart.class);
             criteriaHelper
-                    .add(new SpatialWithinPredicate(cb, atonRoot.get("geometry"), chartRoot.get("geometry")))
+                    .add(new SpatialWithinPredicate(
+                            getNodeBuilder(),
+                            atonRoot.get("geometry"),
+                            chartRoot.get("geometry"),
+                            false)
+                    )
                     .in(chartRoot.get("chartNumber"), param.getChartNumbers());
         }
 
         if (!param.getAreaIds().isEmpty()) {
             Root<Area> areaRoot = c.from(Area.class);
             criteriaHelper
-                    .add(new SpatialWithinPredicate(cb, atonRoot.get("geometry"), areaRoot.get("geometry")))
+                    .add(new SpatialWithinPredicate((NodeBuilder)cb, atonRoot.get("geometry"), areaRoot.get("geometry"), false))
                     .in(areaRoot.get("id"), param.getAreaIds());
         }
 

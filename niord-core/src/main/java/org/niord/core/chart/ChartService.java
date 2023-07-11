@@ -16,6 +16,7 @@
 package org.niord.core.chart;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.query.sqm.NodeBuilder;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.db.CriteriaHelper;
 import org.niord.core.db.SpatialIntersectsPredicate;
@@ -265,9 +266,10 @@ public class ChartService extends BaseService {
         CriteriaHelper<Chart> criteriaHelper = new CriteriaHelper<>(cb, chartQuery);
 
         Predicate geomPredicate = new SpatialIntersectsPredicate(
-                cb,
+                getNodeBuilder(),
                 chartRoot.get("geometry"),
-                geometry);
+                geometry,
+                false);
         criteriaHelper.add(geomPredicate);
 
         // Only search for active charts
