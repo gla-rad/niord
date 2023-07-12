@@ -16,21 +16,17 @@
 package org.niord.core.db;
 
 import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.util.common.SearchException;
 import org.niord.core.aton.AtonNode;
-import org.niord.core.service.BaseService;
 import org.slf4j.Logger;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.control.ActivateRequestContext;
-import jakarta.enterprise.event.Observes;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import java.util.TimerTask;
 
 /**
  * Launches the Hibernate Search index
@@ -60,6 +56,7 @@ public class HibernateSearchIndexService {
 
         long t0 = System.currentTimeMillis();
         SearchSession searchSession = Search.session(entityManager);
+
         // Create a mass indexer
         MassIndexer indexer = searchSession.massIndexer( AtonNode.class )
                 .threadsToLoadObjects( 7 );
