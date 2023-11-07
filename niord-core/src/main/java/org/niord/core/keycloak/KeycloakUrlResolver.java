@@ -17,13 +17,13 @@ package org.niord.core.keycloak;
 
 import org.apache.http.client.HttpClient;
 import org.keycloak.adapters.KeycloakDeployment;
-import org.keycloak.adapters.authentication.ClientCredentialsProvider;
 import org.keycloak.adapters.rotation.PublicKeyLocator;
 import org.keycloak.adapters.spi.HttpFacade;
 import org.keycloak.common.enums.RelativeUrlsUsed;
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.enums.TokenStore;
+import org.keycloak.protocol.oidc.client.authentication.ClientCredentialsProvider;
 
 import java.net.URI;
 import java.util.Map;
