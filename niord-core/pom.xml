@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core-jakarta</artifactId>
-            <version>14.0.12.Final</version>
+            <version>14.0.19.Final</version>
         </dependency>
 
         <dependency>
