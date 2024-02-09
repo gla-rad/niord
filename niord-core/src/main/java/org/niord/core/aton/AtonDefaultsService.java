@@ -314,7 +314,7 @@ public class AtonDefaultsService {
         // Describe the AtoN tags by the type
         return this.osmNodeTypes.values().stream()
                 .map(ODNodeType::getTags)
-                .flatMap(List::stream)
+                .flatMap(Set::stream)
                 .distinct()
                 .filter(tag -> tagKeys.contains(tag.getK()))
                 .map(tag -> {
@@ -627,7 +627,7 @@ public class AtonDefaultsService {
      */
     private static class ODNodeType {
         String name;
-        List<ODTag> tags = new ArrayList<>();
+        Set<ODTag> tags = new HashSet<>();
 
         /** Returns if the node type contains a matching tag key pattern and value */
         public boolean hasTagValue(String k, String v) {
@@ -652,11 +652,11 @@ public class AtonDefaultsService {
         }
 
         @XmlElement(name = "tag")
-        public List<ODTag> getTags() {
+        public Set<ODTag> getTags() {
             return tags;
         }
 
-        public void setTags(List<ODTag> tags) {
+        public void setTags(Set<ODTag> tags) {
             this.tags = tags;
         }
     }

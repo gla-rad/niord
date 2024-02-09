@@ -15,24 +15,21 @@
  */
 package org.niord.core.model;
 
+import jakarta.persistence.*;
 import org.niord.model.ILocalizable;
 import org.niord.model.ILocalizedDesc;
 
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 
 /**
  * Base class for localizable description entities.
  */
 @MappedSuperclass
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "lang", "entity_id" }))
 @SuppressWarnings("unused")
 public abstract class DescEntity<E extends ILocalizable> extends BaseEntity<Integer> implements ILocalizedDesc {
 
     @NotNull
+    @Column(unique = true)
     protected String lang;
 
     @ManyToOne
