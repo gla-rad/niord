@@ -16,6 +16,7 @@
 
 package org.niord.core.db;
 
+import io.quarkus.arc.Unremovable;
 import org.hibernate.search.mapper.orm.mapping.HibernateOrmMappingConfigurationContext;
 import org.hibernate.search.mapper.orm.mapping.HibernateOrmSearchMappingConfigurer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,6 +33,7 @@ import jakarta.enterprise.context.ApplicationScoped;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Unremovable
 @ApplicationScoped
 public class QuarkusHibernateOrmSearchMappingConfigurer implements HibernateOrmSearchMappingConfigurer {
 
