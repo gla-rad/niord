@@ -5122,8 +5122,8 @@
 
     </group>
 
-    <item name="Supplimentary Information" type="node,way,closedway,relation">
-      <label text="Supplimentary Information"/>
+    <item name="Supplementary Information" type="node,way,closedway,relation">
+      <label text="Supplementary Information"/>
       <space/>
       <text key="seamark:name" text="Name"/>
       <text key="seamark:information" text="Information"/>

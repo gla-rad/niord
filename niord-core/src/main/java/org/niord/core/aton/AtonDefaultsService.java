@@ -203,21 +203,22 @@ public class AtonDefaultsService {
                                 return null;
                             }
                         })
+                        .filter(Objects::nonNull)
                         .forEach(osmDefaultsExt -> {
                             // Update look-up tables for fast access
                             osmDefaultsExt.getTagValues()
-                                    .stream()
                                     .forEach(tv -> {
                                         if(osmTagValues.containsKey(tv.getId())) {
+                                            osmTagValues.get(tv.getId()).getTags().removeAll(tv.getTags());
                                             osmTagValues.get(tv.getId()).getTags().addAll(tv.getTags());
                                         } else {
                                             osmTagValues.put(tv.getId(), tv);
                                         }
                                     });
                             osmDefaultsExt.getNodeTypes()
-                                    .stream()
                                     .forEach(nt -> {
                                         if(osmNodeTypes.containsKey(nt.getName())) {
+                                            osmNodeTypes.get(nt.getName()).getTags().removeAll(nt.getTags());
                                             osmNodeTypes.get(nt.getName()).getTags().addAll(nt.getTags());
                                         } else {
                                             osmNodeTypes.put(nt.getName(), nt);
@@ -726,6 +727,18 @@ public class AtonDefaultsService {
         public void setTagValues(List<ODTagValue> tagValues) {
             this.tagValues = tagValues;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ODTag odTag)) return false;
+            return Objects.equals(getK(), odTag.getK()) && Objects.equals(getType(), odTag.getType());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getK(), getType());
+        }
     }
 
     /**
@@ -735,8 +748,8 @@ public class AtonDefaultsService {
     private static class ODTagValues {
         String id;
         String ref;
-        List<ODTagValue> tags;
-        List<ODTagValues> tagValues = new ArrayList<>();
+        Set<ODTagValue> tags;
+        Set<ODTagValues> tagValues = new HashSet<>();
 
         @XmlAttribute
         public String getId() {
@@ -757,21 +770,33 @@ public class AtonDefaultsService {
         }
 
         @XmlElement(name = "tag-value")
-        public List<ODTagValue> getTags() {
+        public Set<ODTagValue> getTags() {
             return tags;
         }
 
-        public void setTags(List<ODTagValue> tags) {
+        public void setTags(Set<ODTagValue> tags) {
             this.tags = tags;
         }
 
         @XmlElement(name = "tag-values")
-        List<ODTagValues> getTagValues() {
+        Set<ODTagValues> getTagValues() {
             return tagValues;
         }
 
-        public void setTagValues(List<ODTagValues> tagValues) {
+        public void setTagValues(Set<ODTagValues> tagValues) {
             this.tagValues = tagValues;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ODTagValues that)) return false;
+            return Objects.equals(getId(), that.getId());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getId());
         }
     }
 
@@ -789,6 +814,18 @@ public class AtonDefaultsService {
 
         public void setV(String v) {
             this.v = v;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ODTagValue that)) return false;
+            return Objects.equals(getV(), that.getV());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getV());
         }
     }
 }
