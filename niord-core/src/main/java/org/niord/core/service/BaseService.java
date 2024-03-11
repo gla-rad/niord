@@ -41,6 +41,9 @@ public abstract class BaseService {
     @Inject
     protected EntityManager em;
 
+    @Inject
+    protected NodeBuilder nb;
+
     /**
      * Constructor
      */
@@ -63,7 +66,7 @@ public abstract class BaseService {
      * @param id the id of the entity
      * @return the entity with the given id or {@code null} if none is found
      */
-    public <E extends BaseEntity> E getByPrimaryKey(Class<E> clazz, Object id) {
+    public <E extends BaseEntity<?>> E getByPrimaryKey(Class<E> clazz, Object id) {
         try {
             return em.find(clazz, id);
         } catch (EntityNotFoundException e) {
@@ -79,6 +82,7 @@ public abstract class BaseService {
      */
     protected NodeBuilder getNodeBuilder() {
         return Optional.of(em)
+                .map(EntityManager::getCriteriaBuilder)
                 .filter(NodeBuilder.class::isInstance)
                 .map(NodeBuilder.class::cast)
                 .orElse(null);
@@ -89,7 +93,7 @@ public abstract class BaseService {
      *
      * @param entity the entity to remove
      */
-    public void remove(BaseEntity entity) {
+    public void remove(BaseEntity<?> entity) {
 
         em.remove(em.merge(entity));
     }
@@ -100,7 +104,7 @@ public abstract class BaseService {
      * @param entity the entity to persist or update
      * @return the updated entity
      */
-    public <E extends BaseEntity> E saveEntity(E entity) {
+    public <E extends BaseEntity<?>> E saveEntity(E entity) {
         if (entity.isPersisted()) {
             // Update existing
             entity = em.merge(entity);
@@ -118,7 +122,7 @@ public abstract class BaseService {
      * @return the first element
      */
     public static <T> T getSingleOrNull(List<T> list) {
-        return (list == null || list.size() == 0) ? null : list.get(0);
+        return (list == null || list.isEmpty()) ? null : list.getFirst();
     }
 
     /**
@@ -127,7 +131,7 @@ public abstract class BaseService {
      * @param entityType the class
      * @return all entities with the given class
      */
-    public <E extends BaseEntity> List<E> getAll(Class<E> entityType) {
+    public <E extends BaseEntity<?>> List<E> getAll(Class<E> entityType) {
         em.clear();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -142,7 +146,7 @@ public abstract class BaseService {
      * @param entityType the class
      * @return the number of entities with the given class
      */
-    public <E extends BaseEntity> long count(Class<E> entityType) {
+    public <E extends BaseEntity<?>> long count(Class<E> entityType) {
         em.clear();
 
         CriteriaBuilder qb = em.getCriteriaBuilder();
@@ -158,7 +162,7 @@ public abstract class BaseService {
      * @param entities the list of entities to look up persisted entities for
      * @return the list of corresponding persisted entities
      */
-    public <E extends BaseEntity> List<E> persistedList(Class<E> entityType, List<E> entities) {
+    public <E extends BaseEntity<?>> List<E> persistedList(Class<E> entityType, List<E> entities) {
         return entities.stream()
                 .map(e -> getByPrimaryKey(entityType, e.getId()))
                 .filter(Objects::nonNull)
@@ -171,7 +175,7 @@ public abstract class BaseService {
      * @param entities the list of entities to look up persisted entities for
      * @return the list of corresponding persisted entities
      */
-    public <E extends BaseEntity> Set<E> persistedSet(Class<E> entityType, Set<E> entities) {
+    public <E extends BaseEntity<?>> Set<E> persistedSet(Class<E> entityType, Set<E> entities) {
         return entities.stream()
                 .map(e -> getByPrimaryKey(entityType, e.getId()))
                 .filter(Objects::nonNull)
@@ -198,7 +202,7 @@ public abstract class BaseService {
      * @param e2 the second entity
      * @return if two entities have the same ID, catering with null parameters
      */
-    public static <E extends BaseEntity> boolean sameEntities(E e1, E e2) {
+    public static <E extends BaseEntity<?>> boolean sameEntities(E e1, E e2) {
         if (e1 == null && e2 == null) {
             return true;
         } else if (e1 == null || e2 == null) {
@@ -215,7 +219,7 @@ public abstract class BaseService {
      * @param sameOrder if the order is significant
      * @return if two lists of entities are identical by matching IDs
      */
-    public static <E extends BaseEntity> boolean sameEntities(List<E> l1, List<E> l2, boolean sameOrder) {
+    public static <E extends BaseEntity<?>> boolean sameEntities(List<E> l1, List<E> l2, boolean sameOrder) {
         if (l1 == null && l2 == null) {
             return true;
         } else if (l1 == null || l2 == null || l1.size() != l2.size()) {
