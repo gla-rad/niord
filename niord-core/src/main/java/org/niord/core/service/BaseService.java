@@ -41,9 +41,6 @@ public abstract class BaseService {
     @Inject
     protected EntityManager em;
 
-    @Inject
-    protected NodeBuilder nb;
-
     /**
      * Constructor
      */
