@@ -15,11 +15,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <io.quarkus.version>3.7.2</io.quarkus.version>
-        <quarkus-qpid-jms.version>2.5.0</quarkus-qpid-jms.version>
-        <keycloak.version>22.0.5</keycloak.version>
-        <batik.version>1.16</batik.version>
-        <hibernate.spatial.version>6.4.3.Final</hibernate.spatial.version>
+        <io.quarkus.version>3.8.3</io.quarkus.version>
+        <quarkus-qpid-jms.version>2.6.1</quarkus-qpid-jms.version>
+        <keycloak.version>24.0.1</keycloak.version>
+        <batik.version>1.17</batik.version>
+        <hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
         <hibernate.search-orm.version>7.0.0.Final</hibernate.search-orm.version>
     </properties>
 
