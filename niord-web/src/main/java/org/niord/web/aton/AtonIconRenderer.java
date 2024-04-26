@@ -38,6 +38,9 @@ public class AtonIconRenderer {
 
     public static final String SVG_NS = "http://www.w3.org/2000/svg";
 
+	// Create a lock to avoid parallel graphic generations
+	private static final Object lock = new Object();
+
 	public static void renderIcon(AtonNodeVo aton, String format, OutputStream out, int w, int h, int x, int y, double s) throws IOException {
 
 		// First, generate the map from the AtoN tags
@@ -46,43 +49,50 @@ public class AtonIconRenderer {
 		Arrays.stream(aton.getTags()).forEach(t -> map.addTag(t.getK(), t.getV()));
 		map.tagsDone(0);
 
-		if ("PNG".equalsIgnoreCase(format)) {
+		// VAtoN are slightly bigger so be mindful
+		int zoom = 16;
+		double factor = (aton.isVAtoN()? 0.72 : 1.16) * s / Renderer.symbolScale[zoom];
 
-            BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = img.createGraphics();
+		// Lock the generation with a synchronous lock
+		synchronized (lock) {
+			if ("PNG".equalsIgnoreCase(format)) {
 
-			Renderer.reRender(
-                    g2,
-                    new Rectangle(x, y, w, h),
-                    16,
-                    s / Renderer.symbolScale[16],
-                    map,
-                    new Context(w, h, x, y));
+				BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2 = img.createGraphics();
 
-            ImageIO.write(img, "png", out);
+				Renderer.reRender(
+						g2,
+						new Rectangle(x, y, w, h),
+						zoom,
+						factor,
+						map,
+						new Context(w, h, x, y));
 
-		} else if ("SVG".equalsIgnoreCase(format)) {
+				ImageIO.write(img, "png", out);
+
+			} else if ("SVG".equalsIgnoreCase(format)) {
 
 				Document document = GenericDOMImplementation
-                        .getDOMImplementation()
-                        .createDocument(SVG_NS, "svg", null);
+						.getDOMImplementation()
+						.createDocument(SVG_NS, "svg", null);
 
 				SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
 				svgGenerator.setSVGCanvasSize(new Dimension(w, h));
 
 				Renderer.reRender(
-                        svgGenerator,
-                        new Rectangle(x, y, w, h),
-                        16,
-                        s / Renderer.symbolScale[16],
-                        map,
-                        new Context(w, h, x, y));
+						svgGenerator,
+						new Rectangle(x, y, w, h),
+						zoom,
+						factor,
+						map,
+						new Context(w, h, x, y));
 
 				try {
 					svgGenerator.stream(new OutputStreamWriter(out), true);
 				} catch (SVGGraphics2DIOException e) {
-                    throw new IOException("Error generating SVG: " + e.getMessage(), e);
+					throw new IOException("Error generating SVG: " + e.getMessage(), e);
 				}
+			}
 		}
 	}
 
@@ -110,6 +120,8 @@ public class AtonIconRenderer {
 			return false;
 		}
 
+		public int grid() { return 0; }
+
 		public Color background(S57map map) {
 			return new Color(0, true);
 		}
@@ -117,5 +129,10 @@ public class AtonIconRenderer {
 		public RuleSet ruleset() {
 			return RuleSet.SEAMARK;
 		}
+
+// For later josm-seachart versions
+//		public ChartContext.Chart chart() {
+//			return null;
+//		}
 	}
 }

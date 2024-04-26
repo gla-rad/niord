@@ -58,6 +58,7 @@ public class AtonTagVo implements IJsonSerializable {
 
     /** No-arg constructor */
     public AtonTagVo() {
+
     }
 
     /** Key-value constructor */

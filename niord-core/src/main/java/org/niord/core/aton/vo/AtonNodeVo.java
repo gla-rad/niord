@@ -98,6 +98,8 @@ public class AtonNodeVo implements IJsonSerializable {
     int version;
     int changeset;
     Date timestamp;
+    AtonNodeVo[] children;
+    AtonLinkVo[] links;
     AtonTagVo[] tags;
 
     /**
@@ -116,42 +118,39 @@ public class AtonNodeVo implements IJsonSerializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         AtonNodeVo that = (AtonNodeVo) o;
-
-        if (!Objects.equals(id, that.id)) return false;
-        if (Double.compare(that.lat, lat) != 0) return false;
-        if (Double.compare(that.lon, lon) != 0) return false;
-        if (uid != that.uid) return false;
-        if (visible != that.visible) return false;
-        if (version != that.version) return false;
-        if (changeset != that.changeset) return false;
-        if (user != null ? !user.equals(that.user) : that.user != null) return false;
-        if (timestamp != null ? !timestamp.equals(that.timestamp) : that.timestamp != null) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(tags, that.tags);
-
+        return Objects.equals(id, that.id)
+                && Double.compare(that.lat, lat) == 0
+                && Double.compare(that.lon, lon) == 0
+                && uid == that.uid
+                && visible == that.visible
+                && version == that.version
+                && changeset == that.changeset
+                && Objects.equals(user, that.user)
+                && Objects.equals(timestamp, that.timestamp)
+                && Arrays.equals(tags, that.tags);
     }
 
     /** {@inheritDoc} */
     @Override
-    @SuppressWarnings("all")
     public int hashCode() {
-        int result;
-        long temp;
-        result = Objects.hashCode(id);
-        temp = Double.doubleToLongBits(lat);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(lon);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (int) (uid ^ (uid >>> 32));
-        result = 31 * result + (visible ? 1 : 0);
-        result = 31 * result + version;
-        result = 31 * result + changeset;
-        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        int result = Objects.hash(id, lat, lon, user, uid, visible, version, changeset, timestamp);
         result = 31 * result + Arrays.hashCode(tags);
         return result;
+    }
+
+    /**
+     * Checks whether the current node is for a virtual AtoN.
+     * @return Whether the current node is for a virtual AtoN
+     */
+    public boolean isVAtoN() {
+        if(tags == null) {
+            return false;
+        }
+        return Stream.of(Optional.of(tags).orElse(new AtonTagVo[0]))
+                .filter(tag -> tag.k.equals("seamark:type") && tag.v.equals("virtual_aton"))
+                .findAny()
+                .isPresent();
     }
 
     /*************************/
@@ -265,6 +264,26 @@ public class AtonNodeVo implements IJsonSerializable {
         this.changeset = changeset;
     }
 
+    @JsonProperty("children")
+    @XmlElement(name = "children")
+    public AtonNodeVo[] getChildren() {
+        return children;
+    }
+
+    public void setChildren(AtonNodeVo[] children) {
+        this.children = children;
+    }
+
+    @JsonProperty("links")
+    @XmlElement(name = "links")
+    public AtonLinkVo[] getLinks() {
+        return links;
+    }
+
+    public void setLinks(AtonLinkVo[] links) {
+        this.links = links;
+    }
+
     @XmlJavaTypeAdapter(Iso8601DateXmlAdapter.class)
     @XmlAttribute
     public Date getTimestamp() {
@@ -293,6 +312,6 @@ public class AtonNodeVo implements IJsonSerializable {
         return "AtonNodeVo [id=" + id + ", lat=" + lat + ", lon=" + lon + ", user=" + user + ", uid=" + uid + ", visible=" + visible + ", version=" + version
                 + ", changeset=" + changeset + ", timestamp=" + timestamp + ", tags=" + Arrays.toString(tags) + "]";
     }
-    
-    
+
+
 }
