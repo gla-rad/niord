@@ -44,13 +44,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- JOSM Seachart Library from: https://josm.openstreetmap.de/wiki/Plugins -->
-<!--        <dependency>-->
-<!--            <groupId>org.josm.plugins</groupId>-->
-<!--            <artifactId>seachart</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
