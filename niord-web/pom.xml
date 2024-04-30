@@ -18,6 +18,20 @@
         <maven.build.timestamp.format>dd-MM-yyyy HH:mm 'UTC'</maven.build.timestamp.format>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>grad</id>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad/</url>
+        </repository>
+        <repository>
+            <id>grad-snapshots</id>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad-snapshots/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <dependency>
@@ -37,19 +51,20 @@
             <artifactId>niord-base-s124</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        <dependency>
-            <groupId>org.niord.base</groupId>
-            <artifactId>niord-base-josm-seachart</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
+    <!--  JOSM Seachart Library from origin Niord project: included as a project module -->
+<!--        <dependency>-->
+<!--            <groupId>org.niord.base</groupId>-->
+<!--            <artifactId>niord-base-josm-seachart</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
 
         <!-- JOSM Seachart Library from: https://josm.openstreetmap.de/wiki/Plugins -->
-<!--        <dependency>-->
-<!--            <groupId>org.josm.plugins</groupId>-->
-<!--            <artifactId>seachart</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.josm.plugins</groupId>
+            <artifactId>seachart</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
