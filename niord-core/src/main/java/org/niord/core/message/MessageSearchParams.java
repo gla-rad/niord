@@ -15,6 +15,8 @@
  */
 package org.niord.core.message;
 
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.impl.HttpServerRequestWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -29,13 +31,7 @@ import org.niord.model.search.PagedSearchParamsVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -122,8 +118,16 @@ public class MessageSearchParams extends PagedSearchParamsVo {
      * @param req the servlet request
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static MessageSearchParams instantiate(Domain domain, HttpServletRequest req) {
-        return instantiate(domain, req.getParameterMap());
+    public static MessageSearchParams instantiate(Domain domain, HttpServerRequest req) {
+        final MessageSearchParams params = new MessageSearchParams();
+        final HttpServerRequestWrapper wrapper = ((HttpServerRequestWrapper) req);
+        final Map<String, String[]> paramMap = new HashMap<>();
+        wrapper.params()
+                .names()
+                .forEach(key ->
+                        paramMap.put(key, wrapper.params().getAll(key).toArray(String[]::new))
+                );
+        return instantiate(domain, paramMap);
     }
 
 

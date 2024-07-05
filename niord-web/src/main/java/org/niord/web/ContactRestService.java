@@ -19,8 +19,7 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.user.*;
 import org.niord.core.user.vo.ContactVo;
 import org.niord.model.IJsonSerializable;
@@ -61,7 +60,6 @@ public class ContactRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public PagedSearchResultVo<ContactVo> search(
             @QueryParam("name") String name,
@@ -129,7 +127,6 @@ public class ContactRestService {
     @Path("/export")
     @Produces("text/plain;charset=UTF-8")
     @PermitAll // Checked programmatically
-    @GZIP
     @NoCache
     public String exportCSV(@QueryParam("separator") @DefaultValue(";") String separator) {
 

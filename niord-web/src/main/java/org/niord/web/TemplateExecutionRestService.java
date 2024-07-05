@@ -18,9 +18,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.aton.LightCharacterParser;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.category.Category;
@@ -85,8 +84,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @GET
     @Path("/parameter-types")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<ParamTypeVo> getParamTypes(@QueryParam("lang") String lang) {
 
         DataFilter filter = DataFilter.get().lang(lang);
@@ -109,8 +107,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @GET
     @Path("/parameter-types/export")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<ParamTypeVo> exportParamTypes() {
 
         List<ParamTypeVo> result = getParamTypes(null);
@@ -154,8 +151,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @GET
     @Path("/parameter-type/{id}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public ParamTypeVo getParamType(
             @PathParam("id") Integer id,
             @QueryParam("lang") String lang) {
@@ -180,8 +176,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public ParamTypeVo createParamType(ParamTypeVo paramType) throws Exception {
         if (paramType instanceof StandardParamTypeVo) {
             throw new WebApplicationException("Illegal parameter type", 400);
@@ -198,8 +193,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public ParamTypeVo updateParamType(@PathParam("id") Integer id, ParamTypeVo paramType) throws Exception {
         if (!Objects.equals(id, paramType.getId())) {
             throw new WebApplicationException(400);
@@ -219,8 +213,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @Path("/parameter-type/{id}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public void deleteParamType(@PathParam("id") Integer id) throws Exception {
         if (templateExecutionService.getParamType(id) instanceof StandardParamType) {
             throw new WebApplicationException("Illegal parameter type", 400);
@@ -242,8 +235,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
-    @GZIP
-    @NoCache
+        @NoCache
     public SystemMessageVo applyTemplate(ExecuteTemplateVo executeTemplate) throws Exception {
 
         if (!executeTemplate.valid()) {
@@ -279,8 +271,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @Path("/validate-light-character")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public NgRemoveValidateResponse validateLightCharacter(NgRemoveValidateParam param) throws Exception {
         NgRemoveValidateResponse response = new NgRemoveValidateResponse();
         response.setValue(param.getValue());
@@ -299,8 +290,7 @@ public class TemplateExecutionRestService extends AbstractBatchableRestService {
     @Path("/validate-call-sign")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public NgRemoveValidateResponse validateCallSign(NgRemoveValidateParam param) throws Exception {
         NgRemoveValidateResponse response = new NgRemoveValidateResponse();
         response.setValue(param.getValue().toUpperCase());

@@ -18,9 +18,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.settings.Setting;
 import org.niord.core.settings.SettingsService;
@@ -69,7 +68,6 @@ public class SettingsRestService extends AbstractBatchableRestService {
     @Path("/editable-settings")
     @Produces("application/json;charset=UTF-8")
     @PermitAll // Checked programmatically
-    @GZIP
     @NoCache
     public List<SettingVo> getSettings() {
         // If a ticket is defined, check if programmatically

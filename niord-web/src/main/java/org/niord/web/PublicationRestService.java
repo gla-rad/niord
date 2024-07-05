@@ -21,9 +21,8 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.NiordApp;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.publication.Publication;
@@ -104,8 +103,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public PagedSearchResultVo<PublicationVo> searchPublications(
             @QueryParam("lang") String lang,
             @QueryParam("domain") String domain,
@@ -143,8 +141,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Path("/search-details")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
-    @GZIP
-    @NoCache
+        @NoCache
     public PagedSearchResultVo<SystemPublicationVo> searchSystemPublications(
             @QueryParam("lang") String lang,
             @QueryParam("domain") String domain,
@@ -181,8 +178,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<PublicationVo> getAllPublications(
             @QueryParam("lang") String lang,
             @QueryParam("maxSize") @DefaultValue("1000") int maxSize) {
@@ -223,8 +219,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/publication/{publicationIds}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<PublicationVo> getPublications(@PathParam("publicationIds") String publicationIds) throws Exception {
         return publicationService.findByPublicationIds(publicationIds.split(",")).stream()
                 .map(p -> p.toVo(PublicationVo.class, DataFilter.get()))
@@ -239,8 +234,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Path("/editable-publication/{publicationId}")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public SystemPublicationVo getSystemPublication(@PathParam("publicationId") String publicationId) throws Exception {
         Publication publication = publicationService.findByPublicationId(publicationId);
         return toSystemPublication(publication);
@@ -255,8 +249,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/new-publication-template")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.ADMIN)
     public SystemPublicationVo newTemplatePublication(
             @QueryParam("mainType") PublicationMainType mainType) throws Exception {
@@ -278,8 +271,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/copy-publication-template/{publicationId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.ADMIN)
     public SystemPublicationVo copyPublicationTemplate(
             @PathParam("publicationId") String publicationId,
@@ -328,8 +320,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public SystemPublicationVo createPublication(SystemPublicationVo publication) throws Exception {
 
         log.info("Creating publication " + publication);
@@ -357,8 +348,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public SystemPublicationVo updatePublication(
             @PathParam("publicationId") String publicationId,
             SystemPublicationVo publication) throws Exception {
@@ -387,8 +377,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Path("/publication/{publicationId}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public void deletePublication(@PathParam("publicationId") String publicationId) throws Exception {
         log.info("Deleting publication " + publicationId);
         publicationService.deletePublication(publicationId);
@@ -405,8 +394,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Path("/update-status")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.ADMIN)
     public SystemPublicationVo updatePublicationStatuses(UpdatePublicationStatusParam update) throws Exception {
 
@@ -512,8 +500,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @Path("/release-publication/{publicationId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.ADMIN)
     public PublicationVo releasePublication(
             @PathParam("publicationId") String publicationId,
@@ -680,8 +667,7 @@ public class PublicationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/export")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<PublicationVo> exportPublications(
             @QueryParam("lang") String lang) {
 

@@ -16,11 +16,11 @@
 
 package org.niord.core.promulgation;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.promulgation.vo.SafetyNetAreaVo;
 import org.niord.core.promulgation.vo.SafetyNetMessagePromulgationVo;
 import org.niord.core.user.Roles;
@@ -28,7 +28,6 @@ import org.niord.core.util.TextUtils;
 import org.niord.model.DataFilter;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import java.util.List;
@@ -55,7 +54,6 @@ public class SafetyNetPromulgationRestService {
     @Path("/reformat-safetynet")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @PermitAll
     @NoCache
     public SafetyNetMessagePromulgationVo reformatSafetyNet(SafetyNetMessagePromulgationVo safetynet) throws Exception {
@@ -83,7 +81,6 @@ public class SafetyNetPromulgationRestService {
     @GET
     @Path("/areas/{typeId}/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SafetyNetAreaVo> getAreas(
             @PathParam("typeId") String typeId,
@@ -101,7 +98,6 @@ public class SafetyNetPromulgationRestService {
     @Path("/areas/{typeId}/area/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public SafetyNetAreaVo createArea(
             @PathParam("typeId") String typeId,
@@ -121,7 +117,7 @@ public class SafetyNetPromulgationRestService {
     @Path("/areas/{typeId}/area/{name}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
+    @Compressed
     @NoCache
     public SafetyNetAreaVo updateArea(
             @PathParam("typeId") String typeId,

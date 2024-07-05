@@ -18,8 +18,7 @@ package org.niord.web;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.message.MessageTag;
 import org.niord.core.message.MessageTagSearchParams;
 import org.niord.core.message.MessageTagService;
@@ -57,7 +56,6 @@ public class MessageTagRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<MessageTagVo> searchTags(
             @QueryParam("name")  @DefaultValue("") String name,
@@ -87,7 +85,6 @@ public class MessageTagRestService {
     @GET
     @Path("/message/{messageUid}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<MessageTagVo> findTagsByMessageId(
             @PathParam("messageUid") String messageUid,
@@ -104,7 +101,6 @@ public class MessageTagRestService {
     @GET
     @Path("/tag/{tagIds}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<MessageTagVo> getTags(@PathParam("tagIds") String tagIds) {
         return messageTagService.findTags(tagIds.split(",")).stream()
@@ -118,7 +114,6 @@ public class MessageTagRestService {
     @Path("/tag/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public MessageTagVo createTag(MessageTagVo tag) {
@@ -131,7 +126,6 @@ public class MessageTagRestService {
     @Path("/tag/{tagId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public MessageTagVo updateTag(@PathParam("tagId") String tagId, MessageTagVo tag) {
@@ -145,7 +139,6 @@ public class MessageTagRestService {
     /** Deletes the tag with the given ID */
     @DELETE
     @Path("/tag/{tagId}")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public boolean deleteTag(@PathParam("tagId") String tagId) {
@@ -158,7 +151,6 @@ public class MessageTagRestService {
     @PUT
     @Path("/unlock-tag/{tagId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public MessageTagVo unlockTag(@PathParam("tagId") String tagId) {
@@ -177,7 +169,6 @@ public class MessageTagRestService {
     @Path("/temp-tag/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public MessageTagVo createTempTag(@QueryParam("ttl") Integer ttl, List<String> messageUids) {
@@ -189,7 +180,6 @@ public class MessageTagRestService {
     /** Clears messages from the given tag */
     @DELETE
     @Path("/tag/{tagId}/messages")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public boolean clearTag(@PathParam("tagId") String tagId) {
@@ -203,7 +193,6 @@ public class MessageTagRestService {
     @Path("/tag/{tagId}/add-messages")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public MessageTagVo addMessageToTag(@PathParam("tagId") String tagId, List<String> messageUids) {
@@ -219,7 +208,6 @@ public class MessageTagRestService {
     @Path("/tag/{tagId}/remove-messages")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public MessageTagVo removeMessageFromTag(@PathParam("tagId") String tagId, List<String> messageUids) {

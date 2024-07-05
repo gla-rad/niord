@@ -19,9 +19,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.message.vo.SystemMessageVo;
 import org.niord.core.promulgation.PromulgationManager;
@@ -74,7 +73,6 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/promulgation-services/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @RolesAllowed(Roles.SYSADMIN)
     @NoCache
     public List<PromulgationServiceVo> getPromulgationServices() {
@@ -90,7 +88,6 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/promulgation-types/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @PermitAll // NB: Checked programmatically to facilitate tickets
     @NoCache
     public List<PromulgationTypeVo> getPromulgationTypes() {
@@ -110,7 +107,6 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/promulgation-type/{typeId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @RolesAllowed(Roles.EDITOR)
     @NoCache
     public PromulgationTypeVo getPromulgationType(@PathParam("typeId") String typeId) throws Exception {
@@ -124,7 +120,6 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public PromulgationTypeVo createPromulgationType(PromulgationTypeVo type) throws Exception {
         return promulgationTypeService.createPromulgationType(new PromulgationType(type)).toVo();
@@ -137,7 +132,6 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public PromulgationTypeVo updatePromulgationType(
             @PathParam("typeId") String typeId,
@@ -187,8 +181,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/public-promulgation-type/{typeIds}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @PermitAll
+        @PermitAll
     @NoCache
     public List<PublicPromulgationTypeVo> getPublicPromulgationTypes(@PathParam("typeIds") String typeIds) {
         Set<String> ids = new HashSet<>();
@@ -207,8 +200,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search-public-promulgation-type")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @PermitAll
+        @PermitAll
     @NoCache
     public List<PublicPromulgationTypeVo> searchPublicPromulgationTypes(
             @QueryParam("type") @DefaultValue("")  String type) {
@@ -234,8 +226,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    @GZIP
-    @NoCache
+        @NoCache
     public BaseMessagePromulgationVo<?> generateMessagePromulgation(
             @PathParam("typeId") String typeId,
             SystemMessageVo messageVo

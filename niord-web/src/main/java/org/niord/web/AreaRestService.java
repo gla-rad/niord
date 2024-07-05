@@ -18,9 +18,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.area.Area;
 import org.niord.core.area.AreaSearchParams;
 import org.niord.core.area.AreaService;
@@ -70,7 +69,6 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemAreaVo> searchAreas(
             @QueryParam("lang") String lang,
@@ -111,7 +109,6 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search/{areaIds}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemAreaVo> searchAreaIds(@PathParam("areaIds") String areaIds,
                                       @QueryParam("lang") String lang,
@@ -138,7 +135,6 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/area-roots")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemAreaVo> getAreaRoots(@QueryParam("lang") String lang) {
 
@@ -156,7 +152,6 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemAreaVo> getAll() {
 
@@ -173,7 +168,6 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/area/{areaId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public SystemAreaVo getArea(
             @PathParam("areaId") Integer areaId,
@@ -295,7 +289,6 @@ public class AreaRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    @GZIP
     @NoCache
     public List<SystemAreaVo> computeIntersectingAreas(
             @QueryParam("lang") String lang,

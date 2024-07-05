@@ -17,8 +17,7 @@
 package org.niord.web;
 
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.integration.NiordIntegration;
 import org.niord.core.integration.NiordIntegrationService;
 import org.niord.core.integration.vo.NiordIntegrationVo;
@@ -53,7 +52,6 @@ public class NiordIntegrationRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<NiordIntegrationVo> getAllNiordIntegrations() {
         return niordIntegrationService.getAllNiordIntegrations().stream()
@@ -66,7 +64,6 @@ public class NiordIntegrationRestService {
     @GET
     @Path("/niord-integration/{id}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public NiordIntegrationVo getNiordIntegration(@PathParam("id") Integer id) {
         return niordIntegrationService.findById(id).toVo();
@@ -78,7 +75,6 @@ public class NiordIntegrationRestService {
     @Path("/niord-integration/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public NiordIntegrationVo createNiordIntegration(NiordIntegrationVo integration) throws Exception {
         log.info("Creating Niord integration point " + integration.getUrl());
@@ -93,7 +89,6 @@ public class NiordIntegrationRestService {
     @Path("/niord-integration/{id}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public NiordIntegrationVo updateNiordIntegration(@PathParam("id") Integer id, NiordIntegrationVo integration) throws Exception {
         if (!Objects.equals(id, integration.getId())) {
@@ -111,7 +106,6 @@ public class NiordIntegrationRestService {
     @DELETE
     @Path("/niord-integration/{id}")
     @Consumes("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public void deleteNiordIntegration(@PathParam("id") Integer id) throws Exception {
         log.info("Deleting Niord integration point " + id);
@@ -123,7 +117,6 @@ public class NiordIntegrationRestService {
     @PUT
     @Path("/execute/{id}")
     @Consumes("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public void executeNiordIntegration(@PathParam("id") Integer id) throws Exception {
         log.info("Executing Niord integration point " + id);

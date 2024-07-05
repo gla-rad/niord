@@ -17,8 +17,7 @@ package org.niord.web;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.message.MessageSeries;
 import org.niord.core.message.MessageSeriesService;
 import org.niord.core.message.vo.SystemMessageSeriesVo;
@@ -54,7 +53,6 @@ public class MessageSeriesRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemMessageSeriesVo> getAllMessageSeries(
             @QueryParam("messageNumbers") @DefaultValue("false") boolean messageNumbers) {
@@ -79,7 +77,6 @@ public class MessageSeriesRestService {
     @GET
     @Path("/search/{seriesIds}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemMessageSeriesVo> getMessageSeries(
             @PathParam("seriesIds") String seriesIds,
@@ -96,7 +93,6 @@ public class MessageSeriesRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemMessageSeriesVo> searchMessageSeries(
             @QueryParam("name") @DefaultValue("") String name,
@@ -114,7 +110,6 @@ public class MessageSeriesRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public SystemMessageSeriesVo createMessageSeries(SystemMessageSeriesVo seriesVo) throws Exception {
         log.info("Creating message series " + seriesVo);
@@ -128,7 +123,6 @@ public class MessageSeriesRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public SystemMessageSeriesVo updateMessageSeries(@PathParam("seriesId") String seriesId, SystemMessageSeriesVo seriesVo) throws Exception {
         if (!Objects.equals(seriesId, seriesVo.getSeriesId())) {
@@ -145,7 +139,6 @@ public class MessageSeriesRestService {
     @Path("/series/{seriesId}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public void deleteMessageSeries(@PathParam("seriesId") String seriesId) throws Exception {
         log.info("Deleting message series " + seriesId);
@@ -157,7 +150,6 @@ public class MessageSeriesRestService {
     @GET
     @Path("/series/{seriesIds}/number/{year}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public Integer getNextMessageSeriesNumber(
             @PathParam("seriesIds") String seriesIds,
@@ -171,7 +163,6 @@ public class MessageSeriesRestService {
     @Path("/series/{seriesIds}/number/{year}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.SYSADMIN)
     public Integer setNextMessageSeriesNumber(
@@ -188,7 +179,6 @@ public class MessageSeriesRestService {
     @GET
     @Path("/series/{seriesIds}/compute-number/{year}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public Integer computeNextMessageSeriesNumber(
             @PathParam("seriesIds") String seriesIds,

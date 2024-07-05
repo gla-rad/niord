@@ -19,9 +19,8 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.server.multipart.FormValue;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.message.Message;
 import org.niord.core.message.MessageService;
 import org.niord.core.repo.RepositoryService;
@@ -42,10 +41,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Returns the map thumbnail image associated with a message.
@@ -205,17 +201,17 @@ public class MessageMapImageRestService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("text/plain")
     @RolesAllowed(Roles.EDITOR)
-    public String uploadMessageMapImage(@PathParam("folder") String path, @MultipartForm MultipartFormDataInput input) throws Exception {
+    public String uploadMessageMapImage(@PathParam("folder") String path, MultipartFormDataInput input) throws Exception {
 
         // Initialise the form parsing parameters
-        final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        final List<InputPart> inputParts = uploadForm.get("file");
+        final Map<String, Collection<FormValue>> uploadForm = input.getValues();
+        final Collection<FormValue> inputParts = uploadForm.get("file");
 
         // Validate that the path is a temporary repository folder path
         Path folder = repositoryService.validateTempRepoPath(path);
 
         // Get hold of the first uploaded publication file
-        InputPart imagePart = inputParts.stream()
+        FormValue imagePart = inputParts.stream()
                 .findFirst()
                 .orElseThrow(() -> new WebApplicationException("No uploaded message image file", 400));
 
@@ -224,7 +220,7 @@ public class MessageMapImageRestService {
         Path imageRepoPath = folder.resolve(imageName);
 
         try {
-            byte[] data = IOUtils.toByteArray(imagePart.getBody(InputStream.class, null));
+            byte[] data = IOUtils.toByteArray(imagePart.getFileItem().getInputStream());
             if (messageMapImageGenerator.generateMessageMapImage(data, imageRepoPath)) {
                 log.info("Generated image thumbnail from uploaded image");
             } else {

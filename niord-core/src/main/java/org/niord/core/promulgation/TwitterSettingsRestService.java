@@ -17,13 +17,11 @@
 package org.niord.core.promulgation;
 
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.promulgation.vo.TwitterSettingsVo;
 import org.niord.core.user.Roles;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 
@@ -45,7 +43,6 @@ public class TwitterSettingsRestService {
     @GET
     @Path("/{typeId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public TwitterSettingsVo getSettings(
             @PathParam("typeId") String typeId) {
@@ -59,7 +56,6 @@ public class TwitterSettingsRestService {
     @Path("/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public TwitterSettingsVo createSettings(
             TwitterSettingsVo settings) throws Exception {
@@ -73,7 +69,6 @@ public class TwitterSettingsRestService {
     @Path("/{typeId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public TwitterSettingsVo updateSettings(
             @PathParam("typeId") String typeId,

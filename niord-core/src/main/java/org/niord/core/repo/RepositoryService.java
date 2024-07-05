@@ -23,8 +23,8 @@ import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.settings.annotation.Setting;
 import org.niord.core.user.Roles;
 import org.niord.core.util.WebUtils;
@@ -364,7 +364,7 @@ public class RepositoryService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    public List<String> uploadFile(@PathParam("folder") String path, MultipartInput input) throws IOException {
+    public List<String> uploadFile(@PathParam("folder") String path, MultipartFormDataInput input) throws IOException {
 
         Path folder = repoRoot.resolve(path);
 
@@ -463,7 +463,7 @@ public class RepositoryService {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    public List<String> uploadTempFile(@PathParam("folder") String path, MultipartInput input) throws IOException {
+    public List<String> uploadTempFile(@PathParam("folder") String path, MultipartFormDataInput input) throws IOException {
 
         // Check that the specified folder is indeed under the "temp" root
         validateTempRepoPath(path);

@@ -15,10 +15,10 @@
  */
 package org.niord.core.batch;
 
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.niord.core.repo.RepositoryService;
 import org.niord.core.util.WebUtils;
 import org.slf4j.Logger;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 
 import jakarta.inject.Inject;
 import java.io.InputStream;

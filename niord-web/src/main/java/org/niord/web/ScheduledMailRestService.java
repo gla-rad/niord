@@ -17,8 +17,7 @@
 package org.niord.web;
 
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.mail.ScheduledMail;
 import org.niord.core.mail.ScheduledMailSearchParams;
 import org.niord.core.mail.ScheduledMailService;
@@ -56,7 +55,6 @@ public class ScheduledMailRestService {
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public PagedSearchResultVo<ScheduledMailVo> search(
             @QueryParam("recipient") String recipient,
@@ -90,7 +88,6 @@ public class ScheduledMailRestService {
     @Path("/scheduled-mail/{scheduledMailId}")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
-    @GZIP
     @NoCache
     public ScheduledMailVo getScheduledMail(@PathParam("scheduledMailId") Integer scheduledMailId) throws Exception {
         ScheduledMail mail = scheduledMailService.getScheduledMail(scheduledMailId);

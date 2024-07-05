@@ -15,7 +15,6 @@
  */
 package org.niord.core.repo;
 
-import org.jboss.resteasy.spi.UnhandledException;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
@@ -62,7 +61,7 @@ public class RepositoryServletFilter implements Filter {
         try {
             // Proceed with the request
             chain.doFilter(req, res);
-        } catch (UnhandledException ex) {
+        } catch (RuntimeException ex) {
             if (ex.getCause() instanceof IOException && "Broken pipe".equals(ex.getCause().getMessage())) {
                 log.trace("Received Broken pipe IOException: " + ((HttpServletRequest)req).getRequestURI());
                 // Do not log this error

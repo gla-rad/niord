@@ -17,8 +17,7 @@ package org.niord.web.aton;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.aton.*;
 import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.aton.vo.AtonTagMetaVo;
@@ -56,8 +55,7 @@ public class AtonRestService {
     @Path("/search-name")
     @Consumes("application/json")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<AtonNodeVo> searchAtons(
             @QueryParam("name") @DefaultValue("") String name,
             @QueryParam("maxAtonNo") @DefaultValue("1000") int maxAtonNo
@@ -77,8 +75,7 @@ public class AtonRestService {
     @Path("/search")
     @Consumes("application/json")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public PagedSearchResultVo<AtonNodeVo> search(
             @QueryParam("name") String name,
             @QueryParam("atonUids") Set<String> atonUids,
@@ -117,8 +114,7 @@ public class AtonRestService {
     @GET
     @Path("/aton/{atonUid}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public AtonNodeVo getAton(@PathParam("atonUid") String atonUid) throws Exception {
 
         AtonNode atonNode = atonService.findByAtonUid(atonUid);
@@ -142,8 +138,7 @@ public class AtonRestService {
     @Path("/aton")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.EDITOR)
     public AtonNodeVo createAton(AtonNodeVo aton) {
         // Reconstruct the internal AtoN node object
@@ -172,8 +167,7 @@ public class AtonRestService {
     @Path("/aton/{atonUid}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.EDITOR)
     public AtonNodeVo updateAton(@PathParam("atonUid") String atonUid, AtonNodeVo aton) {
         // Reconstruct the internal AtoN node object
@@ -200,8 +194,7 @@ public class AtonRestService {
     @Path("/aton/{atonUid}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.EDITOR)
     public boolean deleteAton(@PathParam("atonUid") String atonUid) {
         log.debug("Deleting aton with UID " + atonUid);
@@ -223,8 +216,7 @@ public class AtonRestService {
     @Path("/aton")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     @RolesAllowed(Roles.EDITOR)
     public boolean deleteAtons(List<String> atonUids) {
         log.debug("Deleting atons with UIDs " + String.join(",", atonUids));
@@ -250,8 +242,7 @@ public class AtonRestService {
     @GET
     @Path("/defaults/node-types")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    public List<String> getNodeTypeNames(@QueryParam("name") String name) {
+        public List<String> getNodeTypeNames(@QueryParam("name") String name) {
         return atonDefaultsService.getNodeTypeNames(name);
     }
 
@@ -265,8 +256,7 @@ public class AtonRestService {
     @Path("/defaults/merge-with-node-types")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public AtonNodeVo mergeAtonWithNodeTypes(AtonNodeTypeParam atonNodeTypeParam) throws Exception {
         AtonNode atonNode = new AtonNode(atonNodeTypeParam.getAton());
         atonNodeTypeParam.getNodeTypeNames()
@@ -285,8 +275,7 @@ public class AtonRestService {
     @Path("/defaults/desc-for-node-types")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public Map<String, AtonTagMetaVo> describeAtonForNodeTypes(AtonNodeTypeParam atonNodeTypeParam) {
         return Optional.ofNullable(atonNodeTypeParam)
                 .map(AtonNodeTypeParam::getNodeTypeNames)
@@ -308,8 +297,7 @@ public class AtonRestService {
     @Path("/defaults/desc-for-tag-keys")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public Map<String, AtonTagMetaVo> describeAtonForTagKeys(List<String> tagKeys) {
         return Optional.ofNullable(tagKeys)
                 .orElse(Collections.emptyList())
@@ -330,8 +318,7 @@ public class AtonRestService {
     @Path("/defaults/auto-complete-key")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<String> autoCompleteKey(
             @QueryParam("key") String key,
             AtonNodeVo aton) throws Exception {
@@ -351,8 +338,7 @@ public class AtonRestService {
     @Path("/defaults/auto-complete-value")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public List<String> autoCompleteValue(
             @QueryParam("key") String key,
             @QueryParam("value") String value,

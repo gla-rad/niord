@@ -17,9 +17,8 @@ package org.niord.core.util;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
+import org.jboss.resteasy.reactive.server.multipart.FormValue;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,10 +30,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.function.Predicate.not;
@@ -263,25 +259,25 @@ public class WebUtils {
      * @param input the multi-part form input request
      * @return the extracted parameters' map
      */
-    public static Map<String, Object> getMultipartInputFormParams(MultipartFormDataInput input) throws IOException {
+    public static Map<String, Object> getMultipartInputFormParams(MultipartFormDataInput input) {
         // Initialise the lists of parameters
-        final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+        final Map<String, Collection<FormValue>> uploadForm = input.getValues();
         final Map<String, Object> formParams = new HashMap<>();
 
         // Now iterate for all input parts
-        for(Map.Entry<String, List<InputPart>> paramEntry : uploadForm.entrySet()) {
-            if(paramEntry.getValue().stream().allMatch(not(InputPart::isContentTypeFromMessage))) {
+        for(Map.Entry<String, Collection<FormValue>> paramEntry : uploadForm.entrySet()) {
+            if(paramEntry.getValue().stream().allMatch(not(FormValue::isFileItem))) {
                 switch(paramEntry.getValue().size()) {
                     case 0:
                         formParams.put(paramEntry.getKey(), null);
                         break;
                     case 1:
-                        formParams.put(paramEntry.getKey(), paramEntry.getValue().get(0).getBodyAsString());
+                        formParams.put(paramEntry.getKey(), paramEntry.getValue().stream().findFirst().orElse(null));
                         break;
                     default:
                         final List<String> paramEntryList = new ArrayList<>();
-                        for(InputPart inputPart : paramEntry.getValue()) {
-                            paramEntryList.add(inputPart.getBodyAsString());
+                        for(FormValue inputPart : paramEntry.getValue()) {
+                            paramEntryList.add(inputPart.getValue());
                         }
                         formParams.put(paramEntry.getKey(), paramEntryList);
                         break;
@@ -300,20 +296,22 @@ public class WebUtils {
      * @param input the multi-part input request
      * @return the uploaded files map
      */
-    public static Map<String, InputStream> getMultipartInputFiles(MultipartInput input) throws IOException {
+    public static Map<String, InputStream> getMultipartInputFiles(MultipartFormDataInput input) throws IOException {
         // Initialise the lists of parameters
-        final List<InputPart> uploadParts = input.getParts();
+        final Map<String, Collection<FormValue>> uploadForm = input.getValues();
         final Map<String, InputStream> inputFiles = new HashMap<>();
 
         // For all input parts
-        for(InputPart inputPart : input.getParts()) {
-            // If this looks like a file, i.e. has the same content type as the input
-            if(inputPart.isContentTypeFromMessage()) {
-                // Try to read the file and add it to the map
-                inputFiles.put(
-                        WebUtils.getFileName(inputPart.getHeaders()),
-                        inputPart.getBody(InputStream.class, null)
-                );
+        // Now iterate for all input parts
+        for(Map.Entry<String, Collection<FormValue>> paramEntry : uploadForm.entrySet()) {
+            if (paramEntry.getValue().stream().allMatch(FormValue::isFileItem)) {
+                // If this looks like a file, i.e. has the same content type as the input
+                for (FormValue inputPart : paramEntry.getValue()) {
+                    inputFiles.put(
+                            WebUtils.getFileName(inputPart.getHeaders()),
+                            inputPart.getFileItem().getInputStream()
+                    );
+                 }
             }
         }
 

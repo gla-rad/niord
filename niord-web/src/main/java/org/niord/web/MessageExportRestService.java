@@ -18,12 +18,12 @@ package org.niord.web;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.domain.DomainService;
 import org.niord.core.message.MessageExportService;
@@ -80,9 +80,8 @@ public class MessageExportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/export.zip")
-    @GZIP
     @NoCache
-    public Response generateZipArchiveForSearch(@Context HttpServletRequest request) throws Exception {
+    public Response generateZipArchiveForSearch(@Context HttpServerRequest request) throws Exception {
 
         // Perform a search for at most 1000 messages
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);

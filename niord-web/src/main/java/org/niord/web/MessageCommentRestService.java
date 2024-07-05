@@ -18,8 +18,7 @@ package org.niord.web;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.NiordApp;
 import org.niord.core.dictionary.DictionaryService;
 import org.niord.core.mail.Mail.MailRecipient;
@@ -83,7 +82,6 @@ public class MessageCommentRestService {
     @GET
     @Path("/message/{messageId}/comments")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public List<CommentVo> getComments(@PathParam("messageId") String messageId) {

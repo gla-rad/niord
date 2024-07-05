@@ -18,9 +18,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.NiordApp;
 import org.niord.core.domain.Domain;
 import org.niord.core.domain.DomainService;
@@ -233,7 +232,6 @@ public class MessageRestService  {
     @GET
     @Path("/message/{messageId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MessageVo getMessage(
             @PathParam("messageId") String messageId,
@@ -295,7 +293,6 @@ public class MessageRestService  {
     @GET
     @Path("/editable-message/{messageId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public SystemMessageVo getSystemMessage(
@@ -326,7 +323,6 @@ public class MessageRestService  {
     @GET
     @Path("/new-message-template")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public SystemMessageVo newTemplateMessage(
@@ -382,7 +378,6 @@ public class MessageRestService  {
     @GET
     @Path("/copy-message-template/{messageId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public SystemMessageVo copyMessageTemplate(
@@ -469,7 +464,6 @@ public class MessageRestService  {
     @GET
     @Path("/referenced-messages/{messageId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public List<MessageVo> getReferencedMessages(
@@ -516,7 +510,6 @@ public class MessageRestService  {
     @Path("/message")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public MessageVo createMessage(SystemMessageVo message) throws Exception {
@@ -550,7 +543,6 @@ public class MessageRestService  {
     @Path("/message/{messageId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public MessageVo updateMessage(@PathParam("messageId") String messageId, SystemMessageVo message) throws Exception {
@@ -588,7 +580,6 @@ public class MessageRestService  {
     @Path("/message/{messageId}/status")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public MessageVo updateMessageStatus(
@@ -641,7 +632,6 @@ public class MessageRestService  {
     @Path("/update-statuses")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public List<MessageVo> updateMessageStatuses(List<UpdateStatusParam> updates) throws Exception {
@@ -678,10 +668,9 @@ public class MessageRestService  {
     @Path("/attachments/{folder:.+}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
-    public List<AttachmentVo> uploadMessageAttachments(@PathParam("folder") String path, MultipartInput input) throws Exception {
+    public List<AttachmentVo> uploadMessageAttachments(@PathParam("folder") String path, MultipartFormDataInput input) throws Exception {
 
         List<String> uploadedFiles = repositoryService.uploadTempFile(path, input);
 
@@ -716,7 +705,6 @@ public class MessageRestService  {
     @GET
     @Path("/message/{messageId}/history")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public List<MessageHistoryVo> getMessageHistory(@PathParam("messageId") String messageId) {
@@ -740,7 +728,6 @@ public class MessageRestService  {
     @GET
     @Path("/recently-edited-drafts")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.USER)
     public List<MessageVo> getRecentlyEditedMessages(
@@ -818,7 +805,6 @@ public class MessageRestService  {
     @Path("/adjust-editable-message")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public SystemMessageVo adjustEditableMessage(SystemMessageVo message) throws Exception {
@@ -879,7 +865,6 @@ public class MessageRestService  {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    @GZIP
     @NoCache
     public MessagePublicationVo extractMessagePublication(
             @QueryParam("lang") @DefaultValue("en") String lang,
@@ -902,7 +887,6 @@ public class MessageRestService  {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    @GZIP
     @NoCache
     public MessageVo updateMessagePublications(
             @QueryParam("publicationId") String publicationId,
@@ -936,7 +920,6 @@ public class MessageRestService  {
     @Path("/format-message-geometry")
     @Consumes("application/json;charset=UTF-8")
     @Produces("text/html;charset=UTF-8")
-    @GZIP
     @NoCache
     public String formatGeometry(
             @QueryParam("lang") @DefaultValue("en") String language,
@@ -961,7 +944,6 @@ public class MessageRestService  {
     @Path("/parse-geometry")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public FeatureCollectionVo parsePlainTextGeometry(PlainTextGeometryParam param) throws Exception {
         try {
@@ -981,7 +963,6 @@ public class MessageRestService  {
     @Path("/format-geometry")
     @Consumes("application/json;charset=UTF-8")
     @Produces("plain/text;charset=UTF-8")
-    @GZIP
     @NoCache
     public String formatGeometryAsPlainText(
             @QueryParam("lang") @DefaultValue("en") String language,
@@ -1010,7 +991,6 @@ public class MessageRestService  {
     @Path("/parse-utm")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public FeatureCollectionVo parseUtmGeometry(PlainTextGeometryParam param) throws Exception {
         try {

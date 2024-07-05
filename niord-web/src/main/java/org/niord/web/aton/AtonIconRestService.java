@@ -15,17 +15,17 @@
  */
 package org.niord.web.aton;
 
+import io.quarkus.vertx.http.Compressed;
+import io.vertx.core.http.HttpServerRequest;
+import jakarta.enterprise.context.RequestScoped;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.aton.AtonNode;
 import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.repo.RepositoryService;
 import org.slf4j.Logger;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
@@ -40,7 +40,7 @@ import java.nio.file.Path;
  * Creates and caches AtoN icons
  */
 @jakarta.ws.rs.Path("/aton-icon")
-@ApplicationScoped
+@RequestScoped
 public class AtonIconRestService {
 
     static final String OVERVIEW_ICON_REPO = "aton_icons";
@@ -59,7 +59,7 @@ public class AtonIconRestService {
     @jakarta.ws.rs.Path("/svg")
     @Consumes("application/json;charset=UTF-8")
     @Produces("image/svg+xml")
-    @GZIP
+    @Compressed
     @NoCache
     public Response createSvgForAton(
             @QueryParam("width") @DefaultValue("100") int width,
@@ -93,11 +93,11 @@ public class AtonIconRestService {
     @GET
     @jakarta.ws.rs.Path("/overview")
     @NoCache
-    public Response getAtonOverviewIcon(@Context HttpServletRequest request) throws Exception {
+    public Response getAtonOverviewIcon(@Context HttpServerRequest request) throws Exception {
 
         long t0 = System.currentTimeMillis();
 
-        String type = request.getParameter("seamark:type");
+        String type = request.getParam("seamark:type");
         if (StringUtils.isBlank(type)) {
             return Response
                     .temporaryRedirect(new URI("/img/aton/aton.png"))
@@ -161,8 +161,8 @@ public class AtonIconRestService {
      * @param param the param to check for
      * @return the potentially updated path
      */
-    private Path addParam(AtonNode aton, Path path, HttpServletRequest request, String param) {
-        String val = request.getParameter(param);
+    private Path addParam(AtonNode aton, Path path, HttpServerRequest request, String param) {
+        String val = request.getParam(param);
         if (StringUtils.isNotBlank(val)) {
             aton.updateTag(param, val);
             path = path.resolve(escape(val));

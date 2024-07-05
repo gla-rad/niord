@@ -19,9 +19,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.script.ScriptResource;
 import org.niord.core.script.ScriptResourceHistory;
@@ -64,7 +63,6 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @PermitAll
     @NoCache
     public List<ScriptResourceVo> getScriptResources(
@@ -99,7 +97,6 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @Path("/script-resource/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public ScriptResourceVo createScriptResource(ScriptResourceVo resource) throws Exception {
         log.info("Creating resource " + resource);
@@ -113,7 +110,6 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @Path("/script-resource/{id}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public ScriptResourceVo updateScriptResource(@PathParam("id") Integer id, ScriptResourceVo resource) throws Exception {
         if (!Objects.equals(id, resource.getId())) {
@@ -129,7 +125,6 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     /** Deletes an existing script resource */
     @DELETE
     @Path("/script-resource/{id}")
-    @GZIP
     @NoCache
     public void deleteScriptResource(@PathParam("id") Integer id) throws Exception {
         log.info("Deleting resource " + id);
@@ -141,7 +136,6 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @POST
     @Path("/reload/")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public Integer reloadScriptResourcesFromClassPath() throws Exception {
         log.info("Reloading resources from classpath");
@@ -179,7 +173,6 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/script-resource/{resourceId}/history")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<ScriptResourceHistoryVo> getScriptResourceHistory(@PathParam("resourceId") Integer resourceId) {
 

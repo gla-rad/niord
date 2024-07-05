@@ -15,12 +15,12 @@
  */
 package org.niord.core.model;
 
+import jakarta.ws.rs.FormParam;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.jboss.resteasy.annotations.jaxrs.FormParam;
-import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import jakarta.ws.rs.core.MediaType;
+import org.jboss.resteasy.reactive.PartType;
 
 /**
  * The Mult-Part Body Class.

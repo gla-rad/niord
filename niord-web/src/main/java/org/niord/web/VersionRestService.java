@@ -16,7 +16,7 @@
 
 package org.niord.web;
 
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.NiordApp;
 
 import jakarta.inject.Inject;

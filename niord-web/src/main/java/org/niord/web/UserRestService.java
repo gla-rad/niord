@@ -19,8 +19,7 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.domain.DomainService;
 import org.niord.core.user.Roles;
@@ -63,7 +62,6 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
-    @GZIP
     @NoCache
     public List<UserVo> all() {
         return userService.allUsers().stream()
@@ -77,7 +75,6 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
-    @GZIP
     @NoCache
     public List<UserVo> search(@QueryParam("name") String name) {
         return userService.searchUsers(name).stream()
@@ -91,7 +88,6 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/search-emails")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
-    @GZIP
     @NoCache
     public List<String> searchEmails(@QueryParam("name") String name) {
 
@@ -114,7 +110,6 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/kc-users")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
     @NoCache
     public List<UserVo> searchKeycloakUsers(
             @QueryParam("search") @DefaultValue("") String search,
@@ -129,7 +124,6 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/kc-groups")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
     @NoCache
     public List<GroupVo> getKeycloakGroups() {
         return userService.getKeycloakGroups(domainService.currentDomain());
@@ -141,7 +135,6 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/kc-user/{userId}/kc-groups")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
     @NoCache
     public List<GroupVo> getKeycloakUserGroups(@PathParam("userId") String userId) {
         return userService.getKeycloakUserGroups(domainService.currentDomain(), userId);

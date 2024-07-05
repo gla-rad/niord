@@ -16,11 +16,11 @@
 
 package org.niord.web;
 
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.NiordApp;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.domain.DomainService;
@@ -98,7 +98,6 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/reports")
-    @GZIP
     @NoCache
     public List<FmReportVo> getReports(
             @QueryParam("expandParams") @DefaultValue("true") boolean expandParams
@@ -117,7 +116,6 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<FmReportVo> getAllReports() {
 
@@ -139,7 +137,6 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/detail-reports")
-    @GZIP
     @NoCache
     public List<FmReportVo> getDetailReports() {
         return Arrays.asList(
@@ -154,7 +151,6 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Path("/report/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public FmReportVo createReport(FmReportVo report) throws Exception {
         log.info("Creating report " + report);
@@ -168,7 +164,6 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Path("/report/{reportId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public FmReportVo updateReport(@PathParam("reportId") String reportId, FmReportVo report) throws Exception {
         if (!Objects.equals(reportId, report.getReportId())) {
@@ -184,7 +179,6 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     /** Deletes an existing report */
     @DELETE
     @Path("/report/{reportId}")
-    @GZIP
     @NoCache
     public void deleteReport(@PathParam("reportId") String reportId) throws Exception {
         log.info("Deleting report " + reportId);
@@ -220,12 +214,11 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/message/{messageId}.pdf")
-    @GZIP
     @NoCache
     public Response generatePdfForMessage(
             @PathParam("messageId") String messageId,
             @QueryParam("lang") String language,
-            @Context HttpServletRequest request) throws Exception {
+            @Context HttpServerRequest request) throws Exception {
 
         // The "draft" report display all language variants, so, sort instead of filter by language
         MessageVo message = messageRestService.getMessage(messageId, null);
@@ -280,9 +273,8 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/report.pdf")
-    @GZIP
     @NoCache
-    public Response generatePdfForSearch(@Context HttpServletRequest request) throws Exception {
+    public Response generatePdfForSearch(@Context HttpServerRequest request) throws Exception {
 
         // Perform a search for at most 1000 messages
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);

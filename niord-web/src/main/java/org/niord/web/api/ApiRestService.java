@@ -26,8 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.NiordApp;
 import org.niord.core.area.Area;
 import org.niord.core.message.Message;
@@ -101,8 +100,7 @@ public class ApiRestService extends AbstractApiService {
             )
     )
     @Produces({"application/json;charset=UTF-8"})
-    @GZIP
-    public Response searchMessages(
+        public Response searchMessages(
             @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
 
@@ -170,8 +168,7 @@ public class ApiRestService extends AbstractApiService {
             )
     )
     @Produces({"application/json;charset=UTF-8"})
-    @GZIP
-    public Response messageDetails(
+        public Response messageDetails(
             @Parameter(description = "The message UID or short ID", example = "NM-1275-16")
             @PathParam("messageId") String messageId,
 
@@ -232,8 +229,7 @@ public class ApiRestService extends AbstractApiService {
     )
     @Tag(ref = "message")
     @Produces("application/xml;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public String getMessageXsd(
             @Parameter(description = "The schema file, either schema1.xsd or schema2.xsd", example="schema2.xsd")
             @PathParam("schemaFile")
@@ -322,8 +318,7 @@ public class ApiRestService extends AbstractApiService {
     )
     @Tag(ref = "publications")
     @Produces({"application/json;charset=UTF-8"})
-    @GZIP
-    public Response searchPublications(
+        public Response searchPublications(
 
             @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
@@ -378,8 +373,7 @@ public class ApiRestService extends AbstractApiService {
     )
     @Tag(ref = "publications")
     @Produces({"application/json;charset=UTF-8"})
-    @GZIP
-    public Response publicationDetails(
+        public Response publicationDetails(
 
             @Parameter(description = "The publication ID", example = "5eab7f50-d890-42d9-8f0a-d30e078d3d5a")
             @PathParam("publicationId") String publicationId,
@@ -474,8 +468,7 @@ public class ApiRestService extends AbstractApiService {
     )
     @Tag(ref = "areas")
     @Produces({"application/json;charset=UTF-8"})
-    @GZIP
-    public Response areaDetails(
+        public Response areaDetails(
 
             @Parameter(description = "The area ID", example = "urn:mrn:iho:country:dk")
             @PathParam("areaId") String areaId,
@@ -518,8 +511,7 @@ public class ApiRestService extends AbstractApiService {
     )
     @Tag(ref = "areas")
     @Produces({"application/json;charset=UTF-8"})
-    @GZIP
-    public Response subAreas(
+        public Response subAreas(
 
             @Parameter(description = "The area ID", example = "urn:mrn:iho:country:dk")
             @PathParam("areaId") String areaId,

@@ -18,9 +18,8 @@ package org.niord.web;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.publication.PublicationCategory;
 import org.niord.core.publication.PublicationCategoryService;
@@ -59,7 +58,6 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<PublicationCategoryVo> getAllPublicationCategories(
             @QueryParam("lang") String lang,
@@ -76,8 +74,7 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     @GET
     @Path("/publication-category/{categoryId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
-    @NoCache
+        @NoCache
     public PublicationCategoryVo getPublicationCategory(@PathParam("categoryId") String categoryId) throws Exception {
         return publicationCategoryService.findByCategoryId(categoryId)
                 .toVo(DataFilter.get());
@@ -90,8 +87,7 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public PublicationCategoryVo createPublicationCategory(PublicationCategoryVo publicationCategory) throws Exception {
         log.info("Creating publication category " + publicationCategory);
         return publicationCategoryService.createPublicationCategory(new PublicationCategory(publicationCategory))
@@ -105,8 +101,7 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public PublicationCategoryVo updatePublicationCategory(
             @PathParam("categoryId") String categoryId,
             PublicationCategoryVo category) throws Exception {
@@ -126,8 +121,7 @@ public class PublicationCategoryRestService extends AbstractBatchableRestService
     @Path("/publication-category/{categoryId}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
-    @NoCache
+        @NoCache
     public void deletePublicationCategory(@PathParam("categoryId") String categoryId) throws Exception {
         log.info("Deleting publication category " + categoryId);
         publicationCategoryService.deletePublicationCategory(categoryId);

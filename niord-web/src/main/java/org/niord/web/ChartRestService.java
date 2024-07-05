@@ -17,9 +17,8 @@ package org.niord.web;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.chart.Chart;
@@ -61,7 +60,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search/{chartNumbers}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemChartVo> getCharts(@PathParam("chartNumbers") String chartIds,
                                    @QueryParam("limit") @DefaultValue("1000") int limit) {
@@ -76,7 +74,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemChartVo> searchCharts(@QueryParam("name") @DefaultValue("") String name,
                                       @QueryParam("inactive") @DefaultValue("false") boolean inactive,
@@ -91,7 +88,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemChartVo> getAllCharts(@QueryParam("limit") @DefaultValue("1000") int limit) {
         return chartService.getCharts().stream()
@@ -106,7 +102,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
     @NoCache
     public SystemChartVo createChart(SystemChartVo chartVo) throws Exception {
         log.info("Creating chart " + chartVo);
@@ -119,7 +114,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
     @NoCache
     public SystemChartVo updateChart(@PathParam("chartNumber") String chartNumber, SystemChartVo chartVo) throws Exception {
         if (!Objects.equals(chartNumber, chartVo.getChartNumber())) {
@@ -135,7 +129,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @Path("/chart/{chartNumber}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
-    @GZIP
     @NoCache
     public void deleteChart(@PathParam("chartNumber") String chartNumber) throws Exception {
         log.info("Deleting chart " + chartNumber);
@@ -165,7 +158,6 @@ public class ChartRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-    @GZIP
     @NoCache
     public List<SystemChartVo> computeIntersectingCharts(FeatureCollectionVo featureCollection) {
         GeometryVo geometryVo = featureCollection.toGeometry();

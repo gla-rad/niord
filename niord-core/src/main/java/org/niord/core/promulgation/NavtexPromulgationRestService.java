@@ -19,8 +19,7 @@ package org.niord.core.promulgation;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.promulgation.vo.NavtexMessagePromulgationVo;
 import org.niord.core.promulgation.vo.NavtexTransmitterVo;
 import org.niord.core.user.Roles;
@@ -28,7 +27,6 @@ import org.niord.core.util.TextUtils;
 import org.niord.model.DataFilter;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import java.util.List;
@@ -55,7 +53,6 @@ public class NavtexPromulgationRestService {
     @Path("/reformat-navtex")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @PermitAll
     @NoCache
     public NavtexMessagePromulgationVo reformatNavtex(NavtexMessagePromulgationVo navtex) throws Exception {
@@ -83,7 +80,6 @@ public class NavtexPromulgationRestService {
     @GET
     @Path("/transmitters/{typeId}/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<NavtexTransmitterVo> getTransmitters(
             @PathParam("typeId") String typeId,
@@ -101,7 +97,6 @@ public class NavtexPromulgationRestService {
     @Path("/transmitters/{typeId}/transmitter/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public NavtexTransmitterVo createTransmitter(
             @PathParam("typeId") String typeId,
@@ -122,7 +117,6 @@ public class NavtexPromulgationRestService {
     @Path("/transmitters/{typeId}/transmitter/{name}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public NavtexTransmitterVo updateTransmitter(
             @PathParam("typeId") String typeId,

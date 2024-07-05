@@ -19,9 +19,8 @@ package org.niord.web;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.mail.IMailable;
 import org.niord.core.mail.vo.ScheduledMailVo;
@@ -85,7 +84,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<MailingListVo> search(
             @QueryParam("name") String name,
@@ -204,7 +202,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/mailing-list/{mailingListId}/users")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MailingListRecipients getRecipientUsers(@PathParam("mailingListId") String mailingListId) {
         log.info("Returning recipient users of mailing list " + mailingListId);
@@ -238,7 +235,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Path("/mailing-list/{mailingListId}/users")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MailingListRecipients updateRecipientUsers(@PathParam("mailingListId") String mailingListId, List<UserVo> users) throws Exception {
 
@@ -259,7 +255,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/mailing-list/{mailingListId}/contacts")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MailingListRecipients getRecipientContacts(@PathParam("mailingListId") String mailingListId) {
         log.info("Returning recipient contacts of mailing list " + mailingListId);
@@ -293,7 +288,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Path("/mailing-list/{mailingListId}/contacts")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MailingListRecipients updateRecipientContacts(@PathParam("mailingListId") String mailingListId, List<ContactVo> contacts) throws Exception {
 
@@ -320,7 +314,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Path("/mailing-list/{mailingListId}/update-status")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public boolean updateRecipientStatus(
             @PathParam("mailingListId") String mailingListId,
@@ -380,7 +373,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/export")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @PermitAll // Sysadmin role enforced programmatically
     @NoCache
     public List<MailingListVo> exportMailingLists() {
@@ -479,7 +471,6 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/reports")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @RolesAllowed(Roles.USER)
     @NoCache
     public List<MailingListReportVo> getMailingListReports(@QueryParam("lang") String lang) {

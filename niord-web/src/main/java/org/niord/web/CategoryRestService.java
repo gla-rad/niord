@@ -16,15 +16,12 @@
 package org.niord.web;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.aton.vo.AtonNodeVo;
 import org.niord.core.batch.AbstractBatchableRestService;
 import org.niord.core.category.Category;
@@ -36,7 +33,6 @@ import org.niord.core.domain.vo.DomainVo;
 import org.niord.core.user.Roles;
 import org.niord.model.DataFilter;
 import org.niord.model.IJsonSerializable;
-import org.niord.model.message.CategoryDescVo;
 import org.slf4j.Logger;
 
 import jakarta.annotation.security.PermitAll;
@@ -85,7 +81,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemCategoryVo> searchCategories(
             @QueryParam("lang") String lang,
@@ -116,7 +111,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @Path("/search")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemCategoryVo> searchCategories(
             @QueryParam("lang") String lang,
@@ -179,7 +173,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search/{categoryIds}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemCategoryVo> searchCategoryIds(@PathParam("categoryIds") String categoryIds,
                                       @QueryParam("lang") @DefaultValue("en") String lang,
@@ -206,7 +199,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/category-roots")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemCategoryVo> getCategoryRoots(@QueryParam("lang") String lang) {
 
@@ -224,7 +216,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemCategoryVo> getAll() {
 
@@ -241,7 +232,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/export")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<SystemCategoryVo> exportCategories() {
         return getAll().stream()
@@ -270,7 +260,6 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/category/{categoryId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public SystemCategoryVo getCategory(@PathParam("categoryId") Integer categoryId) throws Exception {
         log.debug("Getting category " + categoryId);

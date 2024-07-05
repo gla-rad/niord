@@ -15,13 +15,13 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.jboss.resteasy.reactive.NoCache;
+import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.batch.BatchService;
 import org.niord.core.batch.BatchSetService;
 import org.niord.core.batch.vo.BatchInstanceVo;
@@ -86,7 +86,6 @@ public class BatchRestService {
     @GET
     @Path("/job-names")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @PermitAll
     public List<String> getJobNames() {
@@ -146,7 +145,6 @@ public class BatchRestService {
     @GET
     @Path("/{jobName}/instances")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public PagedSearchResultVo<BatchInstanceVo> getJobInstances(
@@ -170,7 +168,6 @@ public class BatchRestService {
     @GET
     @Path("/status")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     @PermitAll
     public BatchStatusVo getStatus() {
@@ -255,7 +252,6 @@ public class BatchRestService {
      */
     @GET
     @Path("/instance/{instanceId}/logs")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public List<String> getBatchJobLogFiles(@PathParam("instanceId") long instanceId) throws IOException {
@@ -274,7 +270,6 @@ public class BatchRestService {
     @GET
     @Path("/instance/{instanceId}/logs/{logFileName}")
     @Produces("text/plain")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public String getBatchJobLogFileContent(

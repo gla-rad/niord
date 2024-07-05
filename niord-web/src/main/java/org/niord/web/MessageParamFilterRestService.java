@@ -17,8 +17,7 @@
 package org.niord.web;
 
 import jakarta.annotation.security.PermitAll;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.message.MessageParamFilter;
 import org.niord.core.message.MessageParamFilterService;
 import org.niord.core.message.vo.MessageParamFilterVo;
@@ -65,7 +64,6 @@ public class MessageParamFilterRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<MessageParamFilterVo> getMessageFilters() {
         // Must be logged in
@@ -81,7 +79,6 @@ public class MessageParamFilterRestService {
     @GET
     @Path("/filter/{filterId}")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MessageParamFilterVo getMessageFilter(@PathParam("filterId") Integer filterId) {
         // Must be logged in
@@ -97,7 +94,6 @@ public class MessageParamFilterRestService {
     @Path("/filter")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public MessageParamFilterVo createMessageFilter(MessageParamFilterVo filter) {
         // Must be logged in
@@ -111,7 +107,6 @@ public class MessageParamFilterRestService {
     /** Deletes the filter with the given ID */
     @DELETE
     @Path("/filter/{filterId}")
-    @GZIP
     @NoCache
     public void deleteMessageFilter(@PathParam("filterId") Integer filterId) {
         // Must be logged in

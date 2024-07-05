@@ -16,11 +16,11 @@
 
 package org.niord.web;
 
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.domain.DomainService;
 import org.niord.core.mail.Mail.MailRecipient;
 import org.niord.core.message.MessageMailService;
@@ -72,16 +72,15 @@ public class MessageMailRestService {
     @GET
     @Path("/send")
     @Produces("text/plain")
-    @GZIP
     @NoCache
     @RolesAllowed(Roles.EDITOR)
-    public String sendMessageMail(@Context HttpServletRequest request) throws Exception {
+    public String sendMessageMail(@Context HttpServerRequest request) throws Exception {
 
         long t0 = System.currentTimeMillis();
 
-        String[] mailAddresses = request.getParameterValues("mailTo");
-        String mailSubject = request.getParameter("mailSubject");
-        String mailMessage = request.getParameter("mailMessage");
+        String[] mailAddresses = new String[]{request.getParam("mailTo")};
+        String mailSubject = request.getParam("mailSubject");
+        String mailMessage = request.getParam("mailMessage");
         if (mailAddresses == null || mailAddresses.length == 0) {
             throw new WebApplicationException(400);
         }

@@ -16,10 +16,10 @@
 
 package org.niord.web;
 
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.annotations.GZIP;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.domain.Domain;
 import org.niord.core.domain.DomainService;
 import org.niord.core.message.*;
@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -233,9 +232,8 @@ public class MessageSearchRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
-    public PagedSearchResultVo<MessageVo> search(@Context  HttpServletRequest request) throws Exception {
+    public PagedSearchResultVo<MessageVo> search(@Context HttpServerRequest request) throws Exception {
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);
         return searchMessages(params);
     }
@@ -255,7 +253,6 @@ public class MessageSearchRestService {
     @GET
     @Path("/search-message-ids")
     @Produces("application/json;charset=UTF-8")
-    @GZIP
     @NoCache
     public List<MessageIdMatch> searchMessageIds(
             @QueryParam("lang") String lang,
