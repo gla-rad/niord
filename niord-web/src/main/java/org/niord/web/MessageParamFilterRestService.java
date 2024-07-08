@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.message.MessageParamFilter;
@@ -79,6 +80,7 @@ public class MessageParamFilterRestService {
     @GET
     @Path("/filter/{filterId}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public MessageParamFilterVo getMessageFilter(@PathParam("filterId") Integer filterId) {
         // Must be logged in
@@ -94,6 +96,7 @@ public class MessageParamFilterRestService {
     @Path("/filter")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public MessageParamFilterVo createMessageFilter(MessageParamFilterVo filter) {
         // Must be logged in
@@ -107,6 +110,7 @@ public class MessageParamFilterRestService {
     /** Deletes the filter with the given ID */
     @DELETE
     @Path("/filter/{filterId}")
+    @Compressed
     @NoCache
     public void deleteMessageFilter(@PathParam("filterId") Integer filterId) {
         // Must be logged in

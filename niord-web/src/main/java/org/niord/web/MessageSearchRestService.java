@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import org.apache.commons.lang.StringUtils;
@@ -232,6 +233,7 @@ public class MessageSearchRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public PagedSearchResultVo<MessageVo> search(@Context HttpServerRequest request) throws Exception {
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);
@@ -253,6 +255,7 @@ public class MessageSearchRestService {
     @GET
     @Path("/search-message-ids")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<MessageIdMatch> searchMessageIds(
             @QueryParam("lang") String lang,

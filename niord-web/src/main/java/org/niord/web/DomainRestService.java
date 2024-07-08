@@ -15,6 +15,7 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -55,6 +56,7 @@ public class DomainRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<DomainVo> getAllDomains(
             @QueryParam("lang") String lang,
@@ -86,6 +88,7 @@ public class DomainRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public DomainVo createDomain(DomainVo domain) throws Exception {
         log.info("Creating domain " + domain);
@@ -99,6 +102,7 @@ public class DomainRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public DomainVo updateDomain(@PathParam("domainId") String domainId, DomainVo domain) throws Exception {
         if (!Objects.equals(domainId, domain.getDomainId())) {
@@ -114,6 +118,7 @@ public class DomainRestService extends AbstractBatchableRestService {
     @Path("/domain/{domainId}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public void deleteDomain(@PathParam("domainId") String domainId) throws Exception {
         log.info("Deleting domain " + domainId);
@@ -126,6 +131,7 @@ public class DomainRestService extends AbstractBatchableRestService {
     @Path("/keycloak")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public void createDomainInKeycloak(DomainVo domain) throws Exception {
         log.info("Creating Keycloak domain " + domain);

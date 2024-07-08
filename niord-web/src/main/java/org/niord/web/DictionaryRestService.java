@@ -15,6 +15,7 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -64,6 +65,7 @@ public class DictionaryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/names")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<String> getDictionaryNames() {
         return dictionaryService.getDictionaryNames();
@@ -74,6 +76,7 @@ public class DictionaryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/dictionary/{name}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public DictionaryVo getDictionary(@PathParam("name") String name) {
         return dictionaryService.getCachedDictionary(name);
@@ -84,6 +87,7 @@ public class DictionaryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/dictionary/{name}/entries")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<DictionaryEntryVo> getDictionaryEntries(
             @PathParam("name") String name,
@@ -106,6 +110,7 @@ public class DictionaryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/dictionary/{name}_{lang}.properties")
     @Produces("text/plain;charset=UTF-8")
+    @Compressed
     @NoCache
     public String getDictionaryEntriesAsPropertyFile(@PathParam("name") String name, @PathParam("lang") String lang) {
         DictionaryVo dict = dictionaryService.getCachedDictionary(name);
@@ -133,6 +138,7 @@ public class DictionaryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/dictionary/{names}.json")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<ExportedDictionaryVo> exportDictionary(@PathParam("names") String names) {
 
@@ -234,6 +240,7 @@ public class DictionaryRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
+    @Compressed
     @NoCache
     public DictionaryEntryVo matchesAton(AtonDictEntryListVo params) throws Exception {
 

@@ -15,6 +15,7 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -68,6 +69,7 @@ public class SettingsRestService extends AbstractBatchableRestService {
     @Path("/editable-settings")
     @Produces("application/json;charset=UTF-8")
     @PermitAll // Checked programmatically
+    @Compressed
     @NoCache
     public List<SettingVo> getSettings() {
         // If a ticket is defined, check if programmatically

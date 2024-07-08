@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -82,6 +83,7 @@ public class MessageCommentRestService {
     @GET
     @Path("/message/{messageId}/comments")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.USER)
     public List<CommentVo> getComments(@PathParam("messageId") String messageId) {

@@ -15,6 +15,7 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -53,6 +54,7 @@ public class MessageSeriesRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemMessageSeriesVo> getAllMessageSeries(
             @QueryParam("messageNumbers") @DefaultValue("false") boolean messageNumbers) {
@@ -77,6 +79,7 @@ public class MessageSeriesRestService {
     @GET
     @Path("/search/{seriesIds}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemMessageSeriesVo> getMessageSeries(
             @PathParam("seriesIds") String seriesIds,
@@ -93,6 +96,7 @@ public class MessageSeriesRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemMessageSeriesVo> searchMessageSeries(
             @QueryParam("name") @DefaultValue("") String name,
@@ -110,6 +114,7 @@ public class MessageSeriesRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public SystemMessageSeriesVo createMessageSeries(SystemMessageSeriesVo seriesVo) throws Exception {
         log.info("Creating message series " + seriesVo);
@@ -123,6 +128,7 @@ public class MessageSeriesRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public SystemMessageSeriesVo updateMessageSeries(@PathParam("seriesId") String seriesId, SystemMessageSeriesVo seriesVo) throws Exception {
         if (!Objects.equals(seriesId, seriesVo.getSeriesId())) {
@@ -139,6 +145,7 @@ public class MessageSeriesRestService {
     @Path("/series/{seriesId}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public void deleteMessageSeries(@PathParam("seriesId") String seriesId) throws Exception {
         log.info("Deleting message series " + seriesId);
@@ -150,6 +157,7 @@ public class MessageSeriesRestService {
     @GET
     @Path("/series/{seriesIds}/number/{year}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public Integer getNextMessageSeriesNumber(
             @PathParam("seriesIds") String seriesIds,
@@ -163,6 +171,7 @@ public class MessageSeriesRestService {
     @Path("/series/{seriesIds}/number/{year}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.SYSADMIN)
     public Integer setNextMessageSeriesNumber(
@@ -179,6 +188,7 @@ public class MessageSeriesRestService {
     @GET
     @Path("/series/{seriesIds}/compute-number/{year}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public Integer computeNextMessageSeriesNumber(
             @PathParam("seriesIds") String seriesIds,

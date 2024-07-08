@@ -18,6 +18,7 @@ package org.niord.web;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.vertx.http.Compressed;
 import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -80,6 +81,7 @@ public class MessageExportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/export.zip")
+    @Compressed
     @NoCache
     public Response generateZipArchiveForSearch(@Context HttpServerRequest request) throws Exception {
 

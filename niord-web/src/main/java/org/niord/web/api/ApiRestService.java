@@ -18,6 +18,7 @@ package org.niord.web.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.quarkus.vertx.http.Compressed;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -100,7 +101,8 @@ public class ApiRestService extends AbstractApiService {
             )
     )
     @Produces({"application/json;charset=UTF-8"})
-        public Response searchMessages(
+    @Compressed
+    public Response searchMessages(
             @Parameter(description = "Two-letter ISO 639-1 language code", example = "en")
             @QueryParam("lang") String language,
 
@@ -168,7 +170,8 @@ public class ApiRestService extends AbstractApiService {
             )
     )
     @Produces({"application/json;charset=UTF-8"})
-        public Response messageDetails(
+    @Compressed
+    public Response messageDetails(
             @Parameter(description = "The message UID or short ID", example = "NM-1275-16")
             @PathParam("messageId") String messageId,
 
@@ -229,7 +232,8 @@ public class ApiRestService extends AbstractApiService {
     )
     @Tag(ref = "message")
     @Produces("application/xml;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     public String getMessageXsd(
             @Parameter(description = "The schema file, either schema1.xsd or schema2.xsd", example="schema2.xsd")
             @PathParam("schemaFile")

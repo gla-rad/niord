@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -62,6 +63,7 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
+    @Compressed
     @NoCache
     public List<UserVo> all() {
         return userService.allUsers().stream()
@@ -75,6 +77,7 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
+    @Compressed
     @NoCache
     public List<UserVo> search(@QueryParam("name") String name) {
         return userService.searchUsers(name).stream()
@@ -88,6 +91,7 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/search-emails")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.USER)
+    @Compressed
     @NoCache
     public List<String> searchEmails(@QueryParam("name") String name) {
 
@@ -110,6 +114,7 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/kc-users")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
+    @Compressed
     @NoCache
     public List<UserVo> searchKeycloakUsers(
             @QueryParam("search") @DefaultValue("") String search,
@@ -124,6 +129,7 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/kc-groups")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
+    @Compressed
     @NoCache
     public List<GroupVo> getKeycloakGroups() {
         return userService.getKeycloakGroups(domainService.currentDomain());
@@ -135,6 +141,7 @@ public class UserRestService extends AbstractBatchableRestService {
     @Path("/kc-user/{userId}/kc-groups")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
+    @Compressed
     @NoCache
     public List<GroupVo> getKeycloakUserGroups(@PathParam("userId") String userId) {
         return userService.getKeycloakUserGroups(domainService.currentDomain(), userId);

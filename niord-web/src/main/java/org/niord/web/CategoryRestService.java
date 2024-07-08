@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import io.quarkus.vertx.http.Compressed;
 import org.jboss.resteasy.reactive.NoCache;
 import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 import org.niord.core.aton.vo.AtonNodeVo;
@@ -81,6 +82,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemCategoryVo> searchCategories(
             @QueryParam("lang") String lang,
@@ -111,6 +113,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @Path("/search")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemCategoryVo> searchCategories(
             @QueryParam("lang") String lang,
@@ -199,6 +202,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/category-roots")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemCategoryVo> getCategoryRoots(@QueryParam("lang") String lang) {
 
@@ -216,6 +220,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemCategoryVo> getAll() {
 
@@ -232,6 +237,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/export")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemCategoryVo> exportCategories() {
         return getAll().stream()
@@ -260,6 +266,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/category/{categoryId}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public SystemCategoryVo getCategory(@PathParam("categoryId") Integer categoryId) throws Exception {
         log.debug("Getting category " + categoryId);

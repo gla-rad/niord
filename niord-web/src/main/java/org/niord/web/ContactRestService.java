@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -60,6 +61,7 @@ public class ContactRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public PagedSearchResultVo<ContactVo> search(
             @QueryParam("name") String name,
@@ -127,6 +129,7 @@ public class ContactRestService {
     @Path("/export")
     @Produces("text/plain;charset=UTF-8")
     @PermitAll // Checked programmatically
+    @Compressed
     @NoCache
     public String exportCSV(@QueryParam("separator") @DefaultValue(";") String separator) {
 

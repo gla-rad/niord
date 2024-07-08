@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -74,6 +75,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Path("/promulgation-services/all")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public List<PromulgationServiceVo> getPromulgationServices() {
         return promulgationManager.promulgationServices();
@@ -89,6 +91,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Path("/promulgation-types/all")
     @Produces("application/json;charset=UTF-8")
     @PermitAll // NB: Checked programmatically to facilitate tickets
+    @Compressed
     @NoCache
     public List<PromulgationTypeVo> getPromulgationTypes() {
 
@@ -108,6 +111,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Path("/promulgation-type/{typeId}")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
+    @Compressed
     @NoCache
     public PromulgationTypeVo getPromulgationType(@PathParam("typeId") String typeId) throws Exception {
         return promulgationTypeService.getPromulgationType(typeId).toVo();
@@ -120,6 +124,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public PromulgationTypeVo createPromulgationType(PromulgationTypeVo type) throws Exception {
         return promulgationTypeService.createPromulgationType(new PromulgationType(type)).toVo();
@@ -132,6 +137,7 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public PromulgationTypeVo updatePromulgationType(
             @PathParam("typeId") String typeId,
@@ -181,7 +187,8 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/public-promulgation-type/{typeIds}")
     @Produces("application/json;charset=UTF-8")
-        @PermitAll
+    @Compressed
+    @PermitAll
     @NoCache
     public List<PublicPromulgationTypeVo> getPublicPromulgationTypes(@PathParam("typeIds") String typeIds) {
         Set<String> ids = new HashSet<>();
@@ -200,7 +207,8 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search-public-promulgation-type")
     @Produces("application/json;charset=UTF-8")
-        @PermitAll
+    @Compressed
+    @PermitAll
     @NoCache
     public List<PublicPromulgationTypeVo> searchPublicPromulgationTypes(
             @QueryParam("type") @DefaultValue("")  String type) {
@@ -226,7 +234,8 @@ public class PromulgationRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
-        @NoCache
+    @Compressed
+    @NoCache
     public BaseMessagePromulgationVo<?> generateMessagePromulgation(
             @PathParam("typeId") String typeId,
             SystemMessageVo messageVo

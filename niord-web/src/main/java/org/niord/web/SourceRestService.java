@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -58,6 +59,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SourceVo> searchSources(
             @QueryParam("lang") String lang,
@@ -78,6 +80,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search/{ids}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SourceVo> searchSourcesById(
             @PathParam("ids") String ids) {
@@ -96,6 +99,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SourceVo> getAllSources(
             @QueryParam("lang") String lang,
@@ -113,6 +117,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/source/{id}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public SourceVo getSource(@PathParam("id") Integer id) throws Exception {
         return sourceService.findById(id)
@@ -126,6 +131,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
+    @Compressed
     @NoCache
     public SourceVo createSource(SourceVo source) throws Exception {
         log.info("Creating source " + source);
@@ -140,6 +146,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
+    @Compressed
     @NoCache
     public SourceVo updateSource(
             @PathParam("id") Integer id,
@@ -160,6 +167,7 @@ public class SourceRestService extends AbstractBatchableRestService {
     @Path("/source/{id}")
     @Consumes("application/json;charset=UTF-8")
     @RolesAllowed(Roles.ADMIN)
+    @Compressed
     @NoCache
     public void deleteSource(@PathParam("id") Integer id) throws Exception {
         log.info("Deleting source " + id);

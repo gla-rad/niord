@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -98,6 +99,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/reports")
+    @Compressed
     @NoCache
     public List<FmReportVo> getReports(
             @QueryParam("expandParams") @DefaultValue("true") boolean expandParams
@@ -116,6 +118,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<FmReportVo> getAllReports() {
 
@@ -137,6 +140,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/detail-reports")
+    @Compressed
     @NoCache
     public List<FmReportVo> getDetailReports() {
         return Arrays.asList(
@@ -151,6 +155,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Path("/report/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public FmReportVo createReport(FmReportVo report) throws Exception {
         log.info("Creating report " + report);
@@ -164,6 +169,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Path("/report/{reportId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public FmReportVo updateReport(@PathParam("reportId") String reportId, FmReportVo report) throws Exception {
         if (!Objects.equals(reportId, report.getReportId())) {
@@ -179,6 +185,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     /** Deletes an existing report */
     @DELETE
     @Path("/report/{reportId}")
+    @Compressed
     @NoCache
     public void deleteReport(@PathParam("reportId") String reportId) throws Exception {
         log.info("Deleting report " + reportId);
@@ -214,6 +221,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/message/{messageId}.pdf")
+    @Compressed
     @NoCache
     public Response generatePdfForMessage(
             @PathParam("messageId") String messageId,
@@ -273,6 +281,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
      */
     @GET
     @Path("/report.pdf")
+    @Compressed
     @NoCache
     public Response generatePdfForSearch(@Context HttpServerRequest request) throws Exception {
 

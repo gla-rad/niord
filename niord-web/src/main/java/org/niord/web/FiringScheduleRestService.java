@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -82,6 +83,7 @@ public class FiringScheduleRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<FiringScheduleVo> getFiringSchedules() {
         return firingScheduleService.getFiringSchedules().stream()
@@ -99,6 +101,7 @@ public class FiringScheduleRestService {
     @Path("/firing-schedule/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.SYSADMIN)
     public FiringScheduleVo createFiringSchedule(FiringScheduleVo schedule) {
@@ -117,6 +120,7 @@ public class FiringScheduleRestService {
     @Path("/firing-schedule/{id}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.SYSADMIN)
     public FiringScheduleVo updateFiringSchedule(@PathParam("id") Integer id, FiringScheduleVo schedule) {
@@ -136,6 +140,7 @@ public class FiringScheduleRestService {
     @DELETE
     @Path("/firing-schedule/{id}")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public void deleteFiringSchedule(@PathParam("id") Integer id) {
 
@@ -175,6 +180,7 @@ public class FiringScheduleRestService {
     @GET
     @Path("/search-firing-area-periods")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<FiringAreaPeriodsVo> searchFiringAreaPeriods(
             @QueryParam("date") Long date,
@@ -199,6 +205,7 @@ public class FiringScheduleRestService {
     @Path("/firing-area-periods")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public FiringAreaPeriodsVo updateFiringAreaPeriodsForDate(
@@ -228,6 +235,7 @@ public class FiringScheduleRestService {
     @Path("/generate-firing-area-messages")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public List<MessageVo> generateFiringAreaMessages(FiringAreaMessageParams params) {

@@ -15,6 +15,7 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -69,6 +70,7 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemAreaVo> searchAreas(
             @QueryParam("lang") String lang,
@@ -109,6 +111,7 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search/{areaIds}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemAreaVo> searchAreaIds(@PathParam("areaIds") String areaIds,
                                       @QueryParam("lang") String lang,
@@ -135,6 +138,7 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/area-roots")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemAreaVo> getAreaRoots(@QueryParam("lang") String lang) {
 
@@ -152,6 +156,7 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemAreaVo> getAll() {
 
@@ -168,6 +173,7 @@ public class AreaRestService extends AbstractBatchableRestService {
     @GET
     @Path("/area/{areaId}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public SystemAreaVo getArea(
             @PathParam("areaId") Integer areaId,

@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -64,6 +65,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
     @PermitAll
+    @Compressed
     @NoCache
     public List<ScriptResourceVo> getScriptResources(
             @QueryParam("type") ScriptResource.Type type,
@@ -97,6 +99,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @Path("/script-resource/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public ScriptResourceVo createScriptResource(ScriptResourceVo resource) throws Exception {
         log.info("Creating resource " + resource);
@@ -110,6 +113,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @Path("/script-resource/{id}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public ScriptResourceVo updateScriptResource(@PathParam("id") Integer id, ScriptResourceVo resource) throws Exception {
         if (!Objects.equals(id, resource.getId())) {
@@ -125,6 +129,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     /** Deletes an existing script resource */
     @DELETE
     @Path("/script-resource/{id}")
+    @Compressed
     @NoCache
     public void deleteScriptResource(@PathParam("id") Integer id) throws Exception {
         log.info("Deleting resource " + id);
@@ -136,6 +141,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @POST
     @Path("/reload/")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public Integer reloadScriptResourcesFromClassPath() throws Exception {
         log.info("Reloading resources from classpath");
@@ -173,6 +179,7 @@ public class ScriptResourceRestService extends AbstractBatchableRestService {
     @GET
     @Path("/script-resource/{resourceId}/history")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<ScriptResourceHistoryVo> getScriptResourceHistory(@PathParam("resourceId") Integer resourceId) {
 

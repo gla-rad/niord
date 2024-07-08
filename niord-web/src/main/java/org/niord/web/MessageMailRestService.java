@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -72,6 +73,7 @@ public class MessageMailRestService {
     @GET
     @Path("/send")
     @Produces("text/plain")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.EDITOR)
     public String sendMessageMail(@Context HttpServerRequest request) throws Exception {

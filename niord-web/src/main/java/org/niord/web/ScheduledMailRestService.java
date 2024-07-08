@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.mail.ScheduledMail;
@@ -55,6 +56,7 @@ public class ScheduledMailRestService {
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public PagedSearchResultVo<ScheduledMailVo> search(
             @QueryParam("recipient") String recipient,
@@ -88,6 +90,7 @@ public class ScheduledMailRestService {
     @Path("/scheduled-mail/{scheduledMailId}")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.SYSADMIN)
+    @Compressed
     @NoCache
     public ScheduledMailVo getScheduledMail(@PathParam("scheduledMailId") Integer scheduledMailId) throws Exception {
         ScheduledMail mail = scheduledMailService.getScheduledMail(scheduledMailId);

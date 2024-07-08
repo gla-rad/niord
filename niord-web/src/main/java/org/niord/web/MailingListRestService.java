@@ -16,6 +16,7 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -84,6 +85,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<MailingListVo> search(
             @QueryParam("name") String name,
@@ -202,6 +204,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/mailing-list/{mailingListId}/users")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public MailingListRecipients getRecipientUsers(@PathParam("mailingListId") String mailingListId) {
         log.info("Returning recipient users of mailing list " + mailingListId);
@@ -235,6 +238,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Path("/mailing-list/{mailingListId}/users")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public MailingListRecipients updateRecipientUsers(@PathParam("mailingListId") String mailingListId, List<UserVo> users) throws Exception {
 
@@ -255,6 +259,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/mailing-list/{mailingListId}/contacts")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public MailingListRecipients getRecipientContacts(@PathParam("mailingListId") String mailingListId) {
         log.info("Returning recipient contacts of mailing list " + mailingListId);
@@ -288,6 +293,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Path("/mailing-list/{mailingListId}/contacts")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public MailingListRecipients updateRecipientContacts(@PathParam("mailingListId") String mailingListId, List<ContactVo> contacts) throws Exception {
 
@@ -314,6 +320,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @Path("/mailing-list/{mailingListId}/update-status")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public boolean updateRecipientStatus(
             @PathParam("mailingListId") String mailingListId,
@@ -373,6 +380,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/export")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @PermitAll // Sysadmin role enforced programmatically
     @NoCache
     public List<MailingListVo> exportMailingLists() {
@@ -471,6 +479,7 @@ public class MailingListRestService extends AbstractBatchableRestService  {
     @GET
     @Path("/reports")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @RolesAllowed(Roles.USER)
     @NoCache
     public List<MailingListReportVo> getMailingListReports(@QueryParam("lang") String lang) {

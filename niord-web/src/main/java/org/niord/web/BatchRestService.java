@@ -86,6 +86,7 @@ public class BatchRestService {
     @GET
     @Path("/job-names")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @PermitAll
     public List<String> getJobNames() {
@@ -145,6 +146,7 @@ public class BatchRestService {
     @GET
     @Path("/{jobName}/instances")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public PagedSearchResultVo<BatchInstanceVo> getJobInstances(
@@ -168,6 +170,7 @@ public class BatchRestService {
     @GET
     @Path("/status")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     @PermitAll
     public BatchStatusVo getStatus() {
@@ -252,6 +255,7 @@ public class BatchRestService {
      */
     @GET
     @Path("/instance/{instanceId}/logs")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public List<String> getBatchJobLogFiles(@PathParam("instanceId") long instanceId) throws IOException {
@@ -270,6 +274,7 @@ public class BatchRestService {
     @GET
     @Path("/instance/{instanceId}/logs/{logFileName}")
     @Produces("text/plain")
+    @Compressed
     @NoCache
     @RolesAllowed(Roles.ADMIN)
     public String getBatchJobLogFileContent(
