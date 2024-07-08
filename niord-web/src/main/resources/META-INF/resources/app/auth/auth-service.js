@@ -35,10 +35,10 @@ angular.module('niord.auth')
                     }
 
                     if (AuthService.keycloak.token) {
-                        AuthService.keycloak.updateToken(60).success(function() {
+                        AuthService.keycloak.updateToken(60).then(function() {
                             config.headers.Authorization = 'Bearer ' + AuthService.keycloak.token;
                             deferred.resolve(config);
-                        }).error(function() {
+                        }).catch(function(err) {
                             deferred.reject('Failed to refresh token');
                         });
                     } else {
@@ -148,7 +148,7 @@ function bootstrapKeycloak(angularAppName, onLoad) {
 
     keycloak.init(
         initProps
-    ).success(function (authenticated) {
+    ).then(function (authenticated) {
 
         auth.loggedIn = authenticated;
         auth.keycloak = keycloak;
@@ -203,7 +203,7 @@ function bootstrapKeycloak(angularAppName, onLoad) {
 
         angular.bootstrap(document, [ angularAppName ]);
 
-    }).error(function () {
+    }).catch(function (err) {
         window.location.reload();
     });
 
