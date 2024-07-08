@@ -16,8 +16,8 @@
 package org.niord.web.aton;
 
 import io.quarkus.vertx.http.Compressed;
-import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.aton.AtonNode;
@@ -93,11 +93,11 @@ public class AtonIconRestService {
     @GET
     @jakarta.ws.rs.Path("/overview")
     @NoCache
-    public Response getAtonOverviewIcon(@Context HttpServerRequest request) throws Exception {
+    public Response getAtonOverviewIcon(@Context HttpServletRequest request) throws Exception {
 
         long t0 = System.currentTimeMillis();
 
-        String type = request.getParam("seamark:type");
+        String type = request.getParameter("seamark:type");
         if (StringUtils.isBlank(type)) {
             return Response
                     .temporaryRedirect(new URI("/img/aton/aton.png"))
@@ -161,8 +161,8 @@ public class AtonIconRestService {
      * @param param the param to check for
      * @return the potentially updated path
      */
-    private Path addParam(AtonNode aton, Path path, HttpServerRequest request, String param) {
-        String val = request.getParam(param);
+    private Path addParam(AtonNode aton, Path path, HttpServletRequest request, String param) {
+        String val = request.getParameter(param);
         if (StringUtils.isNotBlank(val)) {
             aton.updateTag(param, val);
             path = path.resolve(escape(val));

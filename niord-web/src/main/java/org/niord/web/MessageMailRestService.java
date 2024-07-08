@@ -17,7 +17,6 @@
 package org.niord.web;
 
 import io.quarkus.vertx.http.Compressed;
-import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -76,13 +75,13 @@ public class MessageMailRestService {
     @Compressed
     @NoCache
     @RolesAllowed(Roles.EDITOR)
-    public String sendMessageMail(@Context HttpServerRequest request) throws Exception {
+    public String sendMessageMail(@Context HttpServletRequest request) throws Exception {
 
         long t0 = System.currentTimeMillis();
 
-        String[] mailAddresses = new String[]{request.getParam("mailTo")};
-        String mailSubject = request.getParam("mailSubject");
-        String mailMessage = request.getParam("mailMessage");
+        String[] mailAddresses = new String[]{request.getParameter("mailTo")};
+        String mailSubject = request.getParameter("mailSubject");
+        String mailMessage = request.getParameter("mailMessage");
         if (mailAddresses == null || mailAddresses.length == 0) {
             throw new WebApplicationException(400);
         }

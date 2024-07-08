@@ -116,7 +116,6 @@ public class WebUtils {
         return null;
     }
 
-
     /**
      * Parses the URL (or part of the URL) to extract a request parameter map.
      * @param url the URL to parse

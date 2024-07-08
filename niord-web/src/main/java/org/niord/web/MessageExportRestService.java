@@ -19,7 +19,6 @@ package org.niord.web;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.vertx.http.Compressed;
-import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -83,7 +82,7 @@ public class MessageExportRestService extends AbstractBatchableRestService {
     @Path("/export.zip")
     @Compressed
     @NoCache
-    public Response generateZipArchiveForSearch(@Context HttpServerRequest request) throws Exception {
+    public Response generateZipArchiveForSearch(@Context HttpServletRequest request) throws Exception {
 
         // Perform a search for at most 1000 messages
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);

@@ -15,8 +15,6 @@
  */
 package org.niord.core.message;
 
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.impl.HttpServerRequestWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -118,16 +116,8 @@ public class MessageSearchParams extends PagedSearchParamsVo {
      * @param req the servlet request
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static MessageSearchParams instantiate(Domain domain, HttpServerRequest req) {
-        final MessageSearchParams params = new MessageSearchParams();
-        final HttpServerRequestWrapper wrapper = ((HttpServerRequestWrapper) req);
-        final Map<String, String[]> paramMap = new HashMap<>();
-        wrapper.params()
-                .names()
-                .forEach(key ->
-                        paramMap.put(key, wrapper.params().getAll(key).toArray(String[]::new))
-                );
-        return instantiate(domain, paramMap);
+    public static MessageSearchParams instantiate(Domain domain, HttpServletRequest req) {
+        return instantiate(domain, req.getParameterMap());
     }
 
 

@@ -17,7 +17,6 @@
 package org.niord.web;
 
 import io.quarkus.vertx.http.Compressed;
-import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -226,7 +225,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     public Response generatePdfForMessage(
             @PathParam("messageId") String messageId,
             @QueryParam("lang") String language,
-            @Context HttpServerRequest request) throws Exception {
+            @Context HttpServletRequest request) throws Exception {
 
         // The "draft" report display all language variants, so, sort instead of filter by language
         MessageVo message = messageRestService.getMessage(messageId, null);
@@ -283,7 +282,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Path("/report.pdf")
     @Compressed
     @NoCache
-    public Response generatePdfForSearch(@Context HttpServerRequest request) throws Exception {
+    public Response generatePdfForSearch(@Context HttpServletRequest request) throws Exception {
 
         // Perform a search for at most 1000 messages
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);
