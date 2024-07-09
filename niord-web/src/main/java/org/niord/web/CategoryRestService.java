@@ -176,6 +176,7 @@ public class CategoryRestService extends AbstractBatchableRestService {
     @GET
     @Path("/search/{categoryIds}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SystemCategoryVo> searchCategoryIds(@PathParam("categoryIds") String categoryIds,
                                       @QueryParam("lang") @DefaultValue("en") String lang,

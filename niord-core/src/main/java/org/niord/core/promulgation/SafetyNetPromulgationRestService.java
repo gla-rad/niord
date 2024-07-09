@@ -81,6 +81,7 @@ public class SafetyNetPromulgationRestService {
     @GET
     @Path("/areas/{typeId}/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<SafetyNetAreaVo> getAreas(
             @PathParam("typeId") String typeId,
@@ -98,6 +99,7 @@ public class SafetyNetPromulgationRestService {
     @Path("/areas/{typeId}/area/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public SafetyNetAreaVo createArea(
             @PathParam("typeId") String typeId,

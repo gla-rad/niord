@@ -16,6 +16,7 @@
 
 package org.niord.core.promulgation;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringUtils;
@@ -54,6 +55,7 @@ public class NavtexPromulgationRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @PermitAll
+    @Compressed
     @NoCache
     public NavtexMessagePromulgationVo reformatNavtex(NavtexMessagePromulgationVo navtex) throws Exception {
         if (StringUtils.isNotBlank(navtex.getText())) {
@@ -80,6 +82,7 @@ public class NavtexPromulgationRestService {
     @GET
     @Path("/transmitters/{typeId}/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<NavtexTransmitterVo> getTransmitters(
             @PathParam("typeId") String typeId,
@@ -97,6 +100,7 @@ public class NavtexPromulgationRestService {
     @Path("/transmitters/{typeId}/transmitter/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public NavtexTransmitterVo createTransmitter(
             @PathParam("typeId") String typeId,
@@ -117,6 +121,7 @@ public class NavtexPromulgationRestService {
     @Path("/transmitters/{typeId}/transmitter/{name}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public NavtexTransmitterVo updateTransmitter(
             @PathParam("typeId") String typeId,

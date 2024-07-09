@@ -295,6 +295,7 @@ public class AreaRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
+    @Compressed
     @NoCache
     public List<SystemAreaVo> computeIntersectingAreas(
             @QueryParam("lang") String lang,

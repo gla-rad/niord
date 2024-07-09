@@ -65,6 +65,7 @@ public class MessageParamFilterRestService {
     @GET
     @Path("/all")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public List<MessageParamFilterVo> getMessageFilters() {
         // Must be logged in

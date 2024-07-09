@@ -16,6 +16,7 @@
 
 package org.niord.core.promulgation;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.promulgation.vo.TwitterSettingsVo;
@@ -43,6 +44,7 @@ public class TwitterSettingsRestService {
     @GET
     @Path("/{typeId}")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public TwitterSettingsVo getSettings(
             @PathParam("typeId") String typeId) {
@@ -56,6 +58,7 @@ public class TwitterSettingsRestService {
     @Path("/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public TwitterSettingsVo createSettings(
             TwitterSettingsVo settings) throws Exception {
@@ -69,6 +72,7 @@ public class TwitterSettingsRestService {
     @Path("/{typeId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
+    @Compressed
     @NoCache
     public TwitterSettingsVo updateSettings(
             @PathParam("typeId") String typeId,

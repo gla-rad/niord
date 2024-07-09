@@ -15,6 +15,7 @@
  */
 package org.niord.web.aton;
 
+import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.jboss.resteasy.reactive.NoCache;
@@ -53,7 +54,8 @@ public class AtonLinkRestService {
     @GET
     @Path("/search")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     public List<AtonLinkVo> searchAtonLinks(
             @QueryParam("name")  @DefaultValue("") String name,
             @QueryParam("type") Set<AtonLinkType> types,
@@ -80,7 +82,8 @@ public class AtonLinkRestService {
     @GET
     @Path("/aton/{atonUid}")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     public List<AtonLinkVo> findAtonLinksByAtonUid(@PathParam("atonUid") String atonUid) {
         return atonLinkService.findAtonLinksByAtonUid(atonUid)
                 .stream()
@@ -93,7 +96,8 @@ public class AtonLinkRestService {
     @GET
     @Path("/link/{linkIds}")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     public List<AtonLinkVo> getAtonLinks(@PathParam("linkIds") String atonLinkUids) {
         return atonLinkService.findAtonLinks(Arrays.stream(atonLinkUids.split(","))
                         .map(UUID::fromString)
@@ -109,7 +113,8 @@ public class AtonLinkRestService {
     @Path("/link/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     @RolesAllowed(Roles.USER)
     public AtonLinkVo createAtonLink(AtonLinkVo link) {
         return atonLinkService.createAtonLink(new AtonLink(link)).toVo();
@@ -121,7 +126,8 @@ public class AtonLinkRestService {
     @Path("/link/{linkId}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     @RolesAllowed(Roles.USER)
     public AtonLinkVo updateAtonLink(@PathParam("linkId") UUID linkId, AtonLinkVo link) {
         if (!Objects.equals(linkId, link.getLinkId())) {
@@ -134,7 +140,8 @@ public class AtonLinkRestService {
     /** Deletes the AtoN links with the given AtoN link ID */
     @DELETE
     @Path("/link/{linkId}")
-        @NoCache
+    @Compressed
+    @NoCache
     @RolesAllowed(Roles.USER)
     public boolean deleteAtonLink(@PathParam("linkId") UUID linkId) {
         log.info("Deleting AtoN link " + linkId);
@@ -158,7 +165,8 @@ public class AtonLinkRestService {
     @Path("/link/{linkId}/add-atons")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     @RolesAllowed(Roles.USER)
     public AtonLinkVo addAtonToAtonLink(@PathParam("linkId") UUID linkId, List<String> atonUids) {
         log.info("Adding AtoNs " + atonUids + " to AtoN link " + linkId);
@@ -171,7 +179,8 @@ public class AtonLinkRestService {
     @Path("/link/{linkId}/remove-atons")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     @RolesAllowed(Roles.USER)
     public AtonLinkVo removeAtonFromAtonLink(@PathParam("linkId") UUID linkId, List<String> atonUids) {
         log.info("Removing AtoNs " + atonUids + " from AtoN link " + linkId);
@@ -182,7 +191,8 @@ public class AtonLinkRestService {
     @GET
     @Path("/type-categories")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     public List<AtonLinkTypeCategoryVo> getAtonLinkTypeCategories(@PathParam("linkType") AtonLinkType linkType) {
 
         return Arrays.stream(AtonLinkTypeCategory.values())
@@ -194,7 +204,8 @@ public class AtonLinkRestService {
     @GET
     @Path("/type-categories/{linkType}")
     @Produces("application/json;charset=UTF-8")
-        @NoCache
+    @Compressed
+    @NoCache
     public List<AtonLinkTypeCategoryVo> getAtonLinkTypeCategoriesByType(@PathParam("linkType") AtonLinkType linkType) {
 
         return Arrays.stream(AtonLinkTypeCategory.values())

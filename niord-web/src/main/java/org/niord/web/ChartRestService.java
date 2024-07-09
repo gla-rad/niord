@@ -165,6 +165,7 @@ public class ChartRestService extends AbstractBatchableRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @RolesAllowed(Roles.EDITOR)
+    @Compressed
     @NoCache
     public List<SystemChartVo> computeIntersectingCharts(FeatureCollectionVo featureCollection) {
         GeometryVo geometryVo = featureCollection.toGeometry();
