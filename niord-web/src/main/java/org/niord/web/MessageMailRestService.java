@@ -79,7 +79,7 @@ public class MessageMailRestService {
 
         long t0 = System.currentTimeMillis();
 
-        String[] mailAddresses = new String[]{request.getParameter("mailTo")};
+        String[] mailAddresses = request.getParameterValues("mailTo");
         String mailSubject = request.getParameter("mailSubject");
         String mailMessage = request.getParameter("mailMessage");
         if (mailAddresses == null || mailAddresses.length == 0) {
