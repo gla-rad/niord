@@ -16,8 +16,8 @@
 package org.niord.web.aton;
 
 import io.quarkus.vertx.http.Compressed;
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.aton.AtonNode;
@@ -34,12 +34,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * Creates and caches AtoN icons
  */
-@jakarta.ws.rs.Path("/aton-icon")
+@Path("/aton-icon")
 @RequestScoped
 public class AtonIconRestService {
 
@@ -54,9 +53,8 @@ public class AtonIconRestService {
     @Inject
     RepositoryService repositoryService;
 
-
     @POST
-    @jakarta.ws.rs.Path("/svg")
+    @Path("/svg")
     @Consumes("application/json;charset=UTF-8")
     @Produces("image/svg+xml")
     @Compressed
@@ -91,13 +89,13 @@ public class AtonIconRestService {
 
 
     @GET
-    @jakarta.ws.rs.Path("/overview")
+    @Path("/overview")
     @NoCache
-    public Response getAtonOverviewIcon(@Context HttpServletRequest request) throws Exception {
+    public Response getAtonOverviewIcon(@Context HttpServerRequest request) throws Exception {
 
         long t0 = System.currentTimeMillis();
 
-        String type = request.getParameter("seamark:type");
+        String type = request.getParam("seamark:type");
         if (StringUtils.isBlank(type)) {
             return Response
                     .temporaryRedirect(new URI("/img/aton/aton.png"))
@@ -108,7 +106,7 @@ public class AtonIconRestService {
         AtonNode aton = new AtonNode();
 
         // Construct a repository path to the icon
-        Path path = repositoryService
+        java.nio.file.Path path = repositoryService
                 .getRepoRoot()
                 .resolve(OVERVIEW_ICON_REPO);
 
@@ -161,8 +159,8 @@ public class AtonIconRestService {
      * @param param the param to check for
      * @return the potentially updated path
      */
-    private Path addParam(AtonNode aton, Path path, HttpServletRequest request, String param) {
-        String val = request.getParameter(param);
+    private java.nio.file.Path addParam(AtonNode aton, java.nio.file.Path path, HttpServerRequest request, String param) {
+        String val = request.getParam(param);
         if (StringUtils.isNotBlank(val)) {
             aton.updateTag(param, val);
             path = path.resolve(escape(val));
@@ -181,7 +179,7 @@ public class AtonIconRestService {
      * Ensures that parent directories are created
      * @param file the file whose parent directories will be created
      */
-    private void checkCreateParentDirs(Path file) throws IOException {
+    private void checkCreateParentDirs(java.nio.file.Path file) throws IOException {
         if (!Files.exists(file.getParent())) {
             Files.createDirectories(file.getParent());
         }

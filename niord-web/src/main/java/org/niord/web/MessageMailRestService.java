@@ -17,6 +17,7 @@
 package org.niord.web;
 
 import io.quarkus.vertx.http.Compressed;
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +28,7 @@ import org.niord.core.message.MessageMailService;
 import org.niord.core.message.MessageMailService.MessageMailTemplate;
 import org.niord.core.message.MessageSearchParams;
 import org.niord.core.user.Roles;
+import org.niord.core.util.WebUtils;
 import org.niord.model.message.MessageVo;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
@@ -35,7 +37,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.internet.InternetAddress;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -75,13 +76,13 @@ public class MessageMailRestService {
     @Compressed
     @NoCache
     @RolesAllowed(Roles.EDITOR)
-    public String sendMessageMail(@Context HttpServletRequest request) throws Exception {
+    public String sendMessageMail(@Context HttpServerRequest request) throws Exception {
 
         long t0 = System.currentTimeMillis();
 
-        String[] mailAddresses = request.getParameterValues("mailTo");
-        String mailSubject = request.getParameter("mailSubject");
-        String mailMessage = request.getParameter("mailMessage");
+        String[] mailAddresses = request.params().getAll("mailTo").toArray(String[]::new);
+        String mailSubject =  request.params().get("mailSubject");
+        String mailMessage = request.params().get("mailMessage");
         if (mailAddresses == null || mailAddresses.length == 0) {
             throw new WebApplicationException(400);
         }

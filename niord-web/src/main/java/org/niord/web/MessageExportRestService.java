@@ -35,9 +35,9 @@ import org.niord.model.IJsonSerializable;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -82,7 +82,7 @@ public class MessageExportRestService extends AbstractBatchableRestService {
     @Path("/export.zip")
     @Compressed
     @NoCache
-    public Response generateZipArchiveForSearch(@Context HttpServletRequest request) throws Exception {
+    public Response generateZipArchiveForSearch(@Context HttpServerRequest request) throws Exception {
 
         // Perform a search for at most 1000 messages
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);

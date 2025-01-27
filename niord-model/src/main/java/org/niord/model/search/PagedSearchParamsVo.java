@@ -16,10 +16,13 @@
 
 package org.niord.model.search;
 
+import io.smallrye.mutiny.operators.multi.MultiMapOp;
+import io.vertx.core.MultiMap;
 import org.niord.model.IJsonSerializable;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,6 +39,20 @@ public abstract class PagedSearchParamsVo implements IJsonSerializable {
     protected  String sortBy;
     protected  SortOrder sortOrder;
 
+    /** Helper method */
+    public static  <T> Set<T> toSet(List<T> arg) {
+        // We create a new HashSet from arg, because we need it to be mutable as some
+        // of the existing code depends on it.
+        // Wildfly would inject mutable containers, but Quarkus injects immutable containers
+        return arg == null ? new HashSet<>() : new HashSet<>(arg);
+    }
+
+    /** Helper method */
+    public static  <T, S> Set<T> toSet(List<S> args, Function<S, T> mapper) {
+        return toSet(args).stream()
+                .map(mapper)
+                .collect(Collectors.toSet());
+    }
 
     /** Helper method */
     public static  <T> Set<T> toSet(Set<T> arg) {

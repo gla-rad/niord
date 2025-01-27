@@ -16,19 +16,17 @@
 
 package org.niord.core.aton;
 
+import io.vertx.core.MultiMap;
+import io.vertx.core.http.HttpServerRequest;
 import org.locationtech.jts.geom.Geometry;
 import org.niord.core.domain.Domain;
 import org.niord.core.geojson.JtsConverter;
 import org.niord.core.util.WebUtils;
 import org.niord.model.search.PagedSearchParamsVo;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
-import static org.niord.core.util.WebUtils.getParameterValues;
 
 /**
  * AtoN search parameters
@@ -50,7 +48,7 @@ public class AtonSearchParams extends PagedSearchParamsVo {
      * @return the MessageSearchParams initialized with parameter values
      */
     public static AtonSearchParams instantiate(Domain domain, String url) {
-        return instantiate(domain, WebUtils.parseParameterMap(url));
+        return instantiate(domain, WebUtils.parseParameterMultiMap(url));
     }
 
 
@@ -60,8 +58,8 @@ public class AtonSearchParams extends PagedSearchParamsVo {
      * @param req the servlet request
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static AtonSearchParams instantiate(Domain domain, HttpServletRequest req) {
-        return instantiate(domain, req.getParameterMap());
+    public static AtonSearchParams instantiate(Domain domain, HttpServerRequest req) {
+        return instantiate(domain, req.params());
     }
 
 
@@ -72,24 +70,24 @@ public class AtonSearchParams extends PagedSearchParamsVo {
      * @param reqParams the request parameters
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static AtonSearchParams instantiate(Domain domain, Map<String, String[]> reqParams) {
+    public static AtonSearchParams instantiate(Domain domain, MultiMap reqParams) {
         AtonSearchParams params = new AtonSearchParams();
-        params.name(getParameterValues(reqParams, "name"))
-                .atonUids(toSet(reqParams.get("atonUids"), Function.identity()))
-                .chartNumbers(toSet(reqParams.get("chartNumbers"), Function.identity()))
-                .areaIds(toSet(reqParams.get("areaIds"), Integer::valueOf))
+        params.name(reqParams.get("name"))
+                .atonUids(toSet(reqParams.getAll("atonUids"), Function.identity()))
+                .chartNumbers(toSet(reqParams.getAll("chartNumbers"), Function.identity()))
+                .areaIds(toSet(reqParams.getAll("areaIds"), Integer::valueOf))
 
                 // Extent parameters
-                .extent(checkNull(getParameterValues(reqParams, "minLat"), Double::valueOf),
-                        checkNull(getParameterValues(reqParams, "minLon"), Double::valueOf),
-                        checkNull(getParameterValues(reqParams, "maxLat"), Double::valueOf),
-                        checkNull(getParameterValues(reqParams, "maxLon"), Double::valueOf))
+                .extent(checkNull(reqParams.get("minLat"), Double::valueOf),
+                        checkNull(reqParams.get("minLon"), Double::valueOf),
+                        checkNull(reqParams.get("maxLat"), Double::valueOf),
+                        checkNull(reqParams.get("maxLon"), Double::valueOf))
 
                 // Standard paged search parameters
-                .maxSize(checkNull(getParameterValues(reqParams, "maxSize"), 100, Integer::valueOf))
-                .page(checkNull(getParameterValues(reqParams, "page"), 0, Integer::valueOf))
-                .sortBy(getParameterValues(reqParams, "sortBy"))
-                .sortOrder(checkNull(getParameterValues(reqParams, "sortOrder"), SortOrder::valueOf));
+                .maxSize(checkNull(reqParams.get("maxSize"), 100, Integer::valueOf))
+                .page(checkNull(reqParams.get("page"), 0, Integer::valueOf))
+                .sortBy(reqParams.get("sortBy"))
+                .sortOrder(checkNull(reqParams.get("sortOrder"), SortOrder::valueOf));
 
         return params;
     }

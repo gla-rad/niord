@@ -39,9 +39,9 @@ import org.niord.model.message.MessageVo;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -225,7 +225,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     public Response generatePdfForMessage(
             @PathParam("messageId") String messageId,
             @QueryParam("lang") String language,
-            @Context HttpServletRequest request) throws Exception {
+            @Context HttpServerRequest request) throws Exception {
 
         // The "draft" report display all language variants, so, sort instead of filter by language
         MessageVo message = messageRestService.getMessage(messageId, null);
@@ -282,7 +282,7 @@ public class MessageReportRestService extends AbstractBatchableRestService {
     @Path("/report.pdf")
     @Compressed
     @NoCache
-    public Response generatePdfForSearch(@Context HttpServletRequest request) throws Exception {
+    public Response generatePdfForSearch(@Context HttpServerRequest request) throws Exception {
 
         // Perform a search for at most 1000 messages
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);

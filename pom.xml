@@ -18,7 +18,8 @@
 
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.12.1</quarkus.platform.version>
+        <quarkus.platform.version>3.15.3</quarkus.platform.version>
+
 
 	    <quarkus.hibernate-search-orm.elasticsearch.version>8.11</quarkus.hibernate-search-orm.elasticsearch.version>
 
@@ -30,7 +31,7 @@
         <infinispan.core.jakarta.version>14.0.21.Final</infinispan.core.jakarta.version>
         <quarkus.jberet.version>2.3.1</quarkus.jberet.version>
 
-        <hibernate.spatial.version>6.5.2.Final</hibernate.spatial.version>
+        <hibernate.spatial.version>6.6.0.Final</hibernate.spatial.version>
     </properties>
 
 

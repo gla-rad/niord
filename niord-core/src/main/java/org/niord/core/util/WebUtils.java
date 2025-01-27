@@ -15,14 +15,15 @@
  */
 package org.niord.core.util;
 
+import io.vertx.core.MultiMap;
+import io.vertx.core.http.Cookie;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.HttpServerResponse;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.reactive.server.multipart.FormValue;
 import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.MultivaluedMap;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,13 +50,13 @@ public class WebUtils {
      * @param request the request
      * @return the base URL
      */
-    public static String getWebAppUrl(HttpServletRequest request, String... appends) {
+    public static String getWebAppUrl(HttpServerRequest request, String... appends) {
         StringBuilder result = new StringBuilder(String.format(
                 "%s://%s%s%s",
-                request.getScheme(),
-                request.getServerName(),
-                request.getServerPort() == 80 || request.getServerPort() == 443 ? "" : ":" + request.getServerPort(),
-                request.getContextPath()));
+                request.scheme(),
+                request.localAddress().hostName(),
+                request.localAddress().port() == 80 || request.localAddress().port() == 443 ? "" : ":" + request.localAddress().port(),
+                request.path()));
         for (String a : appends) {
             result.append(a);
         }
@@ -67,8 +68,8 @@ public class WebUtils {
      * @param request the request
      * @return the base URL
      */
-    public static String getServletUrl(HttpServletRequest request, String... appends) {
-        String[] args = (String[])ArrayUtils.addAll(new String[] { request.getServletPath() }, appends);
+    public static String getServletUrl(HttpServerRequest request, String... appends) {
+        String[] args = (String[])ArrayUtils.addAll(new String[] { request.path() }, appends);
         return getWebAppUrl(request, args);
     }
 
@@ -78,10 +79,10 @@ public class WebUtils {
      * @param name the name
      * @return the cookie with the given name or null if not found
      */
-    public static Cookie getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
+    public static Cookie getCookie(HttpServerRequest request, String name) {
+        Set<Cookie> cookies = request.cookies();
         if (cookies != null) {
-            for (Cookie c : request.getCookies()) {
+            for (Cookie c : request.cookies()) {
                 if (c.getName().equals(name)) {
                     return c;
                 }
@@ -96,24 +97,9 @@ public class WebUtils {
      * @param name the name
      * @return the value of the cookie with the given name or null if not found
      */
-    public static String getCookieValue(HttpServletRequest request, String name) {
+    public static String getCookieValue(HttpServerRequest request, String name) {
         Cookie c = getCookie(request, name);
         return (c == null) ? null : c.getValue();
-    }
-
-
-    /**
-     * Returns a single parameter value from the request parameter map
-     * @param reqParams the request parameter map
-     * @param name the name of the parameter
-     * @return the value or null if not defined
-     */
-    public static String getParameterValues(Map<String, String[]> reqParams, String name) {
-        if (reqParams != null && name != null) {
-            String[] values = reqParams.get(name);
-            return values == null || values.length == 0 ? null : values[0];
-        }
-        return null;
     }
 
     /**
@@ -150,35 +136,28 @@ public class WebUtils {
                         e -> e.getValue().toArray(new String[e.getValue().size()])));
     }
 
-
     /**
-     * Reads the body of a posted request
-     * @param request the request
-     * @return the body
+     * Parses the URL (or part of the URL) to extract a request parameter map
+     * into a  vertx multi-map.
+     * @param url the URL to parse
+     * @return the parsed request parameter MultiMap
      */
-    public static String readRequestBody(HttpServletRequest request) throws IOException {
-        StringBuilder result = new StringBuilder();
-
-        String line;
-        BufferedReader reader = request.getReader();
-        while ((line = reader.readLine()) != null) {
-            result.append(line).append("\n");
-        }
-
-        return result.toString();
+    public static MultiMap parseParameterMultiMap(String url) {
+        final MultiMap multiMap = MultiMap.caseInsensitiveMultiMap();
+        WebUtils.parseParameterMap(url).forEach((k, v) -> multiMap.add(k,Arrays.stream(v).toList()));
+        return multiMap;
     }
-
 
     /**
      * Add headers to the response to ensure no caching takes place
      * @param response the response
      * @return the response
      */
-    public static HttpServletResponse nocache(HttpServletResponse response) {
-        response.setHeader("Cache-Control","no-cache");
-        response.setHeader("Cache-Control","no-store");
-        response.setHeader("Pragma","no-cache");
-        response.setDateHeader ("Expires", 0);
+    public static HttpServerResponse nocache(HttpServerResponse response) {
+        response.headers().add("Cache-Control","no-cache");
+        response.headers().add("Cache-Control","no-store");
+        response.headers().add("Pragma","no-cache");
+        response.headers().add ("Expires", "0");
         return response;
     }
 
@@ -188,11 +167,11 @@ public class WebUtils {
      * @param seconds the number of seconds to cache the response
      * @return the response
      */
-    public static HttpServletResponse cache(HttpServletResponse response, int seconds) {
+    public static HttpServerResponse cache(HttpServerResponse response, int seconds) {
         long now = System.currentTimeMillis();
-        response.addHeader("Cache-Control", "max-age=" + seconds);
-        response.setDateHeader("Last-Modified", now);
-        response.setDateHeader("Expires", now + seconds * 1000L);
+        response.headers().add("Cache-Control", "max-age=" + seconds);
+        response.headers().add("Last-Modified", String.valueOf(now));
+        response.headers().add("Expires", String.valueOf(now + seconds * 1000L));
         return response;
     }
 

@@ -15,6 +15,7 @@
  */
 package org.niord.core.message;
 
+import io.vertx.core.MultiMap;
 import org.apache.commons.lang.StringUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -27,14 +28,13 @@ import org.niord.model.message.Status;
 import org.niord.model.message.Type;
 import org.niord.model.search.PagedSearchParamsVo;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.vertx.core.http.HttpServerRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
-import static org.niord.core.util.WebUtils.getParameterValues;
 
 /**
  * Defines the message search parameters
@@ -106,7 +106,7 @@ public class MessageSearchParams extends PagedSearchParamsVo {
      * @return the MessageSearchParams initialized with parameter values
      */
     public static MessageSearchParams instantiate(Domain domain, String url) {
-        return instantiate(domain, WebUtils.parseParameterMap(url));
+        return instantiate(domain, WebUtils.parseParameterMultiMap(url));
     }
 
 
@@ -116,8 +116,8 @@ public class MessageSearchParams extends PagedSearchParamsVo {
      * @param req the servlet request
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static MessageSearchParams instantiate(Domain domain, HttpServletRequest req) {
-        return instantiate(domain, req.getParameterMap());
+    public static MessageSearchParams instantiate(Domain domain, HttpServerRequest req) {
+        return instantiate(domain, req.params());
     }
 
 
@@ -128,43 +128,43 @@ public class MessageSearchParams extends PagedSearchParamsVo {
      * @param reqParams the request parameters
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static MessageSearchParams instantiate(Domain domain, Map<String, String[]> reqParams) {
+    public static MessageSearchParams instantiate(Domain domain, MultiMap reqParams) {
         MessageSearchParams params = new MessageSearchParams();
-        params.language(getParameterValues(reqParams, "lang"))
-                .query(getParameterValues(reqParams, "query"))
-                .domain(getParameterValues(reqParams, "domain"))
-                .statuses(toSet(reqParams.get("status"), Status::valueOf))
-                .mainTypes(toSet(reqParams.get("mainType"), MainType::valueOf))
-                .types(toSet(reqParams.get("type"), Type::valueOf))
-                .seriesIds(toSet(reqParams.get("messageSeries"), Function.identity()))
-                .areaIds(toSet(reqParams.get("area"), Function.identity()))
-                .categoryIds(toSet(reqParams.get("category"), Function.identity()))
-                .chartNumbers(toSet(reqParams.get("chart"), Function.identity()))
-                .tags(toSet(reqParams.get("tag"), Function.identity()))
-                .publications(toSet(reqParams.get("publication"), Function.identity()))
-                .promulgationTypes(toSet(reqParams.get("promulgationType"), Function.identity()))
-                .messageId(getParameterValues(reqParams, "messageId"))
-                .referenceLevels(checkNull(getParameterValues(reqParams, "referenceLevels"), Integer::valueOf))
-                .from((Long)checkNull(getParameterValues(reqParams, "fromDate"), Long::valueOf))
-                .to((Long)checkNull(getParameterValues(reqParams, "toDate"), Long::valueOf))
-                .dateType(checkNull(getParameterValues(reqParams, "dateType"), DateType::valueOf))
-                .username(getParameterValues(reqParams, "username"))
-                .userType(checkNull(getParameterValues(reqParams, "userType"), UserType::valueOf))
-                .commentsType(checkNull(getParameterValues(reqParams, "comments"), CommentsType::valueOf))
-                .viewMode(getParameterValues(reqParams, "viewMode"))
+        params.language(reqParams.get("lang"))
+                .query(reqParams.get("query"))
+                .domain(reqParams.get("domain"))
+                .statuses(toSet(reqParams.getAll("status"), Status::valueOf))
+                .mainTypes(toSet(reqParams.getAll("mainType"), MainType::valueOf))
+                .types(toSet(reqParams.getAll("type"), Type::valueOf))
+                .seriesIds(toSet(reqParams.getAll("messageSeries"), Function.identity()))
+                .areaIds(toSet(reqParams.getAll("area"), Function.identity()))
+                .categoryIds(toSet(reqParams.getAll("category"), Function.identity()))
+                .chartNumbers(toSet(reqParams.getAll("chart"), Function.identity()))
+                .tags(toSet(reqParams.getAll("tag"), Function.identity()))
+                .publications(toSet(reqParams.getAll("publication"), Function.identity()))
+                .promulgationTypes(toSet(reqParams.getAll("promulgationType"), Function.identity()))
+                .messageId(reqParams.get("messageId"))
+                .referenceLevels(checkNull(reqParams.get("referenceLevels"), Integer::valueOf))
+                .from((Long)checkNull(reqParams.get("fromDate"), Long::valueOf))
+                .to((Long)checkNull(reqParams.get("toDate"), Long::valueOf))
+                .dateType(checkNull(reqParams.get( "dateType"), DateType::valueOf))
+                .username(reqParams.get("username"))
+                .userType(checkNull(reqParams.get("userType"), UserType::valueOf))
+                .commentsType(checkNull(reqParams.get("comments"), CommentsType::valueOf))
+                .viewMode(reqParams.get("viewMode"))
 
                 // Extent parameters
-                .extent(checkNull(getParameterValues(reqParams, "minLat"), Double::valueOf),
-                        checkNull(getParameterValues(reqParams, "minLon"), Double::valueOf),
-                        checkNull(getParameterValues(reqParams, "maxLat"), Double::valueOf),
-                        checkNull(getParameterValues(reqParams, "maxLon"), Double::valueOf))
-                .includeNoPos(checkNull(getParameterValues(reqParams, "includeNoPos"), Boolean::valueOf))
+                .extent(checkNull(reqParams.get("minLat"), Double::valueOf),
+                        checkNull(reqParams.get("minLon"), Double::valueOf),
+                        checkNull(reqParams.get("maxLat"), Double::valueOf),
+                        checkNull(reqParams.get("maxLon"), Double::valueOf))
+                .includeNoPos(checkNull(reqParams.get("includeNoPos"), Boolean::valueOf))
 
                 // Standard paged search parameters
-                .maxSize(checkNull(getParameterValues(reqParams, "maxSize"), 100, Integer::valueOf))
-                .page(checkNull(getParameterValues(reqParams, "page"), 0, Integer::valueOf))
-                .sortBy(getParameterValues(reqParams, "sortBy"))
-                .sortOrder(checkNull(getParameterValues(reqParams, "sortOrder"), SortOrder::valueOf));
+                .maxSize(checkNull(reqParams.get("maxSize"), 100, Integer::valueOf))
+                .page(checkNull(reqParams.get("page"), 0, Integer::valueOf))
+                .sortBy(reqParams.get("sortBy"))
+                .sortOrder(checkNull(reqParams.get("sortOrder"), SortOrder::valueOf));
 
         // If no explicit sort order is specified, sort by domain sort order
         params.checkSortByDomain(domain);

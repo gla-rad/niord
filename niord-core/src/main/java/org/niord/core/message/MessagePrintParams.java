@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.niord.core.util.WebUtils;
 import org.niord.model.search.PagedSearchParamsVo;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.vertx.core.http.HttpServerRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,14 +49,14 @@ public class MessagePrintParams extends PagedSearchParamsVo {
      * @param req the servlet request
      * @return the MessageSearchParams initialized with parameter values
      */
-    public static MessagePrintParams instantiate(HttpServletRequest req) {
+    public static MessagePrintParams instantiate(HttpServerRequest req) {
         MessagePrintParams params = new MessagePrintParams();
-        params.report(req.getParameter("report"))
-                .pageSize(checkNull(req.getParameter("pageSize"), "A4", Function.identity()))
-                .pageOrientation(checkNull(req.getParameter("pageOrientation"), "portrait", Function.identity()))
-                .mapThumbnails(checkNull(req.getParameter("mapThumbnails"), false, Boolean::valueOf))
-                .fileName(checkNull(req.getParameter("fileName"), null, Function.identity()))
-                .debug(checkNull(req.getParameter("debug"), false, Boolean::valueOf))
+        params.report(req.getParam("report"))
+                .pageSize(checkNull(req.getParam("pageSize"), "A4", Function.identity()))
+                .pageOrientation(checkNull(req.getParam("pageOrientation"), "portrait", Function.identity()))
+                .mapThumbnails(checkNull(req.getParam("mapThumbnails"), false, Boolean::valueOf))
+                .fileName(checkNull(req.getParam("fileName"), null, Function.identity()))
+                .debug(checkNull(req.getParam("debug"), false, Boolean::valueOf))
                 .readReportParams(req);
 
         return params;
@@ -154,17 +154,15 @@ public class MessagePrintParams extends PagedSearchParamsVo {
         return params;
     }
 
-    private MessagePrintParams readReportParams(HttpServletRequest request) {
-        request.getParameterMap().entrySet().stream()
-                .filter(e -> e.getKey().startsWith("param:"))
-                .forEach(e -> {
-                    String key = e.getKey().substring("param:".length());
-                    if (e.getValue() != null && e.getValue().length == 1) {
-                        params.put(key, e.getValue()[0]);
-                    } else if (e.getValue().length > 0) {
-                        params.put(key, e.getValue());
-                    }
-                });
+    private MessagePrintParams readReportParams(HttpServerRequest request) {
+        request.params().forEach((k, v) -> {
+            if(k.startsWith("param:")) {
+                String key = k.substring("param:".length());
+                if (v != null && !v.isEmpty()) {
+                    params.put(key, v);
+                }
+            }
+        });
         return this;
     }
 

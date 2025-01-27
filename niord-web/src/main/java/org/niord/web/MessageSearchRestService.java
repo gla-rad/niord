@@ -18,7 +18,6 @@ package org.niord.web;
 
 import io.quarkus.vertx.http.Compressed;
 import jakarta.annotation.security.PermitAll;
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.domain.Domain;
@@ -33,6 +32,7 @@ import org.niord.model.message.Status;
 import org.niord.model.search.PagedSearchResultVo;
 import org.slf4j.Logger;
 
+import io.vertx.core.http.HttpServerRequest;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -235,7 +235,7 @@ public class MessageSearchRestService {
     @Produces("application/json;charset=UTF-8")
     @Compressed
     @NoCache
-    public PagedSearchResultVo<MessageVo> search(@Context HttpServletRequest request) throws Exception {
+    public PagedSearchResultVo<MessageVo> search(@Context HttpServerRequest request) throws Exception {
         MessageSearchParams params = MessageSearchParams.instantiate(domainService.currentDomain(), request);
         return searchMessages(params);
     }

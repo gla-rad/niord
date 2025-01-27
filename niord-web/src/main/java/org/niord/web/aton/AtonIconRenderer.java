@@ -130,9 +130,9 @@ public class AtonIconRenderer {
 			return RuleSet.SEAMARK;
 		}
 
-// For later josm-seachart versions
-//		public ChartContext.Chart chart() {
-//			return null;
-//		}
+		// For later josm-seachart versions
+		public ChartContext.Chart chart() {
+			return null;
+		}
 	}
 }
