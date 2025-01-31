@@ -15,6 +15,10 @@
  */
 package org.niord.core.domain;
 
+import io.smallrye.common.vertx.ContextLocals;
+import io.smallrye.mutiny.Uni;
+import io.vertx.core.Vertx;
+import jakarta.enterprise.context.RequestScoped;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.area.Area;
 import org.niord.core.category.Category;
@@ -26,7 +30,6 @@ import org.niord.core.user.UserService;
 import org.slf4j.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
@@ -41,8 +44,6 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 @SuppressWarnings("unused")
 public class DomainService extends BaseService {
-
-    private final static ThreadLocal<String> THREAD_LOCAL_DOMAIN = new ThreadLocal<>();
 
     @Inject
     Logger log;
@@ -65,7 +66,9 @@ public class DomainService extends BaseService {
 
         Domain currentDomain = null;
 
-        String domainId = THREAD_LOCAL_DOMAIN.get();
+        String domainId = Objects.nonNull(Vertx.currentContext()) ?
+                ContextLocals.get("domainId", null) : null;
+
         if (StringUtils.isNotBlank(domainId)) {
             currentDomain = findByDomainId(domainId);
         }
@@ -76,6 +79,20 @@ public class DomainService extends BaseService {
             if (ticketData != null) {
                 domainId = ticketData.getDomain();
                 currentDomain = findByDomainId(domainId);
+
+                // Ensure we are in the correct Vert.x context
+                if (Vertx.currentContext() != null) {
+                    if (StringUtils.isNotBlank(domainId)) {
+                        ContextLocals.put("domainId", domainId);
+                        log.debug("Domain ID added to ContextLocal");
+                    }
+                    if (StringUtils.isNotBlank(domainId)) {
+                        ContextLocals.put("currentDomain", currentDomain);
+                        log.debug("Current domain added to ContextLocal");
+                    }
+                } else {
+                    log.debug("ContextLocal is not available");
+                }
             }
         }
 
@@ -92,8 +109,14 @@ public class DomainService extends BaseService {
      * @param domainId the domain ID to set
      */
     public void setDomainForCurrentThread(String domainId) {
-        if (StringUtils.isNotBlank(domainId)) {
-            THREAD_LOCAL_DOMAIN.set(domainId);
+        // Ensure we are in the correct Vert.x context
+        if (Vertx.currentContext() != null) {
+            if (StringUtils.isNotBlank(domainId)) {
+                ContextLocals.put("domainId", domainId);
+                log.debug("Domain ID added to ContextLocal");
+            }
+        } else {
+            log.debug("ContextLocal is not available");
         }
     }
 
@@ -105,7 +128,13 @@ public class DomainService extends BaseService {
      * Must be preceded by a call to call to setDomainForCurrentThread()
      */
     public void removeDomainForCurrentThread() {
-        THREAD_LOCAL_DOMAIN.remove();
+        // Ensure we are in the correct Vert.x context
+        if (Vertx.currentContext() != null) {
+            ContextLocals.remove("domainId");
+            log.debug("Domain ID removed to ContextLocal");
+        } else {
+            log.debug("ContextLocal is not available");
+        }
     }
 
 

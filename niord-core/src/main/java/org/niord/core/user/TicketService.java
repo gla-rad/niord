@@ -16,6 +16,8 @@
 
 package org.niord.core.user;
 
+import io.smallrye.common.vertx.ContextLocals;
+import io.vertx.core.Vertx;
 import org.apache.commons.lang.StringUtils;
 import org.infinispan.Cache;
 import org.infinispan.configuration.cache.CacheMode;
@@ -30,6 +32,7 @@ import org.slf4j.Logger;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,9 +59,6 @@ public class TicketService extends BaseCache<String, TicketService.TicketData> {
     final static long LIFESPAN = 60 * 1000;    // 1 minute
 
     final static String CACHE_ID = "ticketCache";
-
-    private final static ThreadLocal<TicketService.TicketData> THREAD_LOCAL_TICKET_DATA = new ThreadLocal<>();
-
 
     @Inject
     private Logger log;
@@ -145,7 +145,13 @@ public class TicketService extends BaseCache<String, TicketService.TicketData> {
 
             // Register the ticket data in a thread local
             if (ticketData != null) {
-                THREAD_LOCAL_TICKET_DATA.set(ticketData);
+                // Ensure we are in the correct Vert.x context
+                if (Vertx.currentContext() != null) {
+                    ContextLocals.put("ticketData", ticketData);
+                    log.debug("Ticket data added to ContextLocal");
+                } else {
+                    log.debug("ContextLocal is not available");
+                }
                 return true;
             }
         }
@@ -159,7 +165,8 @@ public class TicketService extends BaseCache<String, TicketService.TicketData> {
      * @return the ticket data, or null if undefined.
      */
     public TicketData getTicketDataForCurrentThread() {
-        return THREAD_LOCAL_TICKET_DATA.get();
+        return Objects.nonNull(Vertx.currentContext()) ?
+                ContextLocals.get("ticketData", null) : null;
     }
 
     /**
@@ -169,7 +176,13 @@ public class TicketService extends BaseCache<String, TicketService.TicketData> {
      * Must be preceded by a call to call to resolveTicketForCurrentThread()
      */
     public void removeTicketForCurrentThread() {
-        THREAD_LOCAL_TICKET_DATA.remove();
+        // Ensure we are in the correct Vert.x context
+        if (Vertx.currentContext() != null) {
+            ContextLocals.remove("ticketData");
+            log.debug("Ticket data removed from ContextLocal");
+        } else {
+            log.debug("ContextLocal is not available");
+        }
     }
 
     /**

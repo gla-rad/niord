@@ -19,13 +19,14 @@ import io.vertx.core.MultiMap;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.resteasy.reactive.server.multipart.FormValue;
 import org.jboss.resteasy.reactive.server.multipart.MultipartFormDataInput;
 
 import jakarta.ws.rs.core.MultivaluedMap;
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -153,6 +154,19 @@ public class WebUtils {
      * @param response the response
      * @return the response
      */
+    public static HttpServletResponse nocache(HttpServletResponse response) {
+        response.addHeader("Cache-Control","no-cache");
+        response.addHeader("Cache-Control","no-store");
+        response.addHeader("Pragma","no-cache");
+        response.addHeader("Expires", "0");
+        return response;
+    }
+
+    /**
+     * Add headers to the response to ensure no caching takes place
+     * @param response the response
+     * @return the response
+     */
     public static HttpServerResponse nocache(HttpServerResponse response) {
         response.headers().add("Cache-Control","no-cache");
         response.headers().add("Cache-Control","no-store");
@@ -172,6 +186,20 @@ public class WebUtils {
         response.headers().add("Cache-Control", "max-age=" + seconds);
         response.headers().add("Last-Modified", String.valueOf(now));
         response.headers().add("Expires", String.valueOf(now + seconds * 1000L));
+        return response;
+    }
+
+    /**
+     * Add headers to the response to ensure caching in the given duration
+     * @param response the response
+     * @param seconds the number of seconds to cache the response
+     * @return the response
+     */
+    public static HttpServletResponse cache(HttpServletResponse response, int seconds) {
+        long now = System.currentTimeMillis();
+        response.addHeader("Cache-Control", "max-age=" + seconds);
+        response.addHeader("Last-Modified", String.valueOf(now));
+        response.addHeader("Expires", String.valueOf(now + seconds * 1000L));
         return response;
     }
 

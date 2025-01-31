@@ -16,6 +16,11 @@
 
 package org.niord.web;
 
+import io.quarkus.vertx.web.RouteFilter;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.niord.core.NiordApp;
 
 import jakarta.inject.Inject;
@@ -26,6 +31,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
+import org.slf4j.Logger;
+
 import java.io.IOException;
 
 /**
@@ -52,40 +59,40 @@ import java.io.IOException;
  * &lt;/VirtualHost&gt;
  * </pre>
  */
-@WebFilter(urlPatterns={"/*"})
-public class ServerNameServletFilter implements Filter {
+@ApplicationScoped
+public class ServerNameServletFilter {
+
+    @Inject
+    Logger log;
 
     @Inject
     NiordApp app;
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void destroy() {
-    }
-
-
     /**
      * Main filter method
-     * @param req the request
-     * @param res the response
-     * @param chain the filter chain
      */
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    @RouteFilter
+    void doFilter(RoutingContext rc) {
+        // Attach the domain to the current context
+        // Be careful because we need to run on a separate thread cau the
+        // domainService might need access to the database to initialise.
+        Uni.createFrom().voidItem()
+                .runSubscriptionOn(Infrastructure.getDefaultExecutor()) // Move execution off the IO thread
+                .attachContext()
+                .invoke((result) -> {
+                    app.registerServerNameForCurrentThread(rc.request());
+                })
+                .subscribe()
+                .with(success -> rc.next(), ex -> log.error(ex.getMessage(), ex));
 
-        app.registerServerNameForCurrentThread(req);
-
-        try {
-            // Proceed with the request
-            chain.doFilter(req, res);
-        } finally {
-            app.removeServerNameForCurrentThread();
-        }
+        // And remove the domain at the end
+        rc.addEndHandler((end) ->
+                Uni.createFrom().voidItem()
+                        .runSubscriptionOn(Infrastructure.getDefaultExecutor()) // Move execution off the IO thread
+                        .attachContext()
+                        .invoke((result) -> app.removeServerNameForCurrentThread())
+                        .subscribe()
+                        .with(success -> {}, ex -> log.error(ex.getMessage(), ex))
+        );
     }
 }

@@ -16,27 +16,25 @@
 
 package org.niord.core.web;
 
-import org.apache.commons.lang.StringUtils;
+import io.quarkus.vertx.web.RouteFilter;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.niord.core.domain.DomainResolver;
 import org.niord.core.domain.DomainService;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * Resolves the domain from the request and stores it in the current thread
  */
-@WebFilter(urlPatterns={"/*"})
-public class DomainServletFilter implements Filter {
+@ApplicationScoped
+public class DomainServletFilter {
+
+    /* The domain resolver instance */
+    final DomainResolver domainResolver = DomainResolver.newInstance();
 
     @Inject
     Logger log;
@@ -44,38 +42,33 @@ public class DomainServletFilter implements Filter {
     @Inject
     DomainService domainService;
 
-    DomainResolver domainResolver = DomainResolver.newInstance();
-
-
-    /** {@inheritDoc} */
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void destroy() {
-    }
-
     /**
      * Main filter method
-     * @param req the request
-     * @param res the response
-     * @param chain the filter chain
      */
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    @RouteFilter
+    void doFilter(RoutingContext rc) {
+        // If there are concurrent requests, only instantiate once
+        // And resolve the current domain and add it to the local context
+        String domainId = domainResolver.resolveDomain(rc.request());
 
-        String domainId = domainResolver.resolveDomain((HttpServletRequest) req);
-        if (StringUtils.isNotBlank(domainId)) {
-            domainService.setDomainForCurrentThread(domainId);
-        }
+        // Attach the domain to the current context
+        // Be careful because we need to run on a separate thread cau the
+        // domainService might need access to the database to initialise.
+        Uni.createFrom().voidItem()
+                .runSubscriptionOn(Infrastructure.getDefaultExecutor()) // Move execution off the IO thread
+                .attachContext()
+                .invoke((result) -> domainService.setDomainForCurrentThread(domainId))
+                .subscribe()
+                .with(success -> rc.next(), ex -> log.error(ex.getMessage(), ex));
 
-        try {
-            // Proceed with the request
-            chain.doFilter(req, res);
-        } finally {
-            domainService.removeDomainForCurrentThread();
-        }
+        // And remove the domain at the end
+        rc.addEndHandler((end) ->
+            Uni.createFrom().voidItem()
+                    .runSubscriptionOn(Infrastructure.getDefaultExecutor()) // Move execution off the IO thread
+                    .attachContext()
+                    .invoke((result) -> domainService.removeDomainForCurrentThread())
+                    .subscribe()
+                    .with(success -> {}, ex -> log.error(ex.getMessage(), ex))
+        );
     }
 }

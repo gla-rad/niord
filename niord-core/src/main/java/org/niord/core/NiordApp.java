@@ -17,18 +17,21 @@ package org.niord.core;
 
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.QuarkusApplication;
+import io.smallrye.common.vertx.ContextLocals;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.niord.core.settings.Setting;
 import org.niord.core.settings.SettingsService;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -36,8 +39,6 @@ import java.util.Properties;
  */
 @SuppressWarnings("unused")
 public class NiordApp implements QuarkusApplication {
-
-    private final static ThreadLocal<String> THREAD_LOCAL_SERVER_NAME = new ThreadLocal<>();
 
     // The possible execution modes of Niord
     public enum ExecutionMode { DEVELOPMENT, TEST, PRODUCTION }
@@ -213,14 +214,20 @@ public class NiordApp implements QuarkusApplication {
      * Registers the server name associated with the current thread (i.e. servlet request)
      * @param req the servlet request
      */
-    public void registerServerNameForCurrentThread(ServletRequest req) {
-        String scheme = StringUtils.defaultIfBlank(req.getScheme(), "http");
-        String serverName = StringUtils.defaultIfBlank(req.getServerName(), "localhost");
+    public void registerServerNameForCurrentThread(HttpServerRequest req) {
+        String scheme = StringUtils.defaultIfBlank(req.scheme(), "http");
+        String serverName = StringUtils.defaultIfBlank(req.authority().host(), "localhost");
         String port = (scheme.equalsIgnoreCase("https"))
-                        ? (req.getServerPort() == 443 ? "" : ":" + req.getServerPort())
-                        : (req.getServerPort() == 80 ? "" : ":" + req.getServerPort());
+                        ? (req.authority().port() == 443 ? "" : ":" + req.authority().port())
+                        : (req.authority().port() == 80 ? "" : ":" + req.authority().port());
         if (StringUtils.isNotBlank(serverName)) {
-            THREAD_LOCAL_SERVER_NAME.set(scheme + "://" + serverName + port);
+            // Ensure we are in the correct Vert.x context
+            if (Vertx.currentContext() != null) {
+                ContextLocals.put("serverName", scheme + "://" + serverName + port);
+                log.debug("Server name added to ContextLocal");
+            } else {
+                log.debug("ContextLocal is not available");
+            }
         }
     }
 
@@ -229,7 +236,13 @@ public class NiordApp implements QuarkusApplication {
      * Removes the server name associated with the current thread (i.e. servlet request)
      */
     public void removeServerNameForCurrentThread() {
-        THREAD_LOCAL_SERVER_NAME.remove();
+        // Ensure we are in the correct Vert.x context
+        if (Vertx.currentContext() != null) {
+            ContextLocals.remove("serverName");
+            log.debug("Server name removed from ContextLocal");
+        } else {
+            log.debug("ContextLocal is not available");
+        }
     }
 
 
@@ -238,7 +251,8 @@ public class NiordApp implements QuarkusApplication {
      * @return the server name associated with the current thread
      */
     public String getServerNameForCurrentThread() {
-        return THREAD_LOCAL_SERVER_NAME.get();
+        return Objects.nonNull(Vertx.currentContext()) ?
+                ContextLocals.get("serverName", null) : null;
     }
 
 

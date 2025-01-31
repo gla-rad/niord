@@ -15,16 +15,13 @@
  */
 package org.niord.core.repo;
 
+import io.quarkus.vertx.web.RouteFilter;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 
 /**
@@ -35,39 +32,26 @@ import java.io.IOException;
  * NB: The usual method would be to defined a @Provider-annotated ExceptionMapper class for IOException, but
  * we do not really want to handle all IOException silently.
  */
-public class RepositoryServletFilter implements Filter {
+@ApplicationScoped
+public class RepositoryServletFilter {
 
     @Inject
     Logger log;
 
-    /** {@inheritDoc} */
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void destroy() {
-    }
-
-    /**
-     * Main filter method
-     * @param req the request
-     * @param res the response
-     * @param chain the filter chain
-     */
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        try {
-            // Proceed with the request
-            chain.doFilter(req, res);
-        } catch (RuntimeException ex) {
-            if (ex.getCause() instanceof IOException && "Broken pipe".equals(ex.getCause().getMessage())) {
-                log.trace("Received Broken pipe IOException: " + ((HttpServletRequest)req).getRequestURI());
-                // Do not log this error
-                return;
-            }
-            throw ex;
+    @RouteFilter
+    void doFilter(RoutingContext rc) {
+        final String path = rc.request().path();
+        if (path.startsWith("/rest/repo/file/")) {
+            rc.addEndHandler(event -> {
+                if (rc.failed()) {
+                    Throwable ex = rc.failure();
+                    if (ex.getCause() instanceof IOException && "Broken pipe".equals(ex.getCause().getMessage())) {
+                        log.trace("Received Broken pipe IOException: " + rc.request().absoluteURI());
+                    }
+                }
+            });
         }
+        // Pass the error to default handlers
+        rc.next();
     }
 }

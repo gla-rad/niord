@@ -16,24 +16,27 @@
 
 package org.niord.web.conf;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.vertx.web.ReactiveRoutes;
+import io.quarkus.vertx.web.Route;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.niord.core.keycloak.KeycloakIntegrationService;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Loads the keycloak.json file and updates it with one constructed by the KeycloakIntegrationService
  */
-@WebFilter(urlPatterns={"/conf/keycloak.json"})
-public class KeycloakJsonServletFilter extends AbstractTextResourceServletFilter {
+@ApplicationScoped
+public class KeycloakJsonServletFilter {
 
-    final static int CACHE_SECONDS = 0; // Do not cache
-
-    Map<String, Object> keycloakDeployment;
+    /* A single keycloak deployment hashmap */
+    final static Map<String, Object> KEYCLOAK_DEPLOYMENT = new HashMap<>();
 
     @Inject
     Logger log;
@@ -41,35 +44,25 @@ public class KeycloakJsonServletFilter extends AbstractTextResourceServletFilter
     @Inject
     KeycloakIntegrationService keycloakIntegrationService;
 
-    /** Constructor **/
-    public KeycloakJsonServletFilter() {
-        super(CACHE_SECONDS);
-    }
-
-
     /**
      * Updates the response with system properties
      */
-    @Override
-    String updateResponse(HttpServletRequest request, String response) {
-
-        try {
-            if (keycloakDeployment == null) {
-                // If there are concurrent requests, only instantiate once
-                synchronized (this) {
-                    if (keycloakDeployment == null) {
-                        keycloakDeployment = keycloakIntegrationService.createKeycloakDeploymentForWebApp();
-                        log.info("Instantiated keycloak deployment for web application");
+    @Route(path = "/conf/keycloak.json", produces = ReactiveRoutes.APPLICATION_JSON)
+    Uni<Map<String,Object>> route() {
+        // And return the uni
+        return Uni.createFrom()
+                .item(KEYCLOAK_DEPLOYMENT)
+                .runSubscriptionOn(Infrastructure.getDefaultExecutor())
+                .invoke(map -> {
+                    // If there are concurrent requests, only instantiate once
+                    if (KEYCLOAK_DEPLOYMENT.isEmpty()) {
+                        try {
+                            KEYCLOAK_DEPLOYMENT.putAll(keycloakIntegrationService.createKeycloakDeploymentForWebApp());
+                            log.info("Instantiated keycloak deployment for web application");
+                        } catch (Exception ex) {
+                            log.error(ex.getMessage(), ex);
+                        }
                     }
-                }
-            }
-
-            return new ObjectMapper()
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(keycloakDeployment);
-        } catch (Exception e) {
-            log.error("Failed generating proper Keycloak Deployment Configuration", e);
-            return response;
-        }
+                });
     }
 }

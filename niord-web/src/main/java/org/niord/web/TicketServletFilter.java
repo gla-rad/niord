@@ -15,26 +15,22 @@
  */
 package org.niord.web;
 
+import io.quarkus.vertx.web.RouteFilter;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.niord.core.user.TicketService;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * If a request contains a "ticket" parameter, attempt to set the current ticket data (domain, user, roles)
  * in a tread local
  */
-@WebFilter(urlPatterns={"/rest/*"})
-public class TicketServletFilter implements Filter {
+@ApplicationScoped
+public class TicketServletFilter {
 
     private final static String TICKET_PARAM = "ticket";
 
@@ -44,39 +40,41 @@ public class TicketServletFilter implements Filter {
     @Inject
     TicketService ticketService;
 
-
-    /** {@inheritDoc} */
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void destroy() {
-    }
-
     /**
      * Main filter method
-     * @param req the request
-     * @param res the response
-     * @param chain the filter chain
+     * @param rc the routing context
      */
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    @RouteFilter
+    void doFilter(RoutingContext rc) {
+        final String path = rc.request().path();
+        if (path.startsWith("/rest/*")) {
+            // Attach the domain to the current context
+            // Be careful because we need to run on a separate thread cau the
+            // domainService might need access to the database to initialise.
+            Uni.createFrom().voidItem()
+                    .runSubscriptionOn(Infrastructure.getDefaultExecutor()) // Move execution off the IO thread
+                    .attachContext()
+                    .invoke((result) -> {
+                        boolean ticketResolved = ticketService.resolveTicketForCurrentThread(rc.request().getParam(TICKET_PARAM));
+                        if (ticketResolved) {
+                            log.info("Ticket resolved for request " + rc.request().absoluteURI());
+                        }
+                    })
+                    .subscribe()
+                    .with(success -> rc.next(), ex -> log.error(ex.getMessage(), ex));
 
-        boolean ticketResolved = ticketService.resolveTicketForCurrentThread(req.getParameter(TICKET_PARAM));
-        if (ticketResolved) {
-            HttpServletRequest request = (HttpServletRequest)req;
-            log.info("Ticket resolved for request " + request.getRequestURI());
-        }
-
-        try {
+            // And remove the domain at the end
+            rc.addEndHandler((end) ->
+                    Uni.createFrom().voidItem()
+                            .runSubscriptionOn(Infrastructure.getDefaultExecutor()) // Move execution off the IO thread
+                            .attachContext()
+                            .invoke((result) -> ticketService.removeTicketForCurrentThread())
+                            .subscribe()
+                            .with(success -> {}, ex -> log.error(ex.getMessage(), ex))
+            );
+        } else {
             // Proceed with the request
-            chain.doFilter(req, res);
-        } finally {
-            if (ticketResolved) {
-                ticketService.removeTicketForCurrentThread();
-            }
+            rc.next();
         }
     }
 }
