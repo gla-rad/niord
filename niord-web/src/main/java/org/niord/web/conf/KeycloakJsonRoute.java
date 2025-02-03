@@ -33,7 +33,7 @@ import java.util.Map;
  * Loads the keycloak.json file and updates it with one constructed by the KeycloakIntegrationService
  */
 @ApplicationScoped
-public class KeycloakJsonServletFilter {
+public class KeycloakJsonRoute {
 
     /* A single keycloak deployment hashmap */
     final static Map<String, Object> KEYCLOAK_DEPLOYMENT = new HashMap<>();

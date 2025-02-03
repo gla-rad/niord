@@ -18,21 +18,24 @@ package org.niord.web.conf;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.vertx.web.Route;
+import io.smallrye.mutiny.Uni;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.niord.core.settings.SettingsService;
 import org.niord.core.domain.vo.DomainVo;
 import org.niord.web.DomainRestService;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 /**
  * Loads the site-config.js file and injects relevant system configuration and domains
  */
-@WebFilter(urlPatterns={"/conf/site-config.js"})
-public class SiteConfigServletFilter extends AbstractTextResourceServletFilter {
+@ApplicationScoped
+public class SiteConfigRoute extends AbstractTextResourceRoute {
 
     final static int CACHE_SECONDS = 0; // Do not cache
 
@@ -49,10 +52,37 @@ public class SiteConfigServletFilter extends AbstractTextResourceServletFilter {
     DomainRestService domainRestService;
 
     /** Constructor **/
-    public SiteConfigServletFilter() {
-        super(CACHE_SECONDS);
+    public SiteConfigRoute() {
+        super("/conf/site-config.js", CACHE_SECONDS);
     }
 
+    /**
+     * Main filter method
+     */
+    @Route(path = "/conf/site-config.js")
+    Uni<String> serveTextResource(RoutingContext rc) {
+        return super.serveTextResource(rc);
+    }
+
+    /**
+     * Updates the response with system properties
+     */
+    @Override
+    String updateResponse(RoutingContext rc, String response) {
+
+        int startIndex = response.indexOf(SETTINGS_START);
+        int endIndex = response.indexOf(SETTINGS_END);
+
+        if (startIndex != -1 && endIndex != -1) {
+            endIndex += SETTINGS_END.length();
+            return response.substring(0, startIndex)
+                    + getWebSettings()
+                    + getDomains()
+                    + response.substring(endIndex);
+        }
+
+        return response;
+    }
 
     /**
      * Returns the web settings as a javascript snippet sets the settings as $rootScope variables.
@@ -110,24 +140,4 @@ public class SiteConfigServletFilter extends AbstractTextResourceServletFilter {
         return key.replace('.', '_').replace(' ', '_');
     }
 
-
-    /**
-     * Updates the response with system properties
-     */
-    @Override
-    String updateResponse(HttpServletRequest request, String response) {
-
-        int startIndex = response.indexOf(SETTINGS_START);
-        int endIndex = response.indexOf(SETTINGS_END);
-
-        if (startIndex != -1 && endIndex != -1) {
-            endIndex += SETTINGS_END.length();
-            return response.substring(0, startIndex)
-                    + getWebSettings()
-                    + getDomains()
-                    + response.substring(endIndex);
-        }
-
-        return response;
-    }
 }

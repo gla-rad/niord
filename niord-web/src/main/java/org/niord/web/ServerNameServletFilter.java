@@ -24,16 +24,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.niord.core.NiordApp;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebFilter;
 import org.slf4j.Logger;
-
-import java.io.IOException;
 
 /**
  * Will store the host name used for accessing Niord for the duration of the request.

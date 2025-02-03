@@ -16,6 +16,10 @@
 
 package org.niord.web.conf;
 
+import io.quarkus.vertx.web.Route;
+import io.smallrye.mutiny.Uni;
+import io.vertx.ext.web.RoutingContext;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.niord.core.NiordApp;
@@ -23,8 +27,7 @@ import org.niord.core.dictionary.DictionaryService;
 import org.slf4j.Logger;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -34,8 +37,8 @@ import java.util.stream.Collectors;
  *
  * The translations consists of all the dictionary entries of the "web" dictionary.
  */
-@WebFilter(urlPatterns={"/conf/site-texts.js"})
-public class SiteTextsServletFilter extends AbstractTextResourceServletFilter {
+@ApplicationScoped
+public class SiteTextsRoute extends AbstractTextResourceRoute {
 
     final static int CACHE_SECONDS = 0; // No caching
 
@@ -54,8 +57,35 @@ public class SiteTextsServletFilter extends AbstractTextResourceServletFilter {
 
 
     /** Constructor */
-    public SiteTextsServletFilter() {
-        super(CACHE_SECONDS);
+    public SiteTextsRoute() {
+        super("/conf/site-texts.js", CACHE_SECONDS);
+    }
+
+    /**
+     * Main filter method
+     */
+    @Route(path = "/conf/site-texts.js")
+    Uni<String> serveTextResource(RoutingContext rc) {
+        return super.serveTextResource(rc);
+    }
+
+    /**
+     * Updates the response with relevant translations
+     */
+    @Override
+    String updateResponse(RoutingContext rc, String response) {
+
+        int startIndex = response.indexOf(TRANSLATIONS_START);
+        int endIndex = response.indexOf(TRANSLATIONS_END);
+
+        if (startIndex != -1 && endIndex != -1) {
+            endIndex += TRANSLATIONS_END.length();
+            return response.substring(0, startIndex)
+                    + getWebTranslations()
+                    + response.substring(endIndex);
+        }
+
+        return response;
     }
 
 
@@ -108,23 +138,5 @@ public class SiteTextsServletFilter extends AbstractTextResourceServletFilter {
                 .collect(Collectors.joining(" +\n"));
    }
 
-
-    /**
-     * Updates the response with relevant translations
-     */
-    @Override
-    String updateResponse(HttpServletRequest request, String response) {
-        int startIndex = response.indexOf(TRANSLATIONS_START);
-        int endIndex = response.indexOf(TRANSLATIONS_END);
-
-        if (startIndex != -1 && endIndex != -1) {
-            endIndex += TRANSLATIONS_END.length();
-            return response.substring(0, startIndex)
-                    + getWebTranslations()
-                    + response.substring(endIndex);
-        }
-
-        return response;
-    }
 }
 
