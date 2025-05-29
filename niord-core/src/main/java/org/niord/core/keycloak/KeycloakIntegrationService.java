@@ -146,7 +146,7 @@ public class KeycloakIntegrationService {
      *
      * @return the Keycloak public key
      */
-    private PublicKey resolveKeycloakPublicRealmKey() throws Exception {
+    private String resolveKeycloakPublicRealmKey() throws Exception {
 
         return executeAdminRequest(
                 new HttpGet(resolveAuthServerUrl() + "/realms/" + KEYCLOAK_REALM),
@@ -155,7 +155,7 @@ public class KeycloakIntegrationService {
                     PublishedRealmRepresentation rep = new ObjectMapper()
                             .readValue(is, PublishedRealmRepresentation.class);
                     log.debug("Read the niord realm representation");
-                    return rep.getPublicKey();
+                    return rep.getPublicKeyPem();
                 });
     }
 
@@ -175,8 +175,7 @@ public class KeycloakIntegrationService {
         }
 
         // Fetch the public key from Keycloak
-        PublicKey publicKey = resolveKeycloakPublicRealmKey();
-        authServerRealmKey = new String(Base64.getEncoder().encode(publicKey.getEncoded()), "utf-8");
+        authServerRealmKey = resolveKeycloakPublicRealmKey();
 
         // Update the underlying setting
         settingsService.set("authServerRealmKey", authServerRealmKey);

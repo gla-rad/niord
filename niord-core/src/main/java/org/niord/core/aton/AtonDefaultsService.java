@@ -248,7 +248,7 @@ public class AtonDefaultsService {
                                         }
                                     });
                         });
-                log.trace("Added AtoN S-125 extension defaults in " + (System.currentTimeMillis() - t0) + " ms");
+                log.trace("Added AtoN S-100 extension defaults in " + (System.currentTimeMillis() - t0) + " ms");
             }
         } catch (Exception e) {
             e.printStackTrace();
