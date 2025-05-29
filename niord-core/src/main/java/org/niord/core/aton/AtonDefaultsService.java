@@ -288,10 +288,14 @@ public class AtonDefaultsService {
         this.osmNodeTypes.get(nodeTypeName)
                 .getTags()
                 .forEach(tag -> {
-                    if (aton.getTagValue(tag.getK()) == null) {
-                        String v = StringUtils.defaultString(tag.getV());
-                        aton.getTags().add(new AtonTag(tag.getK(), v));
-                    }
+                    final String v = StringUtils.defaultString(tag.getV());
+                    Optional.of(tag)
+                            .map(ODTag::getK)
+                            .map(aton::getTag)
+                            .ifPresentOrElse(
+                                    (atonTag) -> { if (StringUtils.isNotBlank(v)) atonTag.setV(v); },
+                                    () -> aton.getTags().add(new AtonTag(tag.getK(), v))
+                            );
                 });
     }
 
