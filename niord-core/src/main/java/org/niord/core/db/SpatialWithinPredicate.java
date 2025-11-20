@@ -22,6 +22,7 @@ import org.hibernate.query.sqm.NodeBuilder;
 import org.hibernate.query.sqm.SemanticQueryWalker;
 import org.hibernate.query.sqm.sql.SqmTranslator;
 import org.hibernate.query.sqm.tree.SqmCopyContext;
+import org.hibernate.query.sqm.tree.SqmRenderContext;
 import org.hibernate.query.sqm.tree.expression.SqmExpression;
 import org.hibernate.query.sqm.tree.expression.SqmFunction;
 import org.hibernate.query.sqm.tree.predicate.AbstractNegatableSqmPredicate;
@@ -126,8 +127,8 @@ public class SpatialWithinPredicate extends AbstractNegatableSqmPredicate implem
 
     /** {@inheritDoc} */
     @Override
-    public void appendHqlString(StringBuilder sb) {
-        function.appendHqlString(sb);
+    public void appendHqlString(StringBuilder sb, SqmRenderContext context) {
+        function.appendHqlString(sb, context);
     }
 
     /** {@inheritDoc} */
