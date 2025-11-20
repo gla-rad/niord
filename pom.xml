@@ -30,7 +30,7 @@
         <infinispan.core.jakarta.version>14.0.21.Final</infinispan.core.jakarta.version>
         <quarkus.jberet.version>2.6.0</quarkus.jberet.version>
 
-        <hibernate.spatial.version>7.1.6.Final</hibernate.spatial.version>
+        <hibernate.spatial.version>7.1.8.Final</hibernate.spatial.version>
     </properties>
 
 
