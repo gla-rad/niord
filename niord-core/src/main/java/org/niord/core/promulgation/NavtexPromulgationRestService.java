@@ -16,25 +16,35 @@
 
 package org.niord.core.promulgation;
 
-import io.quarkus.vertx.http.Compressed;
-import jakarta.annotation.security.PermitAll;
-import jakarta.annotation.security.RolesAllowed;
+import static org.niord.core.promulgation.NavtexPromulgationService.NAVTEX_LINE_LENGTH;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang.StringUtils;
-import org.jboss.resteasy.reactive.NoCache;
 import org.niord.core.promulgation.vo.NavtexMessagePromulgationVo;
 import org.niord.core.promulgation.vo.NavtexTransmitterVo;
 import org.niord.core.user.Roles;
 import org.niord.core.util.TextUtils;
 import org.niord.model.DataFilter;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static org.niord.core.promulgation.NavtexPromulgationService.NAVTEX_LINE_LENGTH;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.WebApplicationException;
 
 /**
  * REST interface to managing NAVTEX transmitters
@@ -42,7 +52,6 @@ import static org.niord.core.promulgation.NavtexPromulgationService.NAVTEX_LINE_
 @Path("/promulgation/navtex")
 @ApplicationScoped
 @RolesAllowed(Roles.SYSADMIN)
-@SuppressWarnings("unused")
 public class NavtexPromulgationRestService {
 
     @Inject
@@ -55,8 +64,6 @@ public class NavtexPromulgationRestService {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @PermitAll
-    @Compressed
-    @NoCache
     public NavtexMessagePromulgationVo reformatNavtex(NavtexMessagePromulgationVo navtex) throws Exception {
         if (StringUtils.isNotBlank(navtex.getText())) {
             String text = navtex.getText();
@@ -82,8 +89,7 @@ public class NavtexPromulgationRestService {
     @GET
     @Path("/transmitters/{typeId}/all")
     @Produces("application/json;charset=UTF-8")
-    @Compressed
-    @NoCache
+    @Transactional
     public List<NavtexTransmitterVo> getTransmitters(
             @PathParam("typeId") String typeId,
             @QueryParam("lang") @DefaultValue("en") String lang) {
@@ -100,8 +106,7 @@ public class NavtexPromulgationRestService {
     @Path("/transmitters/{typeId}/transmitter/")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @Compressed
-    @NoCache
+    @Transactional
     public NavtexTransmitterVo createTransmitter(
             @PathParam("typeId") String typeId,
             NavtexTransmitterVo transmitter) throws Exception {
@@ -121,8 +126,7 @@ public class NavtexPromulgationRestService {
     @Path("/transmitters/{typeId}/transmitter/{name}")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @Compressed
-    @NoCache
+    @Transactional
     public NavtexTransmitterVo updateTransmitter(
             @PathParam("typeId") String typeId,
             @PathParam("name") String name,
@@ -144,7 +148,6 @@ public class NavtexPromulgationRestService {
     /** Deletes an existing transmitter */
     @DELETE
     @Path("/transmitters/{typeId}/transmitter/{name}")
-    @NoCache
     public void deleteTransmitter(
             @PathParam("typeId") String typeId,
             @PathParam("name") String name) throws Exception {
