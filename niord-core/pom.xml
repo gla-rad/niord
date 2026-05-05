@@ -47,9 +47,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core-jakarta</artifactId>
-            <version>${infinispan.core.jakarta.version}</version>
+            <groupId>io.quarkiverse.infinispan</groupId>
+            <artifactId>quarkus-infinispan-embedded</artifactId>
+            <version>${quarkus.infinispan.embedded}</version>
         </dependency>
 
         <dependency>

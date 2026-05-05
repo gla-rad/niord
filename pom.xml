@@ -18,19 +18,19 @@
 
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.29.4</quarkus.platform.version>
+        <quarkus.platform.version>3.35.1</quarkus.platform.version>
 
 	    <quarkus.hibernate-search-orm.elasticsearch.version>8.11</quarkus.hibernate-search-orm.elasticsearch.version>
 
-        <quarkus-qpid-jms.version>2.10.0</quarkus-qpid-jms.version>
+        <quarkus-qpid-jms.version>2.12.0</quarkus-qpid-jms.version>
         <keycloak.version>25.0.3</keycloak.version>
         <batik.version>1.16</batik.version>
         <surefire-plugin.version>3.1.2</surefire-plugin.version>
 
-        <infinispan.core.jakarta.version>14.0.21.Final</infinispan.core.jakarta.version>
-        <quarkus.jberet.version>2.6.0</quarkus.jberet.version>
+        <quarkus.infinispan.embedded>2.0.1</quarkus.infinispan.embedded>
+        <quarkus.jberet.version>2.9.1</quarkus.jberet.version>
 
-        <hibernate.spatial.version>7.1.8.Final</hibernate.spatial.version>
+        <hibernate.spatial.version>7.3.2.Final</hibernate.spatial.version>
     </properties>
 
 

@@ -140,4 +140,16 @@ public class SpatialWithinPredicate extends AbstractNegatableSqmPredicate implem
                 this.getGeom2Exp(),
                 !isNegated());
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isCompatible(Object object) {
+        return object instanceof Geometry;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int cacheHashCode() {
+        return 0;
+    }
 }

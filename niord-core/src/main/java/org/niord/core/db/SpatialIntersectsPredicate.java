@@ -140,4 +140,17 @@ public class SpatialIntersectsPredicate extends AbstractNegatableSqmPredicate im
                 !isNegated()
         );
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isCompatible(Object object) {
+        return object instanceof Geometry;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int cacheHashCode() {
+        return 0;
+    }
+
 }
