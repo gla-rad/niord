@@ -208,8 +208,8 @@ function bootstrapKeycloak(angularAppName, onLoad) {
                 angular.bootstrap(document, [angularAppName]);
 
             })
-            .catch(function () {
-                window.location.reload();
+            .catch(function (e) {
+                console.error(e);
             });
     });
 }
